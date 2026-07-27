@@ -150,18 +150,21 @@
 <tbody class="bg-white">
 <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
 <td class="p-md font-bold text-primary">Senin – Jumat</td>
-<td class="p-md font-label-md text-label-md" id="hoursWeekday">08.00 – 17.00 WIB</td>
+<td class="p-md font-label-md text-label-md whitespace-nowrap" id="hoursWeekday">08.00 – 17.00 WIB</td>
 </tr>
 <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
 <td class="p-md font-bold text-primary">Sabtu</td>
-<td class="p-md font-label-md text-label-md" id="hoursSaturday">08.00 – 14.00 WIB</td>
+<td class="p-md font-label-md text-label-md whitespace-nowrap" id="hoursSaturday">08.00 – 14.00 WIB</td>
 </tr>
 <tr class="bg-surface-container-low">
 <td class="p-md font-bold text-on-surface-variant">Minggu / Hari Libur</td>
-<td class="p-md font-label-md text-label-md text-error flex items-center gap-xs">
+<td class="p-md font-label-md text-label-md text-error flex flex-wrap items-center gap-xs">
+<span class="inline-flex items-center gap-xs whitespace-nowrap">
 <span class="material-symbols-outlined text-[20px]">block</span>
-                                    <span id="hoursSunday">Tutup</span> (Layanan darurat via WhatsApp)
-                                </td>
+<span id="hoursSunday">Tutup</span>
+</span>
+<span>(Layanan darurat via WhatsApp)</span>
+</td>
 </tr>
 </tbody>
 </table>
