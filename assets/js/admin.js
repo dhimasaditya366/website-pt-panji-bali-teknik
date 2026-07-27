@@ -594,6 +594,13 @@ function utf8ToBase64(str) {
     return btoa(unescape(encodeURIComponent(str)));
 }
 
+function githubErrorMessage(status, errJson) {
+    if (status === 401) return 'Token tidak valid atau sudah kedaluwarsa. Buat token baru di panel pengaturan sinkronisasi.';
+    if (status === 403) return 'Token tidak punya izin cukup (butuh "Contents: Read and write") atau batas request GitHub tercapai.';
+    if (status === 404) return 'Repo/branch/path tidak ditemukan. Cek nama username, nama repo, dan branch di pengaturan sinkronisasi.';
+    return (errJson && errJson.message) || `Gagal menyimpan ke GitHub (HTTP ${status}).`;
+}
+
 async function tryWriteGithub(dataObj) {
     const cfg = getGithubConfig();
     if (!cfg || !cfg.owner || !cfg.repo || !cfg.token) return { ok: false, configured: false };
@@ -605,32 +612,43 @@ async function tryWriteGithub(dataObj) {
         Authorization: `token ${cfg.token}`,
         Accept: 'application/vnd.github+json'
     };
+    const fileContent = 'window.SITE_DEFAULTS = ' + JSON.stringify(dataObj, null, 4) + ';\n';
 
-    try {
-        const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, { headers });
-        if (!getRes.ok) {
-            return { ok: false, configured: true, error: `Tidak bisa membaca file di GitHub (HTTP ${getRes.status}). Cek nama repo/branch/token.` };
-        }
-        const getJson = await getRes.json();
+    // The file's sha can change between our GET and PUT if another save
+    // landed in between (this admin panel is used from multiple
+    // devices/tabs). That only causes a 409 conflict, not a bad token — so
+    // retry once with a freshly-fetched sha before giving up, instead of
+    // making the admin re-enter credentials for something that isn't
+    // actually wrong with them.
+    for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+            const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, { headers });
+            if (!getRes.ok) {
+                return { ok: false, configured: true, error: githubErrorMessage(getRes.status) };
+            }
+            const getJson = await getRes.json();
 
-        const fileContent = 'window.SITE_DEFAULTS = ' + JSON.stringify(dataObj, null, 4) + ';\n';
-        const putRes = await fetch(apiUrl, {
-            method: 'PUT',
-            headers: { ...headers, 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                message: 'Update konten via Admin Dashboard (' + new Date().toLocaleString('id-ID') + ')',
-                content: utf8ToBase64(fileContent),
-                sha: getJson.sha,
-                branch: branch
-            })
-        });
-        if (!putRes.ok) {
+            const putRes = await fetch(apiUrl, {
+                method: 'PUT',
+                headers: { ...headers, 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: 'Update konten via Admin Dashboard (' + new Date().toLocaleString('id-ID') + ')',
+                    content: utf8ToBase64(fileContent),
+                    sha: getJson.sha,
+                    branch: branch
+                })
+            });
+            if (putRes.ok) {
+                return { ok: true, configured: true };
+            }
+            if (putRes.status === 409 && attempt === 0) {
+                continue; // sha changed since our GET — retry once with a fresh one
+            }
             const errJson = await putRes.json().catch(() => ({}));
-            return { ok: false, configured: true, error: errJson.message || `Gagal menyimpan ke GitHub (HTTP ${putRes.status}).` };
+            return { ok: false, configured: true, error: githubErrorMessage(putRes.status, errJson) };
+        } catch (e) {
+            return { ok: false, configured: true, error: 'Tidak bisa terhubung ke GitHub: ' + e.message };
         }
-        return { ok: true, configured: true };
-    } catch (e) {
-        return { ok: false, configured: true, error: 'Tidak bisa terhubung ke GitHub: ' + e.message };
     }
 }
 
