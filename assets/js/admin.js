@@ -573,13 +573,42 @@ async function tryWritePhpEndpoint(dataObj) {
     }
 }
 
-// ---- GitHub Contents API write-back ----
-// Lets "Simpan Perubahan" publish straight to the live GitHub Pages site
-// (no local dev server needed) by committing an updated assets/js/data.js
-// through GitHub's REST API. Only active once a technical admin has filled
-// in the "Pengaturan sinkronisasi otomatis ke GitHub" panel once on this
-// browser/device — everyone else who logs in afterward just clicks "Simpan
-// Perubahan" as normal and it silently publishes for them.
+// ---- Zero-config auto-publish proxy (Cloudflare Worker) ----
+// While this site lives on GitHub Pages (no backend of its own), publishing
+// a change still has to go through GitHub's authenticated write API somehow
+// — there's no way around that for a static host. Rather than making every
+// admin device store a real GitHub token (the old "Pengaturan sinkronisasi
+// otomatis ke GitHub" panel below), this small serverless proxy holds that
+// GitHub token server-side and exposes one narrow action: "overwrite
+// assets/js/data.js in this one repo". PROXY_APP_SECRET only gates that one
+// action — like SAVE_ENDPOINT_SECRET above, it's fine to ship in public JS
+// because it can't do anything beyond this single file write.
+const PROXY_URL = 'https://panji-admin-proxy.panjibaliteknik.workers.dev';
+const PROXY_APP_SECRET = '7be3c2277d4f6700cbf107247cebb8fd893cf7fd1595b4f56aac11a799df136c';
+
+async function tryWriteProxy(dataObj) {
+    try {
+        const res = await fetch(PROXY_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Secret': PROXY_APP_SECRET
+            },
+            body: JSON.stringify(dataObj)
+        });
+        const json = await res.json().catch(() => null);
+        if (res.ok && json && json.ok === true) return { ok: true };
+        return { ok: false, error: (json && json.error) || `HTTP ${res.status}` };
+    } catch (e) {
+        return { ok: false, error: 'Tidak bisa terhubung ke server publikasi: ' + e.message };
+    }
+}
+
+// ---- GitHub Contents API write-back (manual/advanced fallback) ----
+// Kept as a backup path only — normal use no longer needs this since
+// tryWriteProxy above publishes automatically with zero setup. This stays
+// useful only if the proxy above is ever unreachable and a technical admin
+// wants to configure a personal GitHub token as a manual alternative.
 const GH_CONFIG_KEY = 'pbt_github_sync_config';
 
 function getGithubConfig() {
@@ -660,14 +689,13 @@ function setupGithubSyncSettings() {
     const saveBtn = document.getElementById('btnSaveGhConfig');
     const clearBtn = document.getElementById('btnClearGhConfig');
     const statusEl = document.getElementById('ghConfigStatus');
-    const autoInfo = document.getElementById('publishInfoAuto');
     if (!ownerInput || !saveBtn) return;
 
-    function refreshAutoInfo() {
-        const cfg = getGithubConfig();
-        const isConfigured = !!(cfg && cfg.owner && cfg.repo && cfg.token);
-        if (autoInfo) autoInfo.classList.toggle('hidden', !isConfigured);
-    }
+    // The "sinkronisasi otomatis aktif" banner is now unconditional (the
+    // proxy in tryWriteProxy handles publishing regardless of this panel),
+    // so there's nothing left to toggle here — this manual GitHub config is
+    // purely an optional fallback now.
+    function refreshAutoInfo() {}
 
     const existing = getGithubConfig();
     if (existing) {
@@ -763,13 +791,16 @@ function bindActionButtons() {
 
                 // Priority: local dev server (python dev-server.py) -> PHP
                 // endpoint (production hosting like Hostinger, zero setup
-                // per device) -> GitHub API (only if manually configured,
-                // for the interim GitHub Pages phase) -> localStorage only.
+                // per device) -> Cloudflare Worker proxy (zero setup, works
+                // right now on GitHub Pages) -> GitHub API (only if manually
+                // configured, advanced fallback) -> localStorage only.
                 const wroteFile = await tryWriteLocalFile(state);
                 let wrotePhp = false;
                 if (!wroteFile) wrotePhp = await tryWritePhpEndpoint(state);
+                let proxyResult = { ok: false };
+                if (!wroteFile && !wrotePhp) proxyResult = await tryWriteProxy(state);
                 let githubResult = { ok: false, configured: false };
-                if (!wroteFile && !wrotePhp) githubResult = await tryWriteGithub(state);
+                if (!wroteFile && !wrotePhp && !proxyResult.ok) githubResult = await tryWriteGithub(state);
                 btn.disabled = false;
 
                 if (wroteFile) {
@@ -778,12 +809,18 @@ function bindActionButtons() {
                 } else if (wrotePhp) {
                     setStatus('Tersimpan & langsung terpublikasi ke situs pada ' + new Date().toLocaleTimeString('id-ID') + '. Semua pengunjung langsung melihat perubahan ini.');
                     showToast('Perubahan berhasil disimpan & dipublikasikan.', 'success');
+                } else if (proxyResult.ok) {
+                    setStatus('Tersimpan & dipublikasikan otomatis pada ' + new Date().toLocaleTimeString('id-ID') + '. Situs akan menampilkan perubahan ini untuk semua pengunjung dalam 1–2 menit.');
+                    showToast('Perubahan berhasil disimpan & dipublikasikan.', 'success');
                 } else if (githubResult.ok) {
                     setStatus('Tersimpan & dipublikasikan ke GitHub pada ' + new Date().toLocaleTimeString('id-ID') + '. Situs akan menampilkan perubahan ini untuk semua pengunjung dalam 1–2 menit.');
                     showToast('Perubahan berhasil disimpan & dipublikasikan.', 'success');
                 } else if (githubResult.configured) {
-                    setStatus('Tersimpan di browser ini saja — publikasi otomatis ke GitHub gagal: ' + (githubResult.error || 'kesalahan tidak diketahui') + ' Cek pengaturan sinkronisasi di bawah kotak info publikasi.');
-                    showToast('Tersimpan di browser, tapi publikasi ke GitHub gagal.', 'error');
+                    setStatus('Tersimpan di browser ini saja — publikasi otomatis gagal: ' + (proxyResult.error || githubResult.error || 'kesalahan tidak diketahui') + ' Cek pengaturan sinkronisasi di bawah kotak info publikasi.');
+                    showToast('Tersimpan di browser, tapi publikasi gagal.', 'error');
+                } else if (proxyResult.error) {
+                    setStatus('Tersimpan di browser ini saja — publikasi otomatis gagal: ' + proxyResult.error);
+                    showToast('Tersimpan di browser, tapi publikasi gagal.', 'error');
                 } else if (savedLocally) {
                     setStatus('Tersimpan di browser ini saja pada ' + new Date().toLocaleTimeString('id-ID') + ' (belum ada sinkronisasi otomatis aktif — atur di panel "Pengaturan sinkronisasi otomatis ke GitHub", atau tunggu situs ini dipindah ke hosting PHP).');
                     showToast('Perubahan berhasil disimpan di browser ini.', 'success');
