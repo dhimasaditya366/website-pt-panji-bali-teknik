@@ -78,6 +78,7 @@ function initDashboard() {
     renderCategories();
     renderProducts();
     bindActionButtons();
+    setupGithubSyncSettings();
 }
 
 function setStatus(text) {
@@ -413,6 +414,123 @@ async function tryWriteLocalFile(dataObj) {
     }
 }
 
+// ---- GitHub Contents API write-back ----
+// Lets "Simpan Perubahan" publish straight to the live GitHub Pages site
+// (no local dev server needed) by committing an updated assets/js/data.js
+// through GitHub's REST API. Only active once a technical admin has filled
+// in the "Pengaturan sinkronisasi otomatis ke GitHub" panel once on this
+// browser/device — everyone else who logs in afterward just clicks "Simpan
+// Perubahan" as normal and it silently publishes for them.
+const GH_CONFIG_KEY = 'pbt_github_sync_config';
+
+function getGithubConfig() {
+    try {
+        return JSON.parse(localStorage.getItem(GH_CONFIG_KEY) || 'null');
+    } catch (e) {
+        return null;
+    }
+}
+
+function utf8ToBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+}
+
+async function tryWriteGithub(dataObj) {
+    const cfg = getGithubConfig();
+    if (!cfg || !cfg.owner || !cfg.repo || !cfg.token) return { ok: false, configured: false };
+
+    const branch = cfg.branch || 'master';
+    const path = cfg.path || 'assets/js/data.js';
+    const apiUrl = `https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${path}`;
+    const headers = {
+        Authorization: `token ${cfg.token}`,
+        Accept: 'application/vnd.github+json'
+    };
+
+    try {
+        const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, { headers });
+        if (!getRes.ok) {
+            return { ok: false, configured: true, error: `Tidak bisa membaca file di GitHub (HTTP ${getRes.status}). Cek nama repo/branch/token.` };
+        }
+        const getJson = await getRes.json();
+
+        const fileContent = 'window.SITE_DEFAULTS = ' + JSON.stringify(dataObj, null, 4) + ';\n';
+        const putRes = await fetch(apiUrl, {
+            method: 'PUT',
+            headers: { ...headers, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: 'Update konten via Admin Dashboard (' + new Date().toLocaleString('id-ID') + ')',
+                content: utf8ToBase64(fileContent),
+                sha: getJson.sha,
+                branch: branch
+            })
+        });
+        if (!putRes.ok) {
+            const errJson = await putRes.json().catch(() => ({}));
+            return { ok: false, configured: true, error: errJson.message || `Gagal menyimpan ke GitHub (HTTP ${putRes.status}).` };
+        }
+        return { ok: true, configured: true };
+    } catch (e) {
+        return { ok: false, configured: true, error: 'Tidak bisa terhubung ke GitHub: ' + e.message };
+    }
+}
+
+function setupGithubSyncSettings() {
+    const ownerInput = document.getElementById('ghOwner');
+    const repoInput = document.getElementById('ghRepo');
+    const branchInput = document.getElementById('ghBranch');
+    const tokenInput = document.getElementById('ghToken');
+    const saveBtn = document.getElementById('btnSaveGhConfig');
+    const clearBtn = document.getElementById('btnClearGhConfig');
+    const statusEl = document.getElementById('ghConfigStatus');
+    const autoInfo = document.getElementById('publishInfoAuto');
+    if (!ownerInput || !saveBtn) return;
+
+    function refreshAutoInfo() {
+        const cfg = getGithubConfig();
+        const isConfigured = !!(cfg && cfg.owner && cfg.repo && cfg.token);
+        if (autoInfo) autoInfo.classList.toggle('hidden', !isConfigured);
+    }
+
+    const existing = getGithubConfig();
+    if (existing) {
+        ownerInput.value = existing.owner || '';
+        repoInput.value = existing.repo || '';
+        branchInput.value = existing.branch || '';
+        // Token intentionally left blank on reload — re-entering it to
+        // change/confirm avoids leaving it visible in the input by default.
+    }
+    refreshAutoInfo();
+
+    saveBtn.addEventListener('click', () => {
+        const owner = ownerInput.value.trim();
+        const repo = repoInput.value.trim();
+        const branch = branchInput.value.trim() || 'master';
+        const token = tokenInput.value.trim();
+        if (!owner || !repo || !token) {
+            statusEl.textContent = 'Isi username, nama repo, dan token terlebih dahulu.';
+            statusEl.className = 'text-xs text-error';
+            return;
+        }
+        localStorage.setItem(GH_CONFIG_KEY, JSON.stringify({ owner, repo, branch, token }));
+        tokenInput.value = '';
+        statusEl.textContent = 'Pengaturan tersimpan di browser ini. Coba klik "Simpan Perubahan" untuk menguji koneksinya.';
+        statusEl.className = 'text-xs text-secondary';
+        refreshAutoInfo();
+    });
+
+    clearBtn.addEventListener('click', () => {
+        localStorage.removeItem(GH_CONFIG_KEY);
+        ownerInput.value = '';
+        repoInput.value = '';
+        branchInput.value = '';
+        tokenInput.value = '';
+        statusEl.textContent = 'Pengaturan sinkronisasi otomatis dihapus.';
+        statusEl.className = 'text-xs text-on-surface-variant';
+        refreshAutoInfo();
+    });
+}
+
 // ---- Action buttons ----
 function bindActionButtons() {
     document.getElementById('btnAddProduct').addEventListener('click', () => {
@@ -449,12 +567,18 @@ function bindActionButtons() {
         const btn = document.getElementById('btnSave');
         btn.disabled = true;
         const wroteFile = await tryWriteLocalFile(state);
+        let githubResult = { ok: false, configured: false };
+        if (!wroteFile) githubResult = await tryWriteGithub(state);
         btn.disabled = false;
 
         if (wroteFile) {
             setStatus('Tersimpan langsung ke assets/js/data.js (server dev lokal aktif) pada ' + new Date().toLocaleTimeString('id-ID') + '. Refresh tab situs untuk melihat perubahan — siapa pun yang membuka situs ini juga langsung melihatnya.');
+        } else if (githubResult.ok) {
+            setStatus('Tersimpan & dipublikasikan ke GitHub pada ' + new Date().toLocaleTimeString('id-ID') + '. Situs akan menampilkan perubahan ini untuk semua pengunjung dalam 1–2 menit.');
+        } else if (githubResult.configured) {
+            setStatus('Tersimpan di browser ini saja — publikasi otomatis ke GitHub gagal: ' + (githubResult.error || 'kesalahan tidak diketahui') + ' Cek pengaturan sinkronisasi di bawah kotak info publikasi.');
         } else if (savedLocally) {
-            setStatus('Tersimpan di browser ini saja pada ' + new Date().toLocaleTimeString('id-ID') + ' (endpoint simpan otomatis tidak terdeteksi — jalankan "python dev-server.py", atau gunakan "Unduh data.js" untuk publish manual).');
+            setStatus('Tersimpan di browser ini saja pada ' + new Date().toLocaleTimeString('id-ID') + ' (belum ada sinkronisasi otomatis — atur di "Pengaturan sinkronisasi otomatis ke GitHub", jalankan "python dev-server.py", atau gunakan "Unduh data.js" untuk publish manual).');
         } else {
             setStatus('Gagal menyimpan — kemungkinan penyimpanan browser penuh (gambar terlalu besar/banyak).');
         }

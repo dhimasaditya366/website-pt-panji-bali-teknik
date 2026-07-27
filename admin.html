@@ -83,9 +83,32 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 
 <div class="bg-white border border-outline-variant rounded-xl p-md mb-lg">
 <h2 class="font-headline-md text-base text-primary mb-xs flex items-center gap-xs"><span class="material-symbols-outlined text-secondary">publish</span> Cara mempublikasikan perubahan</h2>
-<p class="text-sm text-on-surface-variant leading-relaxed">
+<p class="text-sm text-on-surface-variant leading-relaxed" id="publishInfoText">
 Situs ini statis (tanpa server/database), jadi <strong>"Simpan Perubahan"</strong> hanya menyimpan ke browser ini (localStorage) agar Anda bisa terus mengedit dan melihat pratinjau di tab "Lihat Situs". Perubahan itu <strong>belum terlihat oleh pengunjung lain</strong>. Untuk mempublikasikannya: klik <strong>"Unduh data.js"</strong> di bagian bawah halaman ini, lalu ganti file <code>assets/js/data.js</code> di hosting Anda dengan file yang diunduh, dan unggah ulang/redeploy situsnya.
 </p>
+<p class="text-sm text-secondary font-medium leading-relaxed mt-2 hidden" id="publishInfoAuto">
+✓ Sinkronisasi otomatis ke GitHub aktif — tombol <strong>"Simpan Perubahan"</strong> langsung mempublikasikan ke situs ini. Perubahan biasanya tampil untuk pengunjung lain dalam 1–2 menit.
+</p>
+<details class="mt-sm">
+<summary class="text-xs text-on-surface-variant cursor-pointer select-none">⚙️ Pengaturan sinkronisasi otomatis ke GitHub (sekali setting, untuk admin teknis)</summary>
+<div class="mt-sm p-sm bg-surface-container-low rounded-lg border border-outline-variant space-y-xs max-w-lg">
+<p class="text-xs text-on-surface-variant leading-relaxed">Isi sekali saja di perangkat/browser ini. Setelah tersimpan, siapa pun yang login ke admin ini (termasuk yang tidak paham teknis) cukup klik "Simpan Perubahan" seperti biasa — perubahannya otomatis ter-publish ke GitHub Pages, tanpa perlu impor/unduh JSON lagi.</p>
+<label class="field-label">Username/Organisasi GitHub</label>
+<input class="field-input" id="ghOwner" placeholder="mis. dhimasaditya366" type="text"/>
+<label class="field-label">Nama Repo</label>
+<input class="field-input" id="ghRepo" placeholder="mis. website-pt-panji-bali-teknik" type="text"/>
+<label class="field-label">Branch</label>
+<input class="field-input" id="ghBranch" placeholder="master" type="text"/>
+<label class="field-label">Personal Access Token (fine-grained, khusus repo ini, izin Contents: Read and write)</label>
+<input autocomplete="off" class="field-input" id="ghToken" placeholder="github_pat_..." type="password"/>
+<div class="flex items-center gap-sm pt-xs">
+<button class="text-xs bg-primary text-white px-md py-2 rounded-lg hover:brightness-110 transition" id="btnSaveGhConfig" type="button">Simpan Pengaturan</button>
+<button class="text-xs text-error hover:underline" id="btnClearGhConfig" type="button">Hapus Pengaturan</button>
+</div>
+<p class="text-xs" id="ghConfigStatus"></p>
+<p class="text-[11px] text-on-surface-variant leading-relaxed pt-xs border-t border-outline-variant">Cara buat token: GitHub → Settings → Developer settings → Personal access tokens → Fine-grained tokens → New token. Pilih "Only select repositories" → repo ini saja → Permissions → Contents: Read and write. Token tersimpan hanya di browser ini (localStorage), tidak pernah ikut ter-publish ke kode situs.</p>
+</div>
+</details>
 </div>
 
 <!-- Tabs -->
