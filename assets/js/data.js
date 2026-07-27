@@ -12,9 +12,9 @@ window.SITE_DEFAULTS = {
         "logo": "https://lh3.googleusercontent.com/aida-public/AB6AXuDIDuYdk1pmU8usCFo87gA2ld1wDaqkZ-dhCoO6lj01Nsi6bRlDsPzP-6tnV6xcod-tv3W8pfR9wVkC94Fz3TcMTTPimncFgj-1JPqAmLohJj_11cSaTeh1qkas3U6LcmO15h1cduAOAuEYN8jC0BoAZRTwbuO-dunyDAZ6bsZ2mwOPWjN5I2NuJ9Nvnc7oh54_u4G517GIPtyGN49mBlnODEAZ7UXWAcGW0jMZBbMYNd1wa1wuYn40TJfk1OOFD1Y7vXGe6plVSfHc",
         "description": "Penyedia solusi alat konstruksi jalan dan infrastruktur terdepan di Indonesia sejak 2015. Mengutamakan kualitas unit, keselamatan kerja, dan kepuasan pelanggan secara menyeluruh.",
         "hours": {
-            "weekday": "08.00 - 17.00",
-            "saturday": "08.00 - 14.00",
-            "sunday": "Tutup"
+            "weekday": { "text": "08.00 - 17.00", "closed": false },
+            "saturday": { "text": "08.00 - 14.00", "closed": false },
+            "sunday": { "text": "Tutup", "closed": true }
         },
         "taglines": [
             "Kualitas Terjamin",
