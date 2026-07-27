@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setText('footerPhone', data.company.phoneDisplay);
     setAttr('footerPhone', 'href', 'tel:' + data.company.phone);
     setText('footerEmail', data.company.email);
-    setAttr('footerEmail', 'href', 'mailto:' + data.company.email);
     setText('footerHoursWeekday', data.company.hours.weekday);
     setText('footerHoursSaturday', data.company.hours.saturday);
     setText('footerHoursSunday', data.company.hours.sunday);
@@ -87,6 +86,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.querySelectorAll('a[href^="tel:"]').forEach((a) => {
         a.href = 'tel:' + data.company.phone;
+    });
+    document.querySelectorAll('a[href^="mailto:"]').forEach((a) => {
+        a.href = 'mailto:' + data.company.email;
     });
 
     // ---- index.html: hero, stats, product preview ----
@@ -202,7 +204,6 @@ ${action}
     setText('contactPhoneText', data.company.phoneDisplay);
     setAttr('contactPhone', 'href', 'https://wa.me/' + waNumber);
     setText('contactEmailText', data.company.email);
-    setAttr('contactEmail', 'href', 'mailto:' + data.company.email);
     setText('contactWebsite', data.company.website);
     setText('hoursWeekday', data.company.hours.weekday + ' WIB');
     setText('hoursSaturday', data.company.hours.saturday + ' WIB');

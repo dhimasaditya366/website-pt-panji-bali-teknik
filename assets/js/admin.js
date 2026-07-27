@@ -27,7 +27,16 @@ let state = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     setupLoginGate();
+    setupPasswordToggles();
 });
+
+// Session expires after 1 hour of no mouse/keyboard/touch activity. Closing
+// the tab/window already logs the admin out on its own — sessionStorage
+// (unlike localStorage) is cleared automatically by the browser when the
+// tab closes, so no extra code is needed for that case.
+const SESSION_TIMEOUT_MS = 60 * 60 * 1000;
+const LAST_ACTIVITY_KEY = 'pbt_admin_last_activity';
+let sessionTimeoutInterval = null;
 
 function setupLoginGate() {
     const gate = document.getElementById('loginGate');
@@ -53,6 +62,7 @@ function setupLoginGate() {
 
         if (inputHash === ADMIN_PASSPHRASE_HASH) {
             sessionStorage.setItem('pbt_admin_authed', 'yes');
+            errorMsg.classList.add('hidden');
             gate.classList.add('hidden');
             dashboard.classList.remove('hidden');
             initDashboard();
@@ -62,6 +72,112 @@ function setupLoginGate() {
             passwordInput.focus();
         }
     });
+}
+
+function forceLogout(message) {
+    if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+    sessionStorage.removeItem('pbt_admin_authed');
+    sessionStorage.removeItem(LAST_ACTIVITY_KEY);
+    document.getElementById('dashboard').classList.add('hidden');
+    document.getElementById('loginGate').classList.remove('hidden');
+    document.getElementById('loginPassword').value = '';
+    const errorMsg = document.getElementById('loginError');
+    if (message && errorMsg) {
+        errorMsg.textContent = message;
+        errorMsg.classList.remove('hidden');
+    }
+}
+
+function setupSessionTimeout() {
+    const touch = () => sessionStorage.setItem(LAST_ACTIVITY_KEY, String(Date.now()));
+    touch();
+    ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach((evt) => {
+        window.addEventListener(evt, touch, { passive: true });
+    });
+
+    if (sessionTimeoutInterval) clearInterval(sessionTimeoutInterval);
+    sessionTimeoutInterval = setInterval(() => {
+        const last = Number(sessionStorage.getItem(LAST_ACTIVITY_KEY) || 0);
+        if (Date.now() - last > SESSION_TIMEOUT_MS) {
+            forceLogout('Sesi berakhir karena tidak ada aktivitas selama 1 jam. Silakan masuk kembali.');
+        }
+    }, 30 * 1000);
+}
+
+function setupPasswordToggles() {
+    document.querySelectorAll('[data-toggle-password]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.togglePassword);
+            if (!input) return;
+            const icon = btn.querySelector('.material-symbols-outlined');
+            const willShow = input.type === 'password';
+            input.type = willShow ? 'text' : 'password';
+            if (icon) icon.textContent = willShow ? 'visibility_off' : 'visibility';
+            btn.setAttribute('aria-label', willShow ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+        });
+    });
+}
+
+// ---- Toast notifications ----
+function showToast(message, type) {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+    const isError = type === 'error';
+    const toast = document.createElement('div');
+    toast.className = (isError ? 'bg-error text-on-error' : 'bg-secondary text-on-primary')
+        + ' px-md py-3 rounded-lg shadow-2xl text-sm font-medium flex items-center gap-xs max-w-sm pointer-events-auto hero-enter';
+    const icon = document.createElement('span');
+    icon.className = 'material-symbols-outlined text-lg';
+    icon.textContent = isError ? 'error' : 'check_circle';
+    const text = document.createElement('span');
+    text.textContent = message;
+    toast.appendChild(icon);
+    toast.appendChild(text);
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.transition = 'opacity 300ms ease, transform 300ms ease';
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(8px)';
+        setTimeout(() => toast.remove(), 320);
+    }, 3500);
+}
+
+// ---- Reusable confirm modal (save / reset / logout all use this) ----
+function showConfirmModal(opts) {
+    const modal = document.getElementById('confirmModal');
+    if (!modal) {
+        if (opts.onConfirm) opts.onConfirm();
+        return;
+    }
+    const titleEl = document.getElementById('confirmModalTitle');
+    const msgEl = document.getElementById('confirmModalMessage');
+    const iconEl = document.getElementById('confirmModalIcon');
+    const cancelBtn = document.getElementById('confirmModalCancel');
+    const confirmBtn = document.getElementById('confirmModalConfirm');
+
+    titleEl.textContent = opts.title || 'Konfirmasi';
+    msgEl.textContent = opts.message || 'Apakah Anda yakin?';
+    confirmBtn.textContent = opts.confirmLabel || 'Ya, Lanjutkan';
+    iconEl.textContent = opts.danger ? 'warning' : 'help';
+    confirmBtn.className = 'px-md py-2 rounded-lg font-bold transition text-sm '
+        + (opts.danger ? 'bg-error text-on-error hover:brightness-110' : 'bg-secondary text-on-primary hover:brightness-110');
+
+    modal.classList.remove('hidden');
+
+    function cleanup() {
+        modal.classList.add('hidden');
+        confirmBtn.removeEventListener('click', onConfirmClick);
+        cancelBtn.removeEventListener('click', onCancelClick);
+    }
+    function onConfirmClick() {
+        cleanup();
+        if (opts.onConfirm) opts.onConfirm();
+    }
+    function onCancelClick() {
+        cleanup();
+    }
+    confirmBtn.addEventListener('click', onConfirmClick);
+    cancelBtn.addEventListener('click', onCancelClick);
 }
 
 function initDashboard() {
@@ -79,6 +195,7 @@ function initDashboard() {
     renderProducts();
     bindActionButtons();
     setupGithubSyncSettings();
+    setupSessionTimeout();
 }
 
 function setStatus(text) {
@@ -562,37 +679,72 @@ function bindActionButtons() {
         renderCategories();
     });
 
-    document.getElementById('btnSave').addEventListener('click', async () => {
-        const savedLocally = window.SiteStore.save(state);
-        const btn = document.getElementById('btnSave');
-        btn.disabled = true;
-        const wroteFile = await tryWriteLocalFile(state);
-        let githubResult = { ok: false, configured: false };
-        if (!wroteFile) githubResult = await tryWriteGithub(state);
-        btn.disabled = false;
+    document.getElementById('btnSave').addEventListener('click', () => {
+        showConfirmModal({
+            title: 'Simpan Perubahan',
+            message: 'Simpan semua perubahan yang sudah Anda buat sekarang?',
+            confirmLabel: 'Ya, Simpan',
+            onConfirm: async () => {
+                const savedLocally = window.SiteStore.save(state);
+                const btn = document.getElementById('btnSave');
+                btn.disabled = true;
+                const wroteFile = await tryWriteLocalFile(state);
+                let githubResult = { ok: false, configured: false };
+                if (!wroteFile) githubResult = await tryWriteGithub(state);
+                btn.disabled = false;
 
-        if (wroteFile) {
-            setStatus('Tersimpan langsung ke assets/js/data.js (server dev lokal aktif) pada ' + new Date().toLocaleTimeString('id-ID') + '. Refresh tab situs untuk melihat perubahan — siapa pun yang membuka situs ini juga langsung melihatnya.');
-        } else if (githubResult.ok) {
-            setStatus('Tersimpan & dipublikasikan ke GitHub pada ' + new Date().toLocaleTimeString('id-ID') + '. Situs akan menampilkan perubahan ini untuk semua pengunjung dalam 1–2 menit.');
-        } else if (githubResult.configured) {
-            setStatus('Tersimpan di browser ini saja — publikasi otomatis ke GitHub gagal: ' + (githubResult.error || 'kesalahan tidak diketahui') + ' Cek pengaturan sinkronisasi di bawah kotak info publikasi.');
-        } else if (savedLocally) {
-            setStatus('Tersimpan di browser ini saja pada ' + new Date().toLocaleTimeString('id-ID') + ' (belum ada sinkronisasi otomatis — atur di "Pengaturan sinkronisasi otomatis ke GitHub", jalankan "python dev-server.py", atau gunakan "Unduh data.js" untuk publish manual).');
-        } else {
-            setStatus('Gagal menyimpan — kemungkinan penyimpanan browser penuh (gambar terlalu besar/banyak).');
-        }
+                if (wroteFile) {
+                    setStatus('Tersimpan langsung ke assets/js/data.js (server dev lokal aktif) pada ' + new Date().toLocaleTimeString('id-ID') + '. Refresh tab situs untuk melihat perubahan — siapa pun yang membuka situs ini juga langsung melihatnya.');
+                    showToast('Perubahan berhasil disimpan.', 'success');
+                } else if (githubResult.ok) {
+                    setStatus('Tersimpan & dipublikasikan ke GitHub pada ' + new Date().toLocaleTimeString('id-ID') + '. Situs akan menampilkan perubahan ini untuk semua pengunjung dalam 1–2 menit.');
+                    showToast('Perubahan berhasil disimpan & dipublikasikan.', 'success');
+                } else if (githubResult.configured) {
+                    setStatus('Tersimpan di browser ini saja — publikasi otomatis ke GitHub gagal: ' + (githubResult.error || 'kesalahan tidak diketahui') + ' Cek pengaturan sinkronisasi di bawah kotak info publikasi.');
+                    showToast('Tersimpan di browser, tapi publikasi ke GitHub gagal.', 'error');
+                } else if (savedLocally) {
+                    setStatus('Tersimpan di browser ini saja pada ' + new Date().toLocaleTimeString('id-ID') + ' (belum ada sinkronisasi otomatis — atur di "Pengaturan sinkronisasi otomatis ke GitHub", jalankan "python dev-server.py", atau gunakan "Unduh data.js" untuk publish manual).');
+                    showToast('Perubahan berhasil disimpan di browser ini.', 'success');
+                } else {
+                    setStatus('Gagal menyimpan — kemungkinan penyimpanan browser penuh (gambar terlalu besar/banyak).');
+                    showToast('Gagal menyimpan perubahan.', 'error');
+                }
+            }
+        });
     });
 
     document.getElementById('btnReset').addEventListener('click', () => {
-        if (!confirm('Kembalikan semua konten ke bawaan pabrik? Perubahan yang belum diunduh sebagai backup akan hilang dari browser ini.')) return;
-        window.SiteStore.reset();
-        state = window.SiteStore.get();
-        populateSimpleFields();
-        renderStats();
-        renderCategories();
-        renderProducts();
-        setStatus('Direset ke konten bawaan.');
+        showConfirmModal({
+            title: 'Batalkan Perubahan',
+            message: 'Semua perubahan yang belum disimpan akan hilang, dan konten akan kembali ke kondisi terakhir kali Anda klik "Simpan Perubahan". Lanjutkan?',
+            confirmLabel: 'Ya, Kembalikan',
+            danger: true,
+            onConfirm: () => {
+                // Reloading from SiteStore.get() (defaults merged with the
+                // last SAVED override) rather than wiping localStorage means
+                // this button now undoes in-progress edits back to the last
+                // save point, instead of factory-resetting everything.
+                state = window.SiteStore.get();
+                populateSimpleFields();
+                renderStats();
+                renderCategories();
+                renderProducts();
+                setStatus('Dikembalikan ke kondisi terakhir kali disimpan.');
+                showToast('Perubahan yang belum disimpan telah dibatalkan.', 'success');
+            }
+        });
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', () => {
+        showConfirmModal({
+            title: 'Keluar dari Admin',
+            message: 'Anda akan keluar dari dashboard admin. Perubahan yang sudah disimpan tetap aman. Lanjutkan?',
+            confirmLabel: 'Ya, Keluar',
+            danger: true,
+            onConfirm: () => {
+                forceLogout(null);
+            }
+        });
     });
 
     document.getElementById('btnBackup').addEventListener('click', () => {
@@ -616,8 +768,9 @@ function bindActionButtons() {
                     renderCategories();
                     renderProducts();
                     setStatus('Berhasil mengimpor data dari file backup.');
+                    showToast('Data berhasil diimpor.', 'success');
                 } catch (e) {
-                    alert('Gagal mengimpor: file bukan JSON yang valid.');
+                    showToast('Gagal mengimpor: file bukan JSON yang valid.', 'error');
                 }
             };
             reader.readAsText(file);

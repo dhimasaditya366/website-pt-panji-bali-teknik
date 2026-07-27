@@ -33,7 +33,12 @@
 <p class="text-sm text-on-surface-variant mb-lg">Masukkan kata sandi untuk mengelola konten situs.</p>
 <form id="loginForm">
 <label class="field-label" for="loginPassword">Kata Sandi</label>
-<input autocomplete="current-password" class="field-input mb-sm" id="loginPassword" type="password"/>
+<div class="relative mb-sm">
+<input autocomplete="current-password" class="field-input pr-10" id="loginPassword" type="password"/>
+<button aria-label="Tampilkan kata sandi" class="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition p-1" data-toggle-password="loginPassword" type="button">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
 <p class="hidden text-xs text-error mb-sm" id="loginError">Kata sandi salah. Coba lagi.</p>
 <button class="w-full bg-secondary text-on-primary py-3 rounded-lg font-button hover:brightness-110 transition active:scale-95 motion-reduce:active:scale-100" type="submit">Masuk</button>
 </form>
@@ -70,6 +75,9 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <button class="text-xs md:text-sm px-4 py-2 rounded-lg bg-secondary text-on-primary font-bold hover:brightness-110 transition flex items-center gap-1 active:scale-95 motion-reduce:active:scale-100" id="btnSave" type="button">
 <span class="material-symbols-outlined text-base">save</span> Simpan Perubahan
 </button>
+<button class="text-xs md:text-sm px-3 py-2 rounded-lg border border-white/20 hover:bg-white/10 transition flex items-center gap-1" id="btnLogout" type="button">
+<span class="material-symbols-outlined text-base">logout</span> Keluar
+</button>
 </div>
 </div>
 </header>
@@ -100,7 +108,12 @@ Situs ini statis (tanpa server/database), jadi <strong>"Simpan Perubahan"</stron
 <label class="field-label">Branch</label>
 <input class="field-input" id="ghBranch" placeholder="master" type="text"/>
 <label class="field-label">Personal Access Token (fine-grained, khusus repo ini, izin Contents: Read and write)</label>
-<input autocomplete="off" class="field-input" id="ghToken" placeholder="github_pat_..." type="password"/>
+<div class="relative">
+<input autocomplete="off" class="field-input pr-10" id="ghToken" placeholder="github_pat_..." type="password"/>
+<button aria-label="Tampilkan token" class="absolute right-2 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition p-1" data-toggle-password="ghToken" type="button">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
 <div class="flex items-center gap-sm pt-xs">
 <button class="text-xs bg-primary text-white px-md py-2 rounded-lg hover:brightness-110 transition" id="btnSaveGhConfig" type="button">Simpan Pengaturan</button>
 <button class="text-xs text-error hover:underline" id="btnClearGhConfig" type="button">Hapus Pengaturan</button>
@@ -670,6 +683,24 @@ Sembunyikan harga (tampilkan "Hubungi Kami" di kartu produk, tanpa perlu isi nom
 <button class="text-error p-2" data-action="remove-spec" type="button"><span class="material-symbols-outlined text-base">close</span></button>
 </div>
 </template>
+
+<!-- Toast notifications -->
+<div class="fixed bottom-6 right-6 z-[200] flex flex-col gap-sm items-end pointer-events-none" id="toastContainer"></div>
+
+<!-- Confirm modal (reused for save/reset/logout confirmations) -->
+<div class="hidden fixed inset-0 z-[150] bg-black/50 flex items-center justify-center px-margin-mobile" id="confirmModal">
+<div class="bg-white rounded-2xl shadow-2xl p-lg max-w-sm w-full hero-enter">
+<div class="flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-2xl text-secondary" id="confirmModalIcon">help</span>
+<h3 class="font-headline-md text-lg text-primary" id="confirmModalTitle">Konfirmasi</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-lg" id="confirmModalMessage">Apakah Anda yakin?</p>
+<div class="flex gap-sm justify-end">
+<button class="px-md py-2 rounded-lg border border-outline-variant hover:bg-surface-container-low transition text-sm font-medium" id="confirmModalCancel" type="button">Batal</button>
+<button class="px-md py-2 rounded-lg bg-secondary text-on-primary font-bold hover:brightness-110 transition text-sm" id="confirmModalConfirm" type="button">Ya, Lanjutkan</button>
+</div>
+</div>
+</div>
 
 <script src="assets/js/admin.js"></script>
 </body>
