@@ -2,13 +2,26 @@
 // `state` object, lets the user edit it through plain form fields, and only
 // writes back to localStorage when "Simpan Perubahan" is clicked.
 //
-// IMPORTANT (read before changing ADMIN_PASSPHRASE): this login gate runs
-// entirely in the browser. It stops a casual visitor from stumbling into
-// edit mode; it does NOT stop anyone who views this page's source. Real
-// protection for a static site means restricting access to admin.html at
-// the hosting layer (host-level password protection, .htaccess, a
-// Cloudflare Access rule, etc.), not a stronger client-side password.
-const ADMIN_PASSPHRASE = 'panjibali2026';
+// IMPORTANT (read before changing ADMIN_PASSPHRASE_HASH): this login gate
+// runs entirely in the browser. The password itself is never stored in this
+// file — only its SHA-256 hash — so reading this source (or view-source on
+// the published page) does not hand someone the plaintext password. It is
+// still not real access control: a hash can be brute-forced offline, and
+// nothing stops someone from reading SiteStore's data directly via the
+// browser console once the page has loaded. Real protection for a static
+// site means restricting access to admin.html at the hosting layer
+// (host-level password protection, a Cloudflare Access rule, etc.).
+//
+// To change the password, compute a new hash and replace the value below:
+//   crypto.subtle.digest('SHA-256', new TextEncoder().encode('your-new-password'))
+//     .then(buf => console.log(Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('')));
+const ADMIN_PASSPHRASE_HASH = '67e45bdcbf1e328f35410448aa3cee7e04803426824577831e9bd499ca57c780';
+
+async function sha256Hex(text) {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
 
 let state = null;
 
@@ -31,9 +44,14 @@ function setupLoginGate() {
         return;
     }
 
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (passwordInput.value === ADMIN_PASSPHRASE) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+        const inputHash = await sha256Hex(passwordInput.value);
+        if (submitBtn) submitBtn.disabled = false;
+
+        if (inputHash === ADMIN_PASSPHRASE_HASH) {
             sessionStorage.setItem('pbt_admin_authed', 'yes');
             gate.classList.add('hidden');
             dashboard.classList.remove('hidden');
