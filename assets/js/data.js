@@ -22,7 +22,7 @@ window.SITE_DEFAULTS = {
             },
             "sunday": {
                 "text": "08.00 - 14.00",
-                "closed": false
+                "closed": true
             }
         },
         "taglines": [
