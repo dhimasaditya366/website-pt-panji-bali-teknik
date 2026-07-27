@@ -14,7 +14,7 @@ window.SITE_DEFAULTS = {
         "hours": {
             "weekday": "08.00 - 17.00",
             "saturday": "08.00 - 14.00",
-            "sunday": "Tutup"
+            "sunday": "08.00 - 14.00"
         },
         "taglines": [
             "Kualitas Terjamin",
