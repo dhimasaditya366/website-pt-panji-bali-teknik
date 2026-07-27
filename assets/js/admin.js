@@ -656,8 +656,13 @@ function setupGithubSyncSettings() {
         ownerInput.value = existing.owner || '';
         repoInput.value = existing.repo || '';
         branchInput.value = existing.branch || '';
-        // Token intentionally left blank on reload — re-entering it to
-        // change/confirm avoids leaving it visible in the input by default.
+        // Token intentionally left blank on reload (never shown back in the
+        // input) — but it IS still saved in localStorage and still used by
+        // tryWriteGithub. The placeholder below makes that clear so it isn't
+        // mistaken for having been reset.
+        if (existing.token) {
+            tokenInput.placeholder = 'Sudah tersimpan — biarkan kosong jika tidak ingin menggantinya';
+        }
     }
     refreshAutoInfo();
 
@@ -665,7 +670,12 @@ function setupGithubSyncSettings() {
         const owner = ownerInput.value.trim();
         const repo = repoInput.value.trim();
         const branch = branchInput.value.trim() || 'master';
-        const token = tokenInput.value.trim();
+        const typedToken = tokenInput.value.trim();
+        // Leaving the token field blank keeps the previously saved token
+        // (it's never redisplayed there) instead of being treated as "no
+        // token" — only require typing one the very first time it's set up.
+        const current = getGithubConfig();
+        const token = typedToken || (current && current.token) || '';
         if (!owner || !repo || !token) {
             statusEl.textContent = 'Isi username, nama repo, dan token terlebih dahulu.';
             statusEl.className = 'text-xs text-error';
@@ -673,6 +683,7 @@ function setupGithubSyncSettings() {
         }
         localStorage.setItem(GH_CONFIG_KEY, JSON.stringify({ owner, repo, branch, token }));
         tokenInput.value = '';
+        tokenInput.placeholder = 'Sudah tersimpan — biarkan kosong jika tidak ingin menggantinya';
         statusEl.textContent = 'Pengaturan tersimpan di browser ini. Coba klik "Simpan Perubahan" untuk menguji koneksinya.';
         statusEl.className = 'text-xs text-secondary';
         refreshAutoInfo();
@@ -684,6 +695,7 @@ function setupGithubSyncSettings() {
         repoInput.value = '';
         branchInput.value = '';
         tokenInput.value = '';
+        tokenInput.placeholder = 'github_pat_...';
         statusEl.textContent = 'Pengaturan sinkronisasi otomatis dihapus.';
         statusEl.className = 'text-xs text-on-surface-variant';
         refreshAutoInfo();
