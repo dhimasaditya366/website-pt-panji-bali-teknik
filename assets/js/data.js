@@ -18,7 +18,7 @@ window.SITE_DEFAULTS = {
             },
             "saturday": {
                 "text": "08.00 - 14.00",
-                "closed": true
+                "closed": false
             },
             "sunday": {
                 "text": "08.00 - 14.00",
