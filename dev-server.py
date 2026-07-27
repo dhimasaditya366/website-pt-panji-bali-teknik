@@ -5,12 +5,16 @@ endpoint so the admin dashboard can write changes directly to
 assets/js/data.js on disk instead of only saving to the browser's
 localStorage.
 
-This endpoint only exists here, in this local dev server. It is NOT present
-on real static hosting (Netlify, Vercel, shared hosting, etc.) — those have
-no server-side code at all. When the site is actually deployed, the admin
-dashboard's "Simpan Perubahan" button will automatically fall back to
-localStorage-only + the "Unduh data.js" manual-publish flow, because this
-/api/save-data endpoint won't exist there.
+This /api/save-data endpoint only exists here, in this local Python dev
+server — it's for local editing/testing only.
+
+For production hosting with real PHP support (e.g. Hostinger shared
+hosting), api/save-data.php does the equivalent job server-side: once that
+file is uploaded alongside the rest of the site, "Simpan Perubahan" writes
+straight to assets/js/data.js on the live server automatically, with no
+per-device setup. On hosts without PHP (GitHub Pages, Netlify static-only,
+etc.), the admin dashboard falls back to the GitHub API sync (if configured)
+or localStorage-only + the "Unduh data.js" manual-publish flow.
 
 Run: python dev-server.py
 Then open: http://localhost:8000/admin.html

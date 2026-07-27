@@ -531,6 +531,44 @@ async function tryWriteLocalFile(dataObj) {
     }
 }
 
+// ---- PHP save endpoint write-back (production hosting, e.g. Hostinger) ----
+// Once this project is deployed to shared PHP hosting (api/save-data.php
+// uploaded alongside the rest of the site), this succeeds automatically —
+// no per-device setup, no token to paste anywhere. The endpoint lives
+// server-side and writes assets/js/data.js directly, so every device that
+// logs into admin.html publishes immediately for every visitor. On GitHub
+// Pages (no PHP) this simply 404s and callers fall through to the next
+// option below.
+//
+// SAVE_ENDPOINT_SECRET must match the SAVE_SECRET constant in
+// api/save-data.php exactly. It only stops random visitors from finding
+// this URL and overwriting the site's content — like the admin password,
+// it lives in a public JS file, so it is not real access control.
+const SAVE_ENDPOINT_SECRET = '272eff041649aebf6e7ec501cc6995ee2aaf7b34562b8a4e';
+
+async function tryWritePhpEndpoint(dataObj) {
+    try {
+        const res = await fetch('api/save-data.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Save-Secret': SAVE_ENDPOINT_SECRET
+            },
+            body: JSON.stringify(dataObj)
+        });
+        if (!res.ok) return false;
+        // On hosts that don't execute PHP (GitHub Pages, static-only
+        // Netlify, etc.), requesting this path still returns HTTP 200 —
+        // it just serves the .php file's raw source as plain text instead
+        // of running it. Only trust a real, well-formed { ok: true } JSON
+        // reply as proof the script actually executed and wrote the file.
+        const json = await res.json().catch(() => null);
+        return !!(json && json.ok === true);
+    } catch (e) {
+        return false;
+    }
+}
+
 // ---- GitHub Contents API write-back ----
 // Lets "Simpan Perubahan" publish straight to the live GitHub Pages site
 // (no local dev server needed) by committing an updated assets/js/data.js
@@ -688,14 +726,24 @@ function bindActionButtons() {
                 const savedLocally = window.SiteStore.save(state);
                 const btn = document.getElementById('btnSave');
                 btn.disabled = true;
+
+                // Priority: local dev server (python dev-server.py) -> PHP
+                // endpoint (production hosting like Hostinger, zero setup
+                // per device) -> GitHub API (only if manually configured,
+                // for the interim GitHub Pages phase) -> localStorage only.
                 const wroteFile = await tryWriteLocalFile(state);
+                let wrotePhp = false;
+                if (!wroteFile) wrotePhp = await tryWritePhpEndpoint(state);
                 let githubResult = { ok: false, configured: false };
-                if (!wroteFile) githubResult = await tryWriteGithub(state);
+                if (!wroteFile && !wrotePhp) githubResult = await tryWriteGithub(state);
                 btn.disabled = false;
 
                 if (wroteFile) {
                     setStatus('Tersimpan langsung ke assets/js/data.js (server dev lokal aktif) pada ' + new Date().toLocaleTimeString('id-ID') + '. Refresh tab situs untuk melihat perubahan — siapa pun yang membuka situs ini juga langsung melihatnya.');
                     showToast('Perubahan berhasil disimpan.', 'success');
+                } else if (wrotePhp) {
+                    setStatus('Tersimpan & langsung terpublikasi ke situs pada ' + new Date().toLocaleTimeString('id-ID') + '. Semua pengunjung langsung melihat perubahan ini.');
+                    showToast('Perubahan berhasil disimpan & dipublikasikan.', 'success');
                 } else if (githubResult.ok) {
                     setStatus('Tersimpan & dipublikasikan ke GitHub pada ' + new Date().toLocaleTimeString('id-ID') + '. Situs akan menampilkan perubahan ini untuk semua pengunjung dalam 1–2 menit.');
                     showToast('Perubahan berhasil disimpan & dipublikasikan.', 'success');
