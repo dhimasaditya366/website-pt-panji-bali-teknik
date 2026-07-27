@@ -1,15 +1,16 @@
 // SiteStore: the only place that reads/writes site content.
 //
-// How persistence works on a static site (no server, no database):
+// How persistence works:
 // - Admin edits made in admin.html are saved into this browser's
-//   localStorage immediately (key STORAGE_KEY below), so the admin can keep
-//   editing/previewing across reloads on the SAME device/browser.
-// - localStorage is per-browser and never syncs to other visitors. To make
-//   edits visible to everyone, the admin must click "Unduh data.js" in the
-//   dashboard and replace assets/js/data.js in the actual site files, then
-//   re-publish/redeploy. That download IS the publish step.
-// - "Impor data.js" lets the admin load a previously exported file back in
-//   (e.g. on a new browser, or to restore a backup) before making more edits.
+//   localStorage immediately (key STORAGE_KEY below) via save(), so the
+//   admin can keep editing/previewing across reloads on the SAME
+//   device/browser even if no publish path is available.
+// - To make edits visible to every visitor, admin.js additionally tries (in
+//   order): the local dev server (dev-server.py), the PHP save endpoint
+//   (api/save-data.php, once deployed to PHP hosting), then the GitHub
+//   Contents API (if configured) — see admin.js for that chain. Whichever
+//   one succeeds writes assets/js/data.js directly; localStorage stays the
+//   fallback so nothing is ever lost even when none of those are reachable.
 (function (global) {
     const STORAGE_KEY = 'pbt_site_overrides_v1';
 
@@ -84,52 +85,10 @@
         return localStorage.getItem(STORAGE_KEY) !== null;
     }
 
-    function exportJSON() {
-        return JSON.stringify(get(), null, 4);
-    }
-
-    // Downloads a ready-to-commit replacement for assets/js/data.js.
-    function downloadDataFile() {
-        const json = exportJSON();
-        const fileContent = 'window.SITE_DEFAULTS = ' + json + ';\n';
-        const blob = new Blob([fileContent], { type: 'text/javascript' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'data.js';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-    }
-
-    function downloadBackupJSON() {
-        const json = exportJSON();
-        const blob = new Blob([json], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'panji-bali-teknik-content-backup.json';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-    }
-
-    function importJSON(text) {
-        const parsed = JSON.parse(text); // throws on invalid JSON, caller should catch
-        writeOverrides(parsed);
-        return parsed;
-    }
-
     global.SiteStore = {
         get,
         save,
         reset,
-        hasOverrides,
-        exportJSON,
-        downloadDataFile,
-        downloadBackupJSON,
-        importJSON
+        hasOverrides
     };
 })(window);

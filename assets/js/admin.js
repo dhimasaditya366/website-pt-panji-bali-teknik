@@ -232,11 +232,15 @@ function setupTabs() {
     });
 }
 
-// ---- Simple [data-field] inputs (text/textarea, dot-path bound) ----
+// ---- Simple [data-field] inputs (text/textarea/select + checkbox, dot-path bound) ----
 function populateSimpleFields() {
     document.querySelectorAll('[data-field]').forEach((el) => {
         const value = getPath(state, el.dataset.field);
-        el.value = value == null ? '' : value;
+        if (el.type === 'checkbox') {
+            el.checked = !!value;
+        } else {
+            el.value = value == null ? '' : value;
+        }
     });
     updateImagePreviews();
 }
@@ -244,7 +248,7 @@ function populateSimpleFields() {
 function bindSimpleFieldListeners() {
     document.querySelectorAll('[data-field]').forEach((el) => {
         el.addEventListener('input', () => {
-            setPath(state, el.dataset.field, el.value);
+            setPath(state, el.dataset.field, el.type === 'checkbox' ? el.checked : el.value);
             updateImagePreviews();
         });
     });
@@ -516,8 +520,8 @@ function addSpecRow(specsList, key, value, productIndex) {
 // ---- Local dev-server write-back ----
 // Only succeeds when running via dev-server.py (python dev-server.py), which
 // exposes POST /api/save-data. On real static hosting this endpoint doesn't
-// exist, so this simply fails fast and callers fall back to localStorage +
-// the manual "Unduh data.js" flow.
+// exist, so this simply fails fast and callers fall back to the PHP
+// endpoint, then GitHub sync, then localStorage-only.
 async function tryWriteLocalFile(dataObj) {
     try {
         const res = await fetch('/api/save-data', {
@@ -751,7 +755,7 @@ function bindActionButtons() {
                     setStatus('Tersimpan di browser ini saja — publikasi otomatis ke GitHub gagal: ' + (githubResult.error || 'kesalahan tidak diketahui') + ' Cek pengaturan sinkronisasi di bawah kotak info publikasi.');
                     showToast('Tersimpan di browser, tapi publikasi ke GitHub gagal.', 'error');
                 } else if (savedLocally) {
-                    setStatus('Tersimpan di browser ini saja pada ' + new Date().toLocaleTimeString('id-ID') + ' (belum ada sinkronisasi otomatis — atur di "Pengaturan sinkronisasi otomatis ke GitHub", jalankan "python dev-server.py", atau gunakan "Unduh data.js" untuk publish manual).');
+                    setStatus('Tersimpan di browser ini saja pada ' + new Date().toLocaleTimeString('id-ID') + ' (belum ada sinkronisasi otomatis aktif — atur di panel "Pengaturan sinkronisasi otomatis ke GitHub", atau tunggu situs ini dipindah ke hosting PHP).');
                     showToast('Perubahan berhasil disimpan di browser ini.', 'success');
                 } else {
                     setStatus('Gagal menyimpan — kemungkinan penyimpanan browser penuh (gambar terlalu besar/banyak).');
@@ -795,56 +799,4 @@ function bindActionButtons() {
         });
     });
 
-    document.getElementById('btnBackup').addEventListener('click', () => {
-        window.SiteStore.downloadBackupJSON();
-    });
-
-    document.getElementById('btnImport').addEventListener('click', () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'application/json';
-        input.addEventListener('change', () => {
-            const file = input.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                try {
-                    window.SiteStore.importJSON(reader.result);
-                    state = window.SiteStore.get();
-                    populateSimpleFields();
-                    renderStats();
-                    renderCategories();
-                    renderProducts();
-                    setStatus('Berhasil mengimpor data dari file backup.');
-                    showToast('Data berhasil diimpor.', 'success');
-                } catch (e) {
-                    showToast('Gagal mengimpor: file bukan JSON yang valid.', 'error');
-                }
-            };
-            reader.readAsText(file);
-        });
-        input.click();
-    });
-
-    // Add a "Unduh data.js" button dynamically at the bottom of the page
-    // (kept separate from the header action row since it's the one truly
-    // destructive-feeling action: it's the actual publish step).
-    const publishBar = document.createElement('div');
-    publishBar.className = 'px-margin-mobile md:px-margin-desktop max-w-6xl mx-auto pb-xl';
-    publishBar.innerHTML = `
-<div class="bg-primary text-white rounded-xl p-lg flex flex-wrap items-center justify-between gap-md">
-<div>
-<h3 class="font-headline-md text-lg mb-1">Siap dipublikasikan?</h3>
-<p class="text-sm text-primary-fixed/80">Unduh <code>data.js</code> lalu ganti file yang sama di folder <code>assets/js/</code> pada hosting Anda, kemudian redeploy.</p>
-</div>
-<button class="bg-secondary-fixed text-on-secondary-fixed px-lg py-3 rounded-lg font-button hover:brightness-110 transition flex items-center gap-2 active:scale-95 motion-reduce:active:scale-100" id="btnDownloadData" type="button">
-<span class="material-symbols-outlined">download</span> Unduh data.js
-</button>
-</div>`;
-    document.getElementById('dashboard').appendChild(publishBar);
-    document.getElementById('btnDownloadData').addEventListener('click', () => {
-        window.SiteStore.save(state);
-        window.SiteStore.downloadDataFile();
-        setStatus('data.js diunduh. Ganti file assets/js/data.js di hosting Anda dengan file ini untuk mempublikasikan perubahan.');
-    });
 }

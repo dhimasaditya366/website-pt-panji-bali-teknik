@@ -150,20 +150,32 @@
 <tbody class="bg-white">
 <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
 <td class="p-md font-bold text-primary">Senin – Jumat</td>
-<td class="p-md font-label-md text-label-md whitespace-nowrap" id="hoursWeekday">08.00 – 17.00 WIB</td>
+<td class="p-md font-label-md text-label-md flex flex-wrap items-center gap-xs" id="hoursWeekdayCell">
+<span class="inline-flex items-center gap-xs whitespace-nowrap">
+<span class="material-symbols-outlined text-[20px] hidden" id="hoursWeekdayIcon">block</span>
+<span id="hoursWeekday">08.00 – 17.00 WIB</span>
+</span>
+<span class="hidden" id="hoursWeekdayNote">(Layanan darurat via WhatsApp)</span>
+</td>
 </tr>
 <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
 <td class="p-md font-bold text-primary">Sabtu</td>
-<td class="p-md font-label-md text-label-md whitespace-nowrap" id="hoursSaturday">08.00 – 14.00 WIB</td>
+<td class="p-md font-label-md text-label-md flex flex-wrap items-center gap-xs" id="hoursSaturdayCell">
+<span class="inline-flex items-center gap-xs whitespace-nowrap">
+<span class="material-symbols-outlined text-[20px] hidden" id="hoursSaturdayIcon">block</span>
+<span id="hoursSaturday">08.00 – 14.00 WIB</span>
+</span>
+<span class="hidden" id="hoursSaturdayNote">(Layanan darurat via WhatsApp)</span>
+</td>
 </tr>
 <tr class="bg-surface-container-low">
 <td class="p-md font-bold text-on-surface-variant">Minggu / Hari Libur</td>
-<td class="p-md font-label-md text-label-md text-error flex flex-wrap items-center gap-xs">
+<td class="p-md font-label-md text-label-md flex flex-wrap items-center gap-xs" id="hoursSundayCell">
 <span class="inline-flex items-center gap-xs whitespace-nowrap">
-<span class="material-symbols-outlined text-[20px]">block</span>
+<span class="material-symbols-outlined text-[20px] hidden" id="hoursSundayIcon">block</span>
 <span id="hoursSunday">Tutup</span>
 </span>
-<span>(Layanan darurat via WhatsApp)</span>
+<span class="hidden" id="hoursSundayNote">(Layanan darurat via WhatsApp)</span>
 </td>
 </tr>
 </tbody>
@@ -252,16 +264,16 @@
                 </h4>
 <div class="space-y-4 text-sm text-primary-fixed/90 bg-white/5 p-5 rounded-xl border border-white/10">
 <div class="flex justify-between items-center">
-<span class="font-medium text-primary-fixed/70">Senin - Jumat</span>
+<span class="font-medium text-primary-fixed/70" id="footerHoursWeekdayLabel">Senin - Jumat</span>
 <span class="font-bold text-secondary-fixed" id="footerHoursWeekday">08.00 - 17.00</span>
 </div>
 <div class="flex justify-between items-center">
-<span class="font-medium text-primary-fixed/70">Sabtu</span>
+<span class="font-medium text-primary-fixed/70" id="footerHoursSaturdayLabel">Sabtu</span>
 <span class="font-bold text-secondary-fixed" id="footerHoursSaturday">08.00 - 14.00</span>
 </div>
 <div class="flex justify-between items-center border-t border-white/10 pt-4">
-<span class="font-bold text-error/80">Minggu</span>
-<span class="px-2 py-0.5 bg-error/20 text-error rounded text-[10px] font-bold uppercase tracking-wider" id="footerHoursSunday">Tutup</span>
+<span class="font-medium text-primary-fixed/70" id="footerHoursSundayLabel">Minggu</span>
+<span class="font-bold text-secondary-fixed" id="footerHoursSunday">Tutup</span>
 </div>
 </div>
 </div>

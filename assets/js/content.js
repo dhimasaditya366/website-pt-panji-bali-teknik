@@ -22,6 +22,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const escapeHtml = (s) => String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+    // Renders one hours.{weekday|saturday|sunday} entry ({text, closed}) into
+    // the footer's compact list (shared markup on every page).
+    function applyFooterHoursRow(labelId, valueId, hourData) {
+        const labelEl = document.getElementById(labelId);
+        const valueEl = document.getElementById(valueId);
+        if (!valueEl || !hourData) return;
+        const closed = !!hourData.closed;
+        valueEl.textContent = closed ? (hourData.text || 'Tutup') : hourData.text;
+        valueEl.className = closed
+            ? 'px-2 py-0.5 bg-error/20 text-error rounded text-[10px] font-bold uppercase tracking-wider'
+            : 'font-bold text-secondary-fixed';
+        if (labelEl) {
+            labelEl.className = closed ? 'font-bold text-error/80' : 'font-medium text-primary-fixed/70';
+        }
+    }
+
+    // Renders the same hours entry into kontak.html's full "Jam Operasional"
+    // table row (icon + note only show when that day is marked closed).
+    function applyTableHoursRow(cellId, iconId, textId, noteId, hourData) {
+        const cell = document.getElementById(cellId);
+        const icon = document.getElementById(iconId);
+        const text = document.getElementById(textId);
+        const note = document.getElementById(noteId);
+        if (!cell || !text || !hourData) return;
+        const closed = !!hourData.closed;
+        text.textContent = closed ? (hourData.text || 'Tutup') : hourData.text + ' WIB';
+        cell.classList.toggle('text-error', closed);
+        if (icon) icon.classList.toggle('hidden', !closed);
+        if (note) note.classList.toggle('hidden', !closed);
+    }
+
     function categoryIconHtml(c, size) {
         // Material Symbols glyphs scale with font-size (text-*), while an
         // uploaded icon image needs an actual box size (w-*/h-*) — same
@@ -70,9 +101,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setText('footerPhone', data.company.phoneDisplay);
     setAttr('footerPhone', 'href', 'tel:' + data.company.phone);
     setText('footerEmail', data.company.email);
-    setText('footerHoursWeekday', data.company.hours.weekday);
-    setText('footerHoursSaturday', data.company.hours.saturday);
-    setText('footerHoursSunday', data.company.hours.sunday);
+    applyFooterHoursRow('footerHoursWeekdayLabel', 'footerHoursWeekday', data.company.hours.weekday);
+    applyFooterHoursRow('footerHoursSaturdayLabel', 'footerHoursSaturday', data.company.hours.saturday);
+    applyFooterHoursRow('footerHoursSundayLabel', 'footerHoursSunday', data.company.hours.sunday);
     if (Array.isArray(data.company.taglines)) {
         setText('footerTagline1', data.company.taglines[0]);
         setText('footerTagline2', data.company.taglines[1]);
@@ -205,9 +236,9 @@ ${action}
     setAttr('contactPhone', 'href', 'https://wa.me/' + waNumber);
     setText('contactEmailText', data.company.email);
     setText('contactWebsite', data.company.website);
-    setText('hoursWeekday', data.company.hours.weekday + ' WIB');
-    setText('hoursSaturday', data.company.hours.saturday + ' WIB');
-    setText('hoursSunday', data.company.hours.sunday);
+    applyTableHoursRow('hoursWeekdayCell', 'hoursWeekdayIcon', 'hoursWeekday', 'hoursWeekdayNote', data.company.hours.weekday);
+    applyTableHoursRow('hoursSaturdayCell', 'hoursSaturdayIcon', 'hoursSaturday', 'hoursSaturdayNote', data.company.hours.saturday);
+    applyTableHoursRow('hoursSundayCell', 'hoursSundayIcon', 'hoursSunday', 'hoursSundayNote', data.company.hours.sunday);
     setAttr('mapLink', 'href', 'https://maps.google.com/?q=' + encodeURIComponent(data.company.mapsQuery));
 
     // ---- Other pages' photos (tentang-kami, layanan, layanan-teknis, kontak) ----
