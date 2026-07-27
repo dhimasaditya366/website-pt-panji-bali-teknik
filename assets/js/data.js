@@ -14,7 +14,7 @@ window.SITE_DEFAULTS = {
         "hours": {
             "weekday": "08.00 - 17.00",
             "saturday": "08.00 - 14.00",
-            "sunday": "Tutup"
+            "sunday": "08.00 - 14.00"
         },
         "taglines": [
             "Kualitas Terjamin",
@@ -120,27 +120,76 @@ window.SITE_DEFAULTS = {
         "paragraph": "PT. Panji Bali Teknik adalah perusahaan yang bergerak di bidang penjualan dan penyewaan alat konstruksi jalan serta infrastruktur di Indonesia.",
         "quote": "\"Berkomitmen menghadirkan solusi teknis sesuai kebutuhan proyek Anda.\"",
         "highlights": [
-            { "icon": "verified_user", "text": "Menjadi penyedia alat konstruksi jalan terdepan & terpercaya di Indonesia dengan mengutamakan keselamatan kerja (K3)." },
-            { "icon": "location_on", "text": "Berlokasi strategis di Jakarta Barat, kami melayani pengiriman ke berbagai wilayah dengan armada logistik terintegrasi." }
+            {
+                "icon": "verified_user",
+                "text": "Menjadi penyedia alat konstruksi jalan terdepan & terpercaya di Indonesia dengan mengutamakan keselamatan kerja (K3)."
+            },
+            {
+                "icon": "location_on",
+                "text": "Berlokasi strategis di Jakarta Barat, kami melayani pengiriman ke berbagai wilayah dengan armada logistik terintegrasi."
+            }
         ],
         "linkText": "Pelajari Selengkapnya"
     },
     "layananCards": [
-        { "icon": "conveyor_belt", "title": "Penjualan Alat Berat", "description": "Investasi masa depan proyek Anda dengan unit alat berat baru dari brand ternama. Kami menyediakan garansi resmi pabrikan dan dukungan teknis penuh untuk memastikan operasional tanpa kendala.", "linkText": "Detail Produk" },
-        { "icon": "vibration", "title": "Penyewaan (Rental)", "description": "Fleksibilitas tinggi untuk kebutuhan proyek jangka pendek maupun panjang. Armada kami selalu dalam kondisi prima berkat jadwal maintenance yang ketat dan prosedur inspeksi sebelum pengiriman.", "linkText": "Lihat Katalog Sewa" },
-        { "icon": "engineering", "title": "Purna Jual & Maintenance", "description": "Tim teknisi ahli bersertifikasi siap menangani perbaikan dan perawatan rutin. Kami menjamin ketersediaan suku cadang asli untuk menjaga performa optimal dan memperpanjang usia alat berat Anda.", "linkText": "Layanan Teknis" }
+        {
+            "icon": "conveyor_belt",
+            "title": "Penjualan Alat Berat",
+            "description": "Investasi masa depan proyek Anda dengan unit alat berat baru dari brand ternama. Kami menyediakan garansi resmi pabrikan dan dukungan teknis penuh untuk memastikan operasional tanpa kendala.",
+            "linkText": "Detail Produk"
+        },
+        {
+            "icon": "vibration",
+            "title": "Penyewaan (Rental)",
+            "description": "Fleksibilitas tinggi untuk kebutuhan proyek jangka pendek maupun panjang. Armada kami selalu dalam kondisi prima berkat jadwal maintenance yang ketat dan prosedur inspeksi sebelum pengiriman.",
+            "linkText": "Lihat Katalog Sewa"
+        },
+        {
+            "icon": "engineering",
+            "title": "Purna Jual & Maintenance",
+            "description": "Tim teknisi ahli bersertifikasi siap menangani perbaikan dan perawatan rutin. Kami menjamin ketersediaan suku cadang asli untuk menjaga performa optimal dan memperpanjang usia alat berat Anda.",
+            "linkText": "Layanan Teknis"
+        }
     ],
     "layananTeknisBento": [
-        { "title": "Pemeliharaan Preventif", "description": "Mencegah kerusakan sebelum terjadi. Jadwal pemeliharaan rutin kami dirancang untuk mendeteksi potensi masalah lebih awal, mengurangi biaya perbaikan tak terduga, dan memperpanjang umur pakai unit Anda." },
-        { "title": "Suku Cadang Asli", "description": "Kami hanya menyediakan komponen original untuk menjamin integritas mesin dan efisiensi operasional maksimal." },
-        { "title": "Perbaikan Unit di Lokasi", "description": "Tim lapangan kami siap diterjunkan langsung ke lokasi proyek Anda di seluruh Indonesia untuk meminimalkan downtime." },
-        { "title": "Diagnostik Modern", "description": "Kami menggunakan peralatan diagnostik digital terkini untuk membaca data telemetri mesin secara real-time, memastikan akurasi perbaikan 100%." }
+        {
+            "title": "Pemeliharaan Preventif",
+            "description": "Mencegah kerusakan sebelum terjadi. Jadwal pemeliharaan rutin kami dirancang untuk mendeteksi potensi masalah lebih awal, mengurangi biaya perbaikan tak terduga, dan memperpanjang umur pakai unit Anda."
+        },
+        {
+            "title": "Suku Cadang Asli",
+            "description": "Kami hanya menyediakan komponen original untuk menjamin integritas mesin dan efisiensi operasional maksimal."
+        },
+        {
+            "title": "Perbaikan Unit di Lokasi",
+            "description": "Tim lapangan kami siap diterjunkan langsung ke lokasi proyek Anda di seluruh Indonesia untuk meminimalkan downtime."
+        },
+        {
+            "title": "Diagnostik Modern",
+            "description": "Kami menggunakan peralatan diagnostik digital terkini untuk membaca data telemetri mesin secara real-time, memastikan akurasi perbaikan 100%."
+        }
     ],
     "layananTeknisWhy": [
-        { "icon": "verified_user", "title": "Teknisi Bersertifikat", "description": "Tim ahli kami dilatih langsung oleh manufaktur dan memiliki sertifikasi teknis resmi." },
-        { "icon": "support_agent", "title": "Respon Cepat 24/7", "description": "Darurat teknis tidak mengenal waktu. Kami siap siaga 24 jam untuk mendukung operasional Anda." },
-        { "icon": "inventory_2", "title": "Suku Cadang Asli", "description": "Inventory suku cadang lengkap untuk berbagai model alat berat populer." },
-        { "icon": "biotech", "title": "Alat Diagnostik", "description": "Pemecahan masalah yang cepat dengan bantuan teknologi komputerisasi terbaru." }
+        {
+            "icon": "verified_user",
+            "title": "Teknisi Bersertifikat",
+            "description": "Tim ahli kami dilatih langsung oleh manufaktur dan memiliki sertifikasi teknis resmi."
+        },
+        {
+            "icon": "support_agent",
+            "title": "Respon Cepat 24/7",
+            "description": "Darurat teknis tidak mengenal waktu. Kami siap siaga 24 jam untuk mendukung operasional Anda."
+        },
+        {
+            "icon": "inventory_2",
+            "title": "Suku Cadang Asli",
+            "description": "Inventory suku cadang lengkap untuk berbagai model alat berat populer."
+        },
+        {
+            "icon": "biotech",
+            "title": "Alat Diagnostik",
+            "description": "Pemecahan masalah yang cepat dengan bantuan teknologi komputerisasi terbaru."
+        }
     ],
     "tentangProfil": {
         "eyebrow": "Professional Partner",
@@ -157,10 +206,26 @@ window.SITE_DEFAULTS = {
         ]
     },
     "tentangNilai": [
-        { "icon": "health_and_safety", "title": "Keselamatan", "description": "Menerapkan standar K3 ketat di setiap unit dan lokasi proyek untuk melindungi pekerja dan aset di lapangan — nilai yang paling kami utamakan." },
-        { "icon": "verified", "title": "Kualitas", "description": "Menyediakan alat terbaik dengan performa maksimal untuk hasil proyek sempurna." },
-        { "icon": "engineering", "title": "Profesional", "description": "Tim ahli yang responsif dan berdedikasi tinggi dalam menangani setiap kebutuhan mitra." },
-        { "icon": "handshake", "title": "Integritas", "description": "Menjunjung tinggi transparansi dan kejujuran dalam setiap kesepakatan bisnis." }
+        {
+            "icon": "health_and_safety",
+            "title": "Keselamatan",
+            "description": "Menerapkan standar K3 ketat di setiap unit dan lokasi proyek untuk melindungi pekerja dan aset di lapangan — nilai yang paling kami utamakan."
+        },
+        {
+            "icon": "verified",
+            "title": "Kualitas",
+            "description": "Menyediakan alat terbaik dengan performa maksimal untuk hasil proyek sempurna."
+        },
+        {
+            "icon": "engineering",
+            "title": "Profesional",
+            "description": "Tim ahli yang responsif dan berdedikasi tinggi dalam menangani setiap kebutuhan mitra."
+        },
+        {
+            "icon": "handshake",
+            "title": "Integritas",
+            "description": "Menjunjung tinggi transparansi dan kejujuran dalam setiap kesepakatan bisnis."
+        }
     ],
     "products": [
         {
