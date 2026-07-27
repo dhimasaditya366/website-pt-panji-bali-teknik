@@ -207,6 +207,7 @@ ${action}
     setText('contactWebsite', data.company.website);
     setText('hoursWeekday', data.company.hours.weekday + ' WIB');
     setText('hoursSaturday', data.company.hours.saturday + ' WIB');
+    setText('hoursSunday', data.company.hours.sunday);
     setAttr('mapLink', 'href', 'https://maps.google.com/?q=' + encodeURIComponent(data.company.mapsQuery));
 
     // ---- Other pages' photos (tentang-kami, layanan, layanan-teknis, kontak) ----
