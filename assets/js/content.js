@@ -22,11 +22,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const escapeHtml = (s) => String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+    // Defensive fallback: normalizes a legacy plain-string hours value (the
+    // schema before the per-day "closed" toggle existed) into the current
+    // { text, closed } shape, so a stale cached data.js or an unmigrated
+    // override never renders as "undefined" instead of the actual hours.
+    function normalizeHourEntry(hourData) {
+        if (typeof hourData === 'string') {
+            return { text: hourData, closed: hourData.trim().toLowerCase() === 'tutup' };
+        }
+        return hourData;
+    }
+
     // Renders one hours.{weekday|saturday|sunday} entry ({text, closed}) into
     // the footer's compact list (shared markup on every page).
-    function applyFooterHoursRow(labelId, valueId, hourData) {
+    function applyFooterHoursRow(labelId, valueId, hourDataRaw) {
         const labelEl = document.getElementById(labelId);
         const valueEl = document.getElementById(valueId);
+        const hourData = normalizeHourEntry(hourDataRaw);
         if (!valueEl || !hourData) return;
         const closed = !!hourData.closed;
         valueEl.textContent = closed ? (hourData.text || 'Tutup') : hourData.text;
@@ -40,11 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Renders the same hours entry into kontak.html's full "Jam Operasional"
     // table row (icon + note only show when that day is marked closed).
-    function applyTableHoursRow(cellId, iconId, textId, noteId, hourData) {
+    function applyTableHoursRow(cellId, iconId, textId, noteId, hourDataRaw) {
         const cell = document.getElementById(cellId);
         const icon = document.getElementById(iconId);
         const text = document.getElementById(textId);
         const note = document.getElementById(noteId);
+        const hourData = normalizeHourEntry(hourDataRaw);
         if (!cell || !text || !hourData) return;
         const closed = !!hourData.closed;
         text.textContent = closed ? (hourData.text || 'Tutup') : hourData.text + ' WIB';

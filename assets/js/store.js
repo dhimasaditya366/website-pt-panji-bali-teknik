@@ -52,6 +52,29 @@
         }
     }
 
+    // Upgrades an overrides blob saved under an older field shape so it
+    // merges correctly with the current SITE_DEFAULTS shape, instead of
+    // silently clobbering a field whose type changed since the override was
+    // saved. mergeDeep replaces non-object values wholesale, so a legacy
+    // plain-string override (e.g. company.hours.weekday used to be the
+    // string "08.00 - 17.00"; it is now { text, closed }) would otherwise
+    // overwrite the new object shape with the old string forever, on every
+    // read-then-save round trip.
+    function migrateOverrides(overrides) {
+        if (isPlainObject(overrides) && isPlainObject(overrides.company) && isPlainObject(overrides.company.hours)) {
+            ['weekday', 'saturday', 'sunday'].forEach((day) => {
+                const val = overrides.company.hours[day];
+                if (typeof val === 'string') {
+                    overrides.company.hours[day] = {
+                        text: val,
+                        closed: val.trim().toLowerCase() === 'tutup'
+                    };
+                }
+            });
+        }
+        return overrides;
+    }
+
     function writeOverrides(data) {
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -64,7 +87,7 @@
 
     function get() {
         const defaults = deepClone(global.SITE_DEFAULTS || {});
-        const overrides = readOverrides();
+        const overrides = migrateOverrides(readOverrides());
         return mergeDeep(defaults, overrides);
     }
 
