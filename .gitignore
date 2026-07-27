@@ -1,0 +1,9 @@
+# Secrets — never publish
+.mcp.json
+
+# Tool-internal config/cache, not part of the published site
+.claude/
+.agents/
+.impeccable/
+__pycache__/
+skills-lock.json

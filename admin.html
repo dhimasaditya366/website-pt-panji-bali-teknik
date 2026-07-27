@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="assets/img/favicon.svg" rel="icon" type="image/svg+xml"/>
+<title>Admin Dashboard - PT. Panji Bali Teknik</title>
+<meta content="noindex, nofollow" name="robots"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="assets/js/tailwind-config.js"></script>
+<link href="assets/css/motion.css" rel="stylesheet"/>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    .tab-btn.active { background-color: #001736; color: #fff; }
+    .field-label { display:block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #43474f; margin-bottom: 4px; }
+    .field-input { width: 100%; padding: 10px 12px; border: 1px solid #c4c6d0; border-radius: 8px; font-size: 0.95rem; background: #fff; }
+    .field-input:focus { outline: 2px solid #416900; outline-offset: 1px; border-color: #416900; }
+    textarea.field-input { resize: vertical; min-height: 72px; }
+</style>
+</head>
+<body class="bg-surface-container-low font-body-md text-on-surface">
+
+<!-- Login Gate -->
+<div class="fixed inset-0 z-[100] bg-primary flex items-center justify-center px-margin-mobile" id="loginGate">
+<div class="bg-white rounded-2xl shadow-2xl p-xl max-w-sm w-full hero-enter">
+<div class="w-14 h-14 bg-secondary/10 rounded-xl flex items-center justify-center mb-md">
+<span class="material-symbols-outlined text-2xl text-secondary">admin_panel_settings</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary mb-xs">Admin Dashboard</h1>
+<p class="text-sm text-on-surface-variant mb-lg">Masukkan kata sandi untuk mengelola konten situs.</p>
+<form id="loginForm">
+<label class="field-label" for="loginPassword">Kata Sandi</label>
+<input autocomplete="current-password" class="field-input mb-sm" id="loginPassword" type="password"/>
+<p class="hidden text-xs text-error mb-sm" id="loginError">Kata sandi salah. Coba lagi.</p>
+<button class="w-full bg-secondary text-on-primary py-3 rounded-lg font-button hover:brightness-110 transition active:scale-95 motion-reduce:active:scale-100" type="submit">Masuk</button>
+</form>
+<p class="text-[11px] text-on-surface-variant/70 mt-md leading-relaxed">
+Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikasi server. Siapa pun yang melihat kode sumber halaman ini bisa menemukan kata sandinya. Untuk perlindungan sesungguhnya, lindungi akses ke <code>admin.html</code> di level hosting (misalnya proteksi password bawaan Netlify/Vercel, atau <code>.htaccess</code>).
+</p>
+</div>
+</div>
+
+<!-- Dashboard -->
+<div class="hidden" id="dashboard">
+<header class="bg-primary text-white sticky top-0 z-50 shadow-lg">
+<div class="px-margin-mobile md:px-margin-desktop py-4 flex flex-wrap items-center justify-between gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary-fixed">admin_panel_settings</span>
+<div>
+<h1 class="font-headline-md text-lg font-bold leading-none">Admin Dashboard</h1>
+<p class="text-xs text-primary-fixed/70 leading-none mt-1">PT. Panji Bali Teknik</p>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-xs">
+<a class="text-xs md:text-sm px-3 py-2 rounded-lg border border-white/20 hover:bg-white/10 transition flex items-center gap-1" href="index.html" target="_blank">
+<span class="material-symbols-outlined text-base">open_in_new</span> Lihat Situs
+</a>
+<button class="text-xs md:text-sm px-3 py-2 rounded-lg border border-white/20 hover:bg-white/10 transition flex items-center gap-1" id="btnImport" type="button">
+<span class="material-symbols-outlined text-base">upload_file</span> Impor
+</button>
+<button class="text-xs md:text-sm px-3 py-2 rounded-lg border border-white/20 hover:bg-white/10 transition flex items-center gap-1" id="btnBackup" type="button">
+<span class="material-symbols-outlined text-base">download</span> Backup JSON
+</button>
+<button class="text-xs md:text-sm px-3 py-2 rounded-lg bg-error/80 hover:bg-error transition flex items-center gap-1" id="btnReset" type="button">
+<span class="material-symbols-outlined text-base">restart_alt</span> Reset
+</button>
+<button class="text-xs md:text-sm px-4 py-2 rounded-lg bg-secondary text-on-primary font-bold hover:brightness-110 transition flex items-center gap-1 active:scale-95 motion-reduce:active:scale-100" id="btnSave" type="button">
+<span class="material-symbols-outlined text-base">save</span> Simpan Perubahan
+</button>
+</div>
+</div>
+</header>
+
+<div class="bg-secondary-container text-on-secondary-container px-margin-mobile md:px-margin-desktop py-sm text-sm flex items-center gap-xs" id="statusBar">
+<span class="material-symbols-outlined text-base">info</span>
+<span id="statusText">Memuat data...</span>
+</div>
+
+<div class="px-margin-mobile md:px-margin-desktop py-md max-w-6xl mx-auto">
+
+<div class="bg-white border border-outline-variant rounded-xl p-md mb-lg">
+<h2 class="font-headline-md text-base text-primary mb-xs flex items-center gap-xs"><span class="material-symbols-outlined text-secondary">publish</span> Cara mempublikasikan perubahan</h2>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+Situs ini statis (tanpa server/database), jadi <strong>"Simpan Perubahan"</strong> hanya menyimpan ke browser ini (localStorage) agar Anda bisa terus mengedit dan melihat pratinjau di tab "Lihat Situs". Perubahan itu <strong>belum terlihat oleh pengunjung lain</strong>. Untuk mempublikasikannya: klik <strong>"Unduh data.js"</strong> di bagian bawah halaman ini, lalu ganti file <code>assets/js/data.js</code> di hosting Anda dengan file yang diunduh, dan unggah ulang/redeploy situsnya.
+</p>
+</div>
+
+<!-- Tabs -->
+<div class="flex flex-wrap gap-xs mb-lg border-b border-outline-variant pb-md" id="tabBar">
+<button class="tab-btn active px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="perusahaan" type="button">Perusahaan</button>
+<button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="beranda" type="button">Beranda</button>
+<button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="kategori" type="button">Kategori</button>
+<button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="produk" type="button">Produk</button>
+<button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="foto" type="button">Foto Halaman Lain</button>
+<button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="bagian" type="button">Bagian &amp; CTA</button>
+</div>
+
+<!-- Tab: Perusahaan -->
+<section data-tab-panel="perusahaan">
+<div class="grid md:grid-cols-2 gap-lg">
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Identitas Perusahaan</h3>
+<div>
+<label class="field-label">Nama Perusahaan</label>
+<input class="field-input" data-field="company.name" type="text"/>
+</div>
+<div>
+<label class="field-label">Deskripsi (Footer)</label>
+<textarea class="field-input" data-field="company.description" rows="3"></textarea>
+</div>
+<div>
+<label class="field-label">Logo</label>
+<div class="flex items-center gap-sm">
+<img alt="Preview logo" class="h-12 w-auto object-contain bg-surface-container-low rounded p-1 border border-outline-variant" id="logoPreview" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="company.logo" id="logoUpload" type="file"/>
+</div>
+<input class="field-input mt-xs" data-field="company.logo" placeholder="atau tempel URL gambar di sini" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div>
+<label class="field-label">Tagline 1 (Footer)</label>
+<input class="field-input" data-field="company.taglines.0" type="text"/>
+</div>
+<div>
+<label class="field-label">Tagline 2 (Footer)</label>
+<input class="field-input" data-field="company.taglines.1" type="text"/>
+</div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Kontak</h3>
+<div>
+<label class="field-label">Alamat</label>
+<textarea class="field-input" data-field="company.address" rows="2"></textarea>
+</div>
+<div>
+<label class="field-label">Kata Kunci Peta (untuk link Google Maps)</label>
+<input class="field-input" data-field="company.mapsQuery" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div>
+<label class="field-label">Nomor WhatsApp/Telepon (format +62...)</label>
+<input class="field-input" data-field="company.phone" placeholder="+6281234567890" type="text"/>
+</div>
+<div>
+<label class="field-label">Nomor Tampilan</label>
+<input class="field-input" data-field="company.phoneDisplay" placeholder="+62 812-3456-7890" type="text"/>
+</div>
+</div>
+<div>
+<label class="field-label">Email</label>
+<input class="field-input" data-field="company.email" type="email"/>
+</div>
+<div>
+<label class="field-label">Website</label>
+<input class="field-input" data-field="company.website" type="text"/>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md md:col-span-2">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Jam Operasional</h3>
+<div class="grid md:grid-cols-3 gap-sm">
+<div>
+<label class="field-label">Senin - Jumat</label>
+<input class="field-input" data-field="company.hours.weekday" type="text"/>
+</div>
+<div>
+<label class="field-label">Sabtu</label>
+<input class="field-input" data-field="company.hours.saturday" type="text"/>
+</div>
+<div>
+<label class="field-label">Minggu</label>
+<input class="field-input" data-field="company.hours.sunday" type="text"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Tab: Beranda -->
+<section class="hidden" data-tab-panel="beranda">
+<div class="grid md:grid-cols-2 gap-lg">
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Hero (Beranda)</h3>
+<div>
+<label class="field-label">Badge Kecil</label>
+<input class="field-input" data-field="hero.badge" type="text"/>
+</div>
+<div>
+<label class="field-label">Judul (bagian normal)</label>
+<input class="field-input" data-field="hero.titlePrefix" type="text"/>
+</div>
+<div>
+<label class="field-label">Judul (bagian disorot/warna aksen)</label>
+<input class="field-input" data-field="hero.titleHighlight" type="text"/>
+</div>
+<div>
+<label class="field-label">Subjudul</label>
+<textarea class="field-input" data-field="hero.subtitle" rows="3"></textarea>
+</div>
+<div>
+<label class="field-label">Gambar Hero</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="Preview hero" class="h-16 w-24 object-cover bg-surface-container-low rounded border border-outline-variant" id="heroImgPreview" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="hero.image" type="file"/>
+</div>
+<input class="field-input" data-field="hero.image" placeholder="atau tempel URL gambar di sini" type="text"/>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Statistik (4 kartu tetap)</h3>
+<div class="grid grid-cols-2 gap-sm" id="statsFields"></div>
+</div>
+</div>
+</section>
+
+<!-- Tab: Kategori -->
+<section class="hidden" data-tab-panel="kategori">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-headline-md text-lg text-primary">Kategori Produk</h3>
+<button class="bg-secondary text-on-primary px-md py-2 rounded-lg font-button text-sm hover:brightness-110 transition flex items-center gap-1 active:scale-95 motion-reduce:active:scale-100" id="btnAddCategory" type="button">
+<span class="material-symbols-outlined text-base">add</span> Tambah Kategori
+</button>
+</div>
+<p class="text-xs text-on-surface-variant mb-md">ID dipakai sebagai jangkar link (<code>katalog.html#id</code>) dan dirujuk oleh field "Kategori" pada tiap produk — kalau kategori dihapus, produk yang masih memakainya tidak akan error, hanya kehilangan jangkar link tersebut.</p>
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-md" id="categoryFields"></div>
+</section>
+
+<!-- Tab: Produk -->
+<section class="hidden" data-tab-panel="produk">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-headline-md text-lg text-primary">Katalog Produk</h3>
+<button class="bg-secondary text-on-primary px-md py-2 rounded-lg font-button text-sm hover:brightness-110 transition flex items-center gap-1 active:scale-95 motion-reduce:active:scale-100" id="btnAddProduct" type="button">
+<span class="material-symbols-outlined text-base">add</span> Tambah Produk
+</button>
+</div>
+<div class="space-y-md" id="productList"></div>
+</section>
+
+<!-- Tab: Foto Halaman Lain -->
+<section class="hidden" data-tab-panel="foto">
+<p class="text-sm text-on-surface-variant mb-md">Foto-foto ini muncul di halaman selain Katalog Produk. Setiap foto bisa diganti dengan mengunggah gambar baru atau menempel URL gambar.</p>
+<div class="grid md:grid-cols-2 gap-lg">
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Tentang Kami</h3>
+<div>
+<label class="field-label">Foto Latar Hero</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.tentangKami.heroImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.tentangKami.heroImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.tentangKami.heroImage" type="text"/>
+</div>
+<div>
+<label class="field-label">Foto Tim Engineer (Profil Perusahaan)</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.tentangKami.profileImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.tentangKami.profileImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.tentangKami.profileImage" type="text"/>
+</div>
+<div>
+<label class="field-label">Foto Visi &amp; Misi</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.tentangKami.visiMisiImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.tentangKami.visiMisiImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.tentangKami.visiMisiImage" type="text"/>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Layanan</h3>
+<div>
+<label class="field-label">Foto Latar Hero</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layanan.heroImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.layanan.heroImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.layanan.heroImage" type="text"/>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Layanan Teknis</h3>
+<div>
+<label class="field-label">Foto Latar Hero</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layananTeknis.heroImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.layananTeknis.heroImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.layananTeknis.heroImage" type="text"/>
+</div>
+<div>
+<label class="field-label">Foto Pemeliharaan Preventif</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layananTeknis.preventiveImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.layananTeknis.preventiveImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.layananTeknis.preventiveImage" type="text"/>
+</div>
+<div>
+<label class="field-label">Foto Suku Cadang Asli</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layananTeknis.partsImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.layananTeknis.partsImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.layananTeknis.partsImage" type="text"/>
+</div>
+<div>
+<label class="field-label">Foto Teknisi (Bagian CTA)</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layananTeknis.ctaImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.layananTeknis.ctaImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.layananTeknis.ctaImage" type="text"/>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Hubungi Kami</h3>
+<div>
+<label class="field-label">Gambar Peta Lokasi</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.kontak.mapImage" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="pages.kontak.mapImage" type="file"/>
+</div>
+<input class="field-input" data-field="pages.kontak.mapImage" type="text"/>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- Tab: Bagian & CTA -->
+<section class="hidden space-y-lg" data-tab-panel="bagian">
+<p class="text-sm text-on-surface-variant">Judul, teks, dan tombol pada section CTA serta kartu-kartu fitur di tiap halaman. Ikon memakai nama ikon Google Material Symbols.</p>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">CTA Penutup — Beranda</h3>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="ctas.home.heading" type="text"/></div>
+<div><label class="field-label">Tombol 1 (WhatsApp)</label><input class="field-input" data-field="ctas.home.button1Text" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Teks</label><textarea class="field-input" data-field="ctas.home.text" rows="2"></textarea></div>
+<div><label class="field-label">Tombol 2 (Katalog)</label><input class="field-input" data-field="ctas.home.button2Text" type="text"/></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">CTA Penutup — Layanan</h3>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="ctas.layanan.heading" type="text"/></div>
+<div><label class="field-label">Tombol (WhatsApp)</label><input class="field-input" data-field="ctas.layanan.buttonText" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Teks</label><textarea class="field-input" data-field="ctas.layanan.text" rows="2"></textarea></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">CTA Penutup — Layanan Teknis</h3>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="ctas.layananTeknis.heading" type="text"/></div>
+<div><label class="field-label">Tombol 1 (Konsultasi)</label><input class="field-input" data-field="ctas.layananTeknis.button1Text" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Teks</label><textarea class="field-input" data-field="ctas.layananTeknis.text" rows="2"></textarea></div>
+<div><label class="field-label">Tombol 2 (Jadwalkan Servis)</label><input class="field-input" data-field="ctas.layananTeknis.button2Text" type="text"/></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">CTA Penutup — Tentang Kami</h3>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="ctas.tentangKami.heading" type="text"/></div>
+<div><label class="field-label">Tombol (WhatsApp)</label><input class="field-input" data-field="ctas.tentangKami.buttonText" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Teks</label><textarea class="field-input" data-field="ctas.tentangKami.text" rows="2"></textarea></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">CTA — Hubungi Kami</h3>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="ctas.kontak.heading" type="text"/></div>
+<div><label class="field-label">Tombol (WhatsApp)</label><input class="field-input" data-field="ctas.kontak.buttonText" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Teks</label><textarea class="field-input" data-field="ctas.kontak.text" rows="2"></textarea></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">Section "Tentang Kami" di Beranda</h3>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Label Kecil</label><input class="field-input" data-field="homeAbout.eyebrow" type="text"/></div>
+<div><label class="field-label">Teks Tombol</label><input class="field-input" data-field="homeAbout.linkText" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Judul</label><input class="field-input" data-field="homeAbout.heading" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Paragraf</label><textarea class="field-input" data-field="homeAbout.paragraph" rows="2"></textarea></div>
+<div class="md:col-span-2"><label class="field-label">Kutipan (kartu mengambang di foto)</label><input class="field-input" data-field="homeAbout.quote" type="text"/></div>
+<div><label class="field-label">Poin 1 — Ikon</label><input class="field-input" data-field="homeAbout.highlights.0.icon" type="text"/></div>
+<div><label class="field-label">Poin 2 — Ikon</label><input class="field-input" data-field="homeAbout.highlights.1.icon" type="text"/></div>
+<div><label class="field-label">Poin 1 — Teks</label><textarea class="field-input" data-field="homeAbout.highlights.0.text" rows="2"></textarea></div>
+<div><label class="field-label">Poin 2 — Teks</label><textarea class="field-input" data-field="homeAbout.highlights.1.text" rows="2"></textarea></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">3 Kartu Layanan (Halaman Layanan)</h3>
+<div class="grid md:grid-cols-3 gap-md">
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="layananCards.0.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananCards.0.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananCards.0.description" rows="3"></textarea>
+<label class="field-label">Teks Tautan</label><input class="field-input" data-field="layananCards.0.linkText" type="text"/>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="layananCards.1.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananCards.1.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananCards.1.description" rows="3"></textarea>
+<label class="field-label">Teks Tautan</label><input class="field-input" data-field="layananCards.1.linkText" type="text"/>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="layananCards.2.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananCards.2.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananCards.2.description" rows="3"></textarea>
+<label class="field-label">Teks Tautan</label><input class="field-input" data-field="layananCards.2.linkText" type="text"/>
+</div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">4 Kartu Bento (Halaman Layanan Teknis)</h3>
+<p class="text-xs text-on-surface-variant">Hanya judul &amp; deskripsi — ikon, checklist, dan angka statistik pada kartu-kartu ini tetap (struktur tiap kartu berbeda-beda).</p>
+<div class="grid md:grid-cols-2 gap-md">
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Judul (Pemeliharaan Preventif)</label><input class="field-input" data-field="layananTeknisBento.0.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.0.description" rows="3"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Judul (Suku Cadang Asli)</label><input class="field-input" data-field="layananTeknisBento.1.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.1.description" rows="3"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Judul (Perbaikan Unit di Lokasi)</label><input class="field-input" data-field="layananTeknisBento.2.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.2.description" rows="3"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Judul (Diagnostik Modern)</label><input class="field-input" data-field="layananTeknisBento.3.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.3.description" rows="3"></textarea>
+</div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">4 Kartu "Kenapa Memilih Layanan Kami" (Halaman Layanan Teknis)</h3>
+<div class="grid md:grid-cols-2 gap-md">
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="layananTeknisWhy.0.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananTeknisWhy.0.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisWhy.0.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="layananTeknisWhy.1.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananTeknisWhy.1.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisWhy.1.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="layananTeknisWhy.2.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananTeknisWhy.2.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisWhy.2.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="layananTeknisWhy.3.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananTeknisWhy.3.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisWhy.3.description" rows="2"></textarea>
+</div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">Profil Perusahaan (Halaman Tentang Kami)</h3>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Label Kecil</label><input class="field-input" data-field="tentangProfil.eyebrow" type="text"/></div>
+<div><label class="field-label">Judul</label><input class="field-input" data-field="tentangProfil.heading" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Paragraf</label><textarea class="field-input" data-field="tentangProfil.paragraph" rows="3"></textarea></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">Visi &amp; Misi (Halaman Tentang Kami)</h3>
+<label class="field-label">Visi</label>
+<textarea class="field-input mb-sm" data-field="tentangVisiMisi.visiText" rows="2"></textarea>
+<label class="field-label">Misi — Poin 1</label><input class="field-input mb-xs" data-field="tentangVisiMisi.misiItems.0" type="text"/>
+<label class="field-label">Misi — Poin 2</label><input class="field-input mb-xs" data-field="tentangVisiMisi.misiItems.1" type="text"/>
+<label class="field-label">Misi — Poin 3</label><input class="field-input mb-xs" data-field="tentangVisiMisi.misiItems.2" type="text"/>
+<label class="field-label">Misi — Poin 4</label><input class="field-input" data-field="tentangVisiMisi.misiItems.3" type="text"/>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">4 Kartu Nilai Perusahaan (Halaman Tentang Kami)</h3>
+<div class="grid md:grid-cols-2 gap-md">
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon (Keselamatan — kartu unggulan)</label><input class="field-input" data-field="tentangNilai.0.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="tentangNilai.0.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="tentangNilai.0.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon (Kualitas)</label><input class="field-input" data-field="tentangNilai.1.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="tentangNilai.1.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="tentangNilai.1.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon (Profesional)</label><input class="field-input" data-field="tentangNilai.2.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="tentangNilai.2.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="tentangNilai.2.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon (Integritas)</label><input class="field-input" data-field="tentangNilai.3.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="tentangNilai.3.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="tentangNilai.3.description" rows="2"></textarea>
+</div>
+</div>
+</div>
+
+</section>
+
+</div>
+</div>
+
+<!-- Templates (not rendered, cloned by JS) -->
+<template id="tplStat">
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Nilai</label>
+<input class="field-input mb-xs" data-stat-field="value" type="text"/>
+<label class="field-label">Label</label>
+<input class="field-input" data-stat-field="label" type="text"/>
+</div>
+</template>
+
+<template id="tplCategory">
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-sm space-y-xs" data-category-card="">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-xs">
+<span class="w-8 h-8 rounded bg-white border border-outline-variant flex items-center justify-center overflow-hidden" data-cat-icon-preview=""></span>
+</div>
+<button class="text-error hover:bg-error/10 p-1 rounded transition flex items-center gap-1 text-xs" data-action="remove-category" type="button">
+<span class="material-symbols-outlined text-base">delete</span>
+</button>
+</div>
+<label class="field-label">ID (anchor)</label>
+<input class="field-input" data-cat-field="id" type="text"/>
+<label class="field-label">Label</label>
+<input class="field-input" data-cat-field="label" type="text"/>
+<label class="field-label">Jenis Ikon</label>
+<select class="field-input" data-cat-field="iconType">
+<option value="symbol">Nama ikon (Material Symbols)</option>
+<option value="image">Gambar unggahan</option>
+</select>
+<div data-cat-icon-symbol-wrap="">
+<label class="field-label">Nama Ikon</label>
+<input class="field-input" data-cat-field="icon" placeholder="mis. electric_bolt" type="text"/>
+</div>
+<div class="hidden" data-cat-icon-image-wrap="">
+<label class="field-label">Unggah Gambar Ikon</label>
+<input accept="image/*" class="text-xs block" data-cat-icon-upload="" type="file"/>
+</div>
+</div>
+</template>
+
+<template id="tplProduct">
+<div class="bg-white border border-outline-variant rounded-xl p-lg" data-product-card="">
+<div class="flex items-start justify-between gap-md mb-md">
+<div class="flex items-center gap-sm">
+<img alt="Preview produk" class="w-16 h-16 object-cover rounded-lg bg-surface-container-low border border-outline-variant" data-product-field="imagePreview" src="assets/img/placeholder.svg"/>
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase" data-product-field="skuLabel"></span>
+</div>
+</div>
+<button class="text-error hover:bg-error/10 p-2 rounded-lg transition flex items-center gap-1 text-sm" data-action="remove-product" type="button">
+<span class="material-symbols-outlined text-base">delete</span> Hapus
+</button>
+</div>
+<div class="grid md:grid-cols-2 gap-sm">
+<div>
+<label class="field-label">SKU</label>
+<input class="field-input" data-product-field="sku" type="text"/>
+</div>
+<div>
+<label class="field-label">Nama Produk</label>
+<input class="field-input" data-product-field="name" type="text"/>
+</div>
+<div>
+<label class="field-label">Model (opsional)</label>
+<input class="field-input" data-product-field="model" type="text"/>
+</div>
+<div>
+<label class="field-label">Kategori</label>
+<select class="field-input" data-product-field="category"></select>
+</div>
+<div class="md:col-span-2">
+<label class="flex items-center gap-xs text-sm font-medium text-on-surface-variant">
+<input class="w-4 h-4" data-product-field="hidePrice" type="checkbox"/>
+Sembunyikan harga (tampilkan "Hubungi Kami" di kartu produk, tanpa perlu isi nominal)
+</label>
+</div>
+<div data-price-field-wrap="">
+<label class="field-label">Harga per Hari (angka)</label>
+<input class="field-input" data-product-field="price" type="number"/>
+</div>
+<div data-price-field-wrap="">
+<label class="field-label">Label Harga Tampilan</label>
+<input class="field-input" data-product-field="priceLabel" placeholder="mis. Rp 250rb" type="text"/>
+</div>
+<div>
+<label class="field-label">Status</label>
+<select class="field-input" data-product-field="status">
+<option value="tersedia">Tersedia</option>
+<option value="disewa">Disewa</option>
+</select>
+</div>
+<div>
+<label class="field-label">Gambar (URL atau unggah)</label>
+<input accept="image/*" class="text-xs mb-1 block" data-product-image-upload="" type="file"/>
+<input class="field-input" data-product-field="image" type="text"/>
+</div>
+<div class="md:col-span-2">
+<label class="field-label">Deskripsi</label>
+<textarea class="field-input" data-product-field="description" rows="2"></textarea>
+</div>
+</div>
+<div class="mt-md">
+<div class="flex items-center justify-between mb-xs">
+<label class="field-label mb-0">Spesifikasi Teknis (opsional)</label>
+<button class="text-xs text-secondary font-bold flex items-center gap-1" data-action="add-spec" type="button">
+<span class="material-symbols-outlined text-sm">add</span> Tambah baris
+</button>
+</div>
+<div class="space-y-xs" data-specs-list=""></div>
+</div>
+</div>
+</template>
+
+<template id="tplSpecRow">
+<div class="flex gap-xs items-center" data-spec-row="">
+<input class="field-input" data-spec-field="key" placeholder="mis. Power Output" type="text"/>
+<input class="field-input" data-spec-field="value" placeholder="mis. 100 kVA / 80 kW" type="text"/>
+<button class="text-error p-2" data-action="remove-spec" type="button"><span class="material-symbols-outlined text-base">close</span></button>
+</div>
+</template>
+
+<script src="assets/js/admin.js"></script>
+</body>
+</html>

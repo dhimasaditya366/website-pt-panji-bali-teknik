@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="assets/img/favicon.svg" rel="icon" type="image/svg+xml"/>
+<title>Katalog Produk - PT. Panji Bali Teknik</title>
+<meta content="Katalog lengkap alat konstruksi jalan dan infrastruktur untuk disewa: genset, jack hammer, concrete vibrator, bar cutter, asphalt cutter, vibratory roller, dan lainnya." name="description"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="assets/js/tailwind-config.js"></script>
+<link href="assets/css/motion.css" rel="stylesheet"/>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/content.js"></script>
+</head>
+<body class="bg-background text-on-background font-body-md scroll-smooth">
+<a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-secondary focus:text-on-primary focus:px-md focus:py-sm focus:rounded font-button" href="#konten-utama">Langsung ke konten</a>
+<!-- TopNavBar -->
+<nav class="site-nav fixed top-0 w-full z-[60] bg-white/95 backdrop-blur-sm border-b border-outline-variant px-margin-mobile md:px-margin-desktop py-4 transition-[padding,box-shadow]">
+<div class="flex justify-between items-center">
+<a class="flex items-center gap-sm" href="index.html">
+<img alt="PT. PANJI BALI TEKNIK Logo" class="h-10 md:h-12 w-auto object-contain" id="navLogo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIDuYdk1pmU8usCFo87gA2ld1wDaqkZ-dhCoO6lj01Nsi6bRlDsPzP-6tnV6xcod-tv3W8pfR9wVkC94Fz3TcMTTPimncFgj-1JPqAmLohJj_11cSaTeh1qkas3U6LcmO15h1cduAOAuEYN8jC0BoAZRTwbuO-dunyDAZ6bsZ2mwOPWjN5I2NuJ9Nvnc7oh54_u4G517GIPtyGN49mBlnODEAZ7UXWAcGW0jMZBbMYNd1wa1wuYn40TJfk1OOFD1Y7vXGe6plVSfHc"/>
+<span class="hidden lg:block font-headline-md text-xl font-bold text-primary tracking-tight" id="navCompanyName">PT. PANJI BALI TEKNIK</span>
+</a>
+<div class="hidden md:flex items-center gap-lg">
+<a class="font-label-md text-on-surface hover:text-secondary transition-colors" href="index.html">Beranda</a>
+<a class="font-label-md text-secondary font-bold" href="katalog.html">Produk</a>
+<a class="font-label-md text-on-surface hover:text-secondary transition-colors" href="layanan.html">Layanan</a>
+<a class="font-label-md text-on-surface hover:text-secondary transition-colors" href="tentang-kami.html">Tentang Kami</a>
+<a class="font-label-md text-on-surface hover:text-secondary transition-colors" href="kontak.html">Hubungi Kami</a>
+</div>
+<div class="flex items-center gap-sm">
+<a class="hidden sm:inline-flex bg-secondary text-on-primary px-lg py-2.5 font-button rounded hover:brightness-110 transition active:scale-95 motion-reduce:active:scale-100 text-sm md:text-base whitespace-nowrap shadow-sm" href="https://wa.me/6281234567890" rel="noopener" target="_blank">Rent Now</a>
+<button aria-expanded="false" aria-label="Buka menu" class="md:hidden w-10 h-10 flex items-center justify-center text-primary" id="mobile-menu-btn">
+<span class="material-symbols-outlined icon-open">menu</span>
+<span class="material-symbols-outlined icon-close hidden">close</span>
+</button>
+</div>
+</div>
+<div class="md:hidden mobile-menu-collapse" id="mobile-menu">
+<div class="flex flex-col gap-1 mt-4 pb-2 border-t border-outline-variant pt-4">
+<a class="font-label-md text-on-surface py-2" href="index.html">Beranda</a>
+<a class="font-label-md text-secondary font-bold py-2" href="katalog.html">Produk</a>
+<a class="font-label-md text-on-surface py-2" href="layanan.html">Layanan</a>
+<a class="font-label-md text-on-surface py-2" href="tentang-kami.html">Tentang Kami</a>
+<a class="font-label-md text-on-surface py-2" href="kontak.html">Hubungi Kami</a>
+<a class="mt-2 bg-secondary text-on-primary text-center px-lg py-2.5 font-button rounded" href="https://wa.me/6281234567890" rel="noopener" target="_blank">Rent Now</a>
+</div>
+</div>
+</nav>
+
+<div class="flex pt-24 min-h-[100dvh]">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex sticky top-24 h-[calc(100dvh-96px)] w-64 border-r border-outline-variant bg-surface flex-col p-sm shrink-0 hero-enter">
+<div class="mb-lg px-xs">
+<h2 class="font-headline-md text-headline-md text-primary">Catalog</h2>
+<p class="font-label-md text-label-md text-on-surface-variant">Browse Inventory</p>
+</div>
+<nav class="space-y-xs">
+<a class="flex items-center gap-sm p-sm bg-secondary-container text-on-secondary-container font-bold rounded-r-full transition translate-x-1" href="katalog.html">
+<span class="material-symbols-outlined">category</span>
+<span class="font-label-md text-label-md">Semua Alat</span>
+</a>
+<div class="space-y-xs" id="categorySidebar">
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high transition" href="katalog.html#genset">
+<span class="material-symbols-outlined">electric_bolt</span>
+<span class="font-label-md text-label-md">Genset</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high transition" href="katalog.html#pemadat">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span class="font-label-md text-label-md">Pemadat</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high transition" href="katalog.html#pemotong">
+<span class="material-symbols-outlined">content_cut</span>
+<span class="font-label-md text-label-md">Pemotong</span>
+</a>
+</div>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high transition" href="layanan-teknis.html">
+<span class="material-symbols-outlined">build_circle</span>
+<span class="font-label-md text-label-md">Layanan Teknis</span>
+</a>
+</nav>
+<div class="mt-md space-y-md">
+<a class="w-full bg-primary text-on-primary py-sm rounded flex items-center justify-center gap-xs font-button text-button" href="kontak.html">
+<span class="material-symbols-outlined">support_agent</span> Butuh Bantuan?
+                </a>
+</div>
+</aside>
+
+<!-- Main Content -->
+<main class="flex-1 px-sm md:px-lg py-md max-w-7xl mx-auto w-full" id="konten-utama">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-xs mb-md text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">home</span>
+<a class="hover:text-primary transition-colors" href="index.html">Beranda</a>
+<span>/</span>
+<span class="text-primary font-semibold">Produk</span>
+</nav>
+<!-- Mobile/Tablet Category Chips (sidebar is desktop-only) -->
+<nav class="lg:hidden flex gap-xs items-center overflow-x-auto mb-md pb-1 hero-enter" aria-label="Kategori produk">
+<a class="shrink-0 flex items-center gap-1 px-md py-xs bg-secondary-container text-on-secondary-container font-bold rounded-full font-label-md text-label-md whitespace-nowrap" href="katalog.html">
+<span class="material-symbols-outlined text-base">category</span> Semua Alat
+</a>
+<div class="contents" id="categoryChipsMobile">
+<a class="shrink-0 flex items-center gap-1 px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap" href="katalog.html#genset">
+<span class="material-symbols-outlined text-base">electric_bolt</span> Genset
+</a>
+<a class="shrink-0 flex items-center gap-1 px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap" href="katalog.html#pemadat">
+<span class="material-symbols-outlined text-base">precision_manufacturing</span> Pemadat
+</a>
+<a class="shrink-0 flex items-center gap-1 px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap" href="katalog.html#pemotong">
+<span class="material-symbols-outlined text-base">content_cut</span> Pemotong
+</a>
+</div>
+<a class="shrink-0 flex items-center gap-1 px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap" href="layanan-teknis.html">
+<span class="material-symbols-outlined text-base">build_circle</span> Layanan Teknis
+</a>
+</nav>
+<!-- Header Section -->
+<div class="mb-lg">
+<span class="font-label-md text-label-md text-secondary uppercase tracking-widest block mb-xs hero-enter" style="animation-delay:0ms">Katalog Rental</span>
+<h1 class="font-display-lg text-3xl sm:text-4xl md:text-display-lg text-primary uppercase hero-enter" style="animation-delay:80ms">PRODUK UTAMA KAMI</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-xs max-w-3xl hero-enter" style="animation-delay:160ms">
+                    PT. Panji Bali Teknik menyediakan berbagai alat konstruksi jalan yang telah teruji kualitas dan keandalannya. Seluruh produk kami terjamin performa dan keamanannya untuk mendukung kebutuhan proyek konstruksi Anda.
+                </p>
+</div>
+<!-- Toolbar/Filters -->
+<div class="flex flex-col md:flex-row justify-between items-center gap-md mb-lg bg-surface p-sm rounded-xl border border-outline-variant hero-enter" style="animation-delay:240ms">
+<div class="flex gap-sm items-center overflow-x-auto w-full md:w-auto" id="sortToolbar" role="group" aria-label="Urutkan produk">
+<button aria-pressed="true" class="sort-btn px-md py-xs bg-primary text-on-primary rounded-full font-label-md text-label-md whitespace-nowrap transition-colors" data-sort="default" type="button">Semua</button>
+<button aria-pressed="false" class="sort-btn px-md py-xs bg-surface-container-highest text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap transition-colors" data-sort="popular" type="button">Populer</button>
+<button aria-pressed="false" class="sort-btn px-md py-xs bg-surface-container-highest text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap transition-colors" data-sort="newest" type="button">Terbaru</button>
+<button aria-pressed="false" class="sort-btn px-md py-xs bg-surface-container-highest text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap transition-colors" data-sort="price-asc" type="button">Harga Terendah</button>
+</div>
+<div class="flex items-center gap-sm w-full md:w-auto">
+<span class="font-label-md text-label-md text-on-surface-variant" id="productCount">Menampilkan 6 Produk</span>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md" id="productGrid">
+<!-- Product 1: Genset -->
+<div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-price="1250000" data-status="tersedia" id="genset">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img alt="High-powered industrial silent generator" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7WzodFkOcwfc90GYIC-El4U5WGeXDGGyOsIGmam0nUHTuezKcfieTi0vmxaBzzbbL0xWnOjMlo5g9idXtQITSXWdsxa97u-cAxFX4lO6hZkoV8_6lSND3AxQhUkHfMRB1Bw7JDs9gkscsXE4E-QGzavth5JrdpI6wM08lH-acurjaglZtjsnfF9Q-98XCtxEYGTl1-Ov-JwRdETDpFRDzQL8UcreOSMOcW1Y8LVctC_6hNl6gT9YZil3ZRyL1GJtlgdDZ68xKEx9s"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-primary px-sm py-xs rounded font-label-md text-label-md uppercase">Tersedia</div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-primary">Generator / Genset (Silent)</h3>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-xs py-1 rounded">SKU-001</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Sumber daya listrik portabel yang andal untuk mendukung seluruh operasional alat di lapangan.</p>
+<div class="flex flex-col gap-xs pt-xs border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Mulai Dari</span>
+<div class="flex items-baseline gap-xs text-secondary font-bold tabular-nums">
+<span class="text-body-md">Rp</span>
+<span class="text-headline-lg">1.250.000</span>
+<span class="text-on-surface-variant font-normal">/ hari</span>
+</div>
+</div>
+<a class="w-full bg-secondary text-on-primary py-md rounded-lg font-button text-button uppercase tracking-widest hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition flex items-center justify-center" href="detail-penyewaan.html?sku=SKU-001">Sewa Sekarang</a>
+</div>
+</div>
+<!-- Product 2: Jack Hammer -->
+<div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-price="450000" data-status="disewa">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img alt="Heavy duty electric jack hammer for concrete demolition" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0wS56XItOa4I6lP8YHlpX88Rks8Vma3nJTsSNewZA6Iuj3UMJJObx3npLfaWuBoYPAXzKM0YwowCOlluz8B24Ys9Yk3M201tXAgOYQgQ-NQBhyl_FFTbAvZBroYvAObkzdR1gHk9odpY8qWALrc0UDplOF-xZUQlesAzRVPyNIXiw6CviwgC-L1rTYMY9o5cgljoCwDIIv8iF7eoaV2JPWldbfH-84yhfdpQJH8JboRQa5dIoHPTggvPJO3P9bILjzwfU86V1XaHn"/>
+<div class="absolute top-4 left-4 bg-error text-on-error px-sm py-xs rounded font-label-md text-label-md uppercase">Disewa Proyek</div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-primary">Jack Hammer / Concrete Breaker</h3>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-xs py-1 rounded">SKU-005</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Alat pemecah beton dan permukaan keras yang kuat untuk pembongkaran dan penggalian infrastruktur.</p>
+<div class="flex flex-col gap-xs pt-xs border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Mulai Dari</span>
+<div class="flex items-baseline gap-xs text-secondary font-bold tabular-nums">
+<span class="text-body-md">Rp</span>
+<span class="text-headline-lg">450.000</span>
+<span class="text-on-surface-variant font-normal">/ hari</span>
+</div>
+</div>
+<button class="w-full bg-outline-variant text-on-surface-variant py-md rounded-lg font-button text-button uppercase tracking-widest cursor-not-allowed opacity-60" disabled="">Sedang Disewa</button>
+</div>
+</div>
+<!-- Product 3: Concrete Vibrator -->
+<div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-price="250000" data-status="tersedia" id="pemadat">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img alt="Concrete vibrator" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvTgPpkksocKb4ZTjG8nx1yqDOGq_iIQvv-HPWtVvVTRzCBYsnHq-nUP1DkzXFx-_yA3cYdyXwx7MaQQcYFefX6tglcfPhe8BOTC96BHeCFG1iENu6h_zXUdbRivipidfuyWc6t751PovPKKv0Kga1XeeSxUppjjIlKZvgKMuwmkIFCttA2-_KQ45jEgehuqApDAFSKsEOyt-HIMrRO3A8bAZzyev03nPaKoMbCsV1EGz1BPNCiQK4pM3akwzHxwSCWbaVBNXJqYIn"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-primary px-sm py-xs rounded font-label-md text-label-md uppercase">Tersedia</div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-primary">Concrete Vibrator</h3>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-xs py-1 rounded">SKU-003</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Alat pemadat beton untuk hasil pengecoran yang padat, kuat, dan bebas rongga udara.</p>
+<div class="flex flex-col gap-xs pt-xs border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Mulai Dari</span>
+<div class="flex items-baseline gap-xs text-secondary font-bold tabular-nums">
+<span class="text-body-md">Rp</span>
+<span class="text-headline-lg">250.000</span>
+<span class="text-on-surface-variant font-normal">/ hari</span>
+</div>
+</div>
+<a class="w-full bg-secondary text-on-primary py-md rounded-lg font-button text-button uppercase tracking-widest hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition flex items-center justify-center" href="detail-penyewaan.html?sku=SKU-003">Sewa Sekarang</a>
+</div>
+</div>
+<!-- Product 4: Bar Cutter -->
+<div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-price="550000" data-status="tersedia" id="pemotong">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img alt="Bar cutter" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTWoGVs977UbJIwAVL8oh4fLj1INU05WvceG9fuvE_ZRsdR5SGSF632fmLOIW43cpzF39xh6cRd9ckMIGg6Txus_deI7VE5DXTqdT5jz-HGfx4ccHcSxPRaGEL-W5Zj03e4A40kFoBtY5ls2J7qXzcy_q0Y3jIHzlNCHFJEp5mWnfV7V23InrXIVZdBhJ-N7lUL56qnaD7ZbHqR1CzW0x11vk6zmiNNjEhGRufz67-NRhDhCvvSVW9O2Pt-geJQy4-mHGFEUUvf0PG"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-primary px-sm py-xs rounded font-label-md text-label-md uppercase">Tersedia</div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-primary">Bar Cutter &amp; Bar Bender</h3>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-xs py-1 rounded">SKU-004</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Alat pemotong dan pembengkok besi tulangan beton dengan presisi tinggi dan rapi.</p>
+<div class="flex flex-col gap-xs pt-xs border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Mulai Dari</span>
+<div class="flex items-baseline gap-xs text-secondary font-bold tabular-nums">
+<span class="text-body-md">Rp</span>
+<span class="text-headline-lg">550.000</span>
+<span class="text-on-surface-variant font-normal">/ hari</span>
+</div>
+</div>
+<a class="w-full bg-secondary text-on-primary py-md rounded-lg font-button text-button uppercase tracking-widest hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition flex items-center justify-center" href="detail-penyewaan.html?sku=SKU-004">Sewa Sekarang</a>
+</div>
+</div>
+<!-- Product 5: Asphalt Cutter -->
+<div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-price="800000" data-status="tersedia">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img alt="Asphalt cutter" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLjpLWAKio11u75MkAcScdFKdMBgyCfdGRD8m8iAnnopPXKvRgQLbGTiPIwWRh4e03uWNb6eKhtjDP0b6ihy05Sns6RPiyH8plJ6gEyx-GfPd9Aci9KuIFcgy0joPjqWv04yBawooWEY24x1LHYm68qUFV-Mg3AmOAUsX0Sfn1w77606qstXqyAJ1MaX3rpfWxi2UlkYp4JX6yOrTqZilFXUhRQ-zpa0pbLCeo1BAV9XUWppOXLL7I7wdYvtmfCDSn88TrpDrc4loY"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-primary px-sm py-xs rounded font-label-md text-label-md uppercase">Tersedia</div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-primary">Asphalt &amp; Concrete Cutter</h3>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-xs py-1 rounded">SKU-007</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Alat pemotong aspal dan beton untuk perbaikan jalan, utilitas, dan renovasi infrastruktur.</p>
+<div class="flex flex-col gap-xs pt-xs border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Mulai Dari</span>
+<div class="flex items-baseline gap-xs text-secondary font-bold tabular-nums">
+<span class="text-body-md">Rp</span>
+<span class="text-headline-lg">800.000</span>
+<span class="text-on-surface-variant font-normal">/ hari</span>
+</div>
+</div>
+<a class="w-full bg-secondary text-on-primary py-md rounded-lg font-button text-button uppercase tracking-widest hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition flex items-center justify-center" href="detail-penyewaan.html?sku=SKU-007">Sewa Sekarang</a>
+</div>
+</div>
+<!-- Product 6: Vibratory Roller -->
+<div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-price="1500000" data-status="tersedia">
+<div class="relative h-64 overflow-hidden bg-surface-container">
+<img alt="Vibratory roller" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv56gHnn5HBMEvy5OJBk2hdMOxP-mwzGq1gUkO2tvfV0lN4xI6pMwg_JIltYLiIsxiNGxpJRiO4xSetckt74FUM0dkECSSv-XGUOeRBeoq9UUldLDAVXigtTGFow4LL8-YtJeUTI7YOC7s8j38qFv2r0bkEvN_0xNsfJbfvGNT2g1ZQIxAa5aofEX6xjh65_CcYx82eSUaNRCej3c9d-hmzfzsG5pvJPQhJ2FpbdxyD0nAfNcvhh5KTB2XqBV_qxzYLaJG6JbsY-PK"/>
+<div class="absolute top-4 left-4 bg-secondary text-on-primary px-sm py-xs rounded font-label-md text-label-md uppercase">Tersedia</div>
+</div>
+<div class="p-md space-y-sm">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-primary">Vibratory Roller</h3>
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-xs py-1 rounded">SKU-002</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Mesin pemadat tanah dan aspal dengan sistem getar untuk permukaan jalan yang kuat dan rata.</p>
+<div class="flex flex-col gap-xs pt-xs border-t border-outline-variant">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Mulai Dari</span>
+<div class="flex items-baseline gap-xs text-secondary font-bold tabular-nums">
+<span class="text-body-md">Rp</span>
+<span class="text-headline-lg">1.500.000</span>
+<span class="text-on-surface-variant font-normal">/ hari</span>
+</div>
+</div>
+<a class="w-full bg-secondary text-on-primary py-md rounded-lg font-button text-button uppercase tracking-widest hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition flex items-center justify-center" href="detail-penyewaan.html?sku=SKU-002">Sewa Sekarang</a>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<!-- Footer -->
+<footer class="bg-primary text-white pt-xl pb-lg border-t-8 border-secondary">
+<div class="px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-xl">
+<div class="space-y-lg">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<img alt="Logo" class="h-12 w-auto brightness-0 invert" id="footerLogo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIDuYdk1pmU8usCFo87gA2ld1wDaqkZ-dhCoO6lj01Nsi6bRlDsPzP-6tnV6xcod-tv3W8pfR9wVkC94Fz3TcMTTPimncFgj-1JPqAmLohJj_11cSaTeh1qkas3U6LcmO15h1cduAOAuEYN8jC0BoAZRTwbuO-dunyDAZ6bsZ2mwOPWjN5I2NuJ9Nvnc7oh54_u4G517GIPtyGN49mBlnODEAZ7UXWAcGW0jMZBbMYNd1wa1wuYn40TJfk1OOFD1Y7vXGe6plVSfHc"/>
+<div class="font-headline-md text-xl font-extrabold text-secondary-fixed leading-tight tracking-tight" id="footerCompanyName">PANJI BALI TEKNIK</div>
+</div>
+</div>
+<p class="text-sm text-primary-fixed/80 leading-relaxed max-w-xs" id="footerDescription">
+                Penyedia solusi alat konstruksi jalan dan infrastruktur terdepan di Indonesia sejak 2015. Mengutamakan kualitas unit, keselamatan kerja, dan kepuasan pelanggan secara menyeluruh.
+            </p>
+</div>
+<div class="lg:pl-8">
+<h4 class="font-headline-md text-lg mb-8 text-white flex items-center gap-2">
+<span class="w-8 h-[2px] bg-secondary-fixed"></span> Navigasi
+            </h4>
+<ul class="space-y-4 text-sm text-primary-fixed/90">
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="index.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Beranda</a></li>
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="katalog.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Produk</a></li>
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="layanan.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Layanan</a></li>
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="tentang-kami.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Tentang Kami</a></li>
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="kontak.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Hubungi Kami</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-headline-md text-lg mb-8 text-white flex items-center gap-2">
+<span class="w-8 h-[2px] bg-secondary-fixed"></span> Jam Operasional
+            </h4>
+<div class="space-y-4 text-sm text-primary-fixed/90 bg-white/5 p-5 rounded-xl border border-white/10">
+<div class="flex justify-between items-center">
+<span class="font-medium text-primary-fixed/70">Senin - Jumat</span>
+<span class="font-bold text-secondary-fixed" id="footerHoursWeekday">08.00 - 17.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-medium text-primary-fixed/70">Sabtu</span>
+<span class="font-bold text-secondary-fixed" id="footerHoursSaturday">08.00 - 14.00</span>
+</div>
+<div class="flex justify-between items-center border-t border-white/10 pt-4">
+<span class="font-bold text-error/80">Minggu</span>
+<span class="px-2 py-0.5 bg-error/20 text-error rounded text-[10px] font-bold uppercase tracking-wider" id="footerHoursSunday">Tutup</span>
+</div>
+</div>
+</div>
+<div>
+<h4 class="font-headline-md text-lg mb-8 text-white flex items-center gap-2">
+<span class="w-8 h-[2px] bg-secondary-fixed"></span> Info Kontak
+            </h4>
+<ul class="space-y-6 text-sm text-primary-fixed/90">
+<li class="flex gap-4 items-start">
+<div class="bg-secondary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-secondary-fixed">location_on</span>
+</div>
+<span class="leading-relaxed" id="footerAddress">Jl. KH Aja No. 34A, Meruya Selatan, Kembangan, Jakarta Barat 11650</span>
+</li>
+<li class="flex gap-4 items-center">
+<div class="bg-secondary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-secondary-fixed">call</span>
+</div>
+<a class="font-bold text-lg hover:text-secondary-fixed transition-colors" href="tel:+6281234567890" id="footerPhone">+62 812-3456-7890</a>
+</li>
+<li class="flex gap-4 items-center">
+<div class="bg-secondary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-secondary-fixed">mail</span>
+</div>
+<a class="hover:text-secondary-fixed transition-colors" href="mailto:info@panjibali.co.id" id="footerEmail">info@panjibali.co.id</a>
+</li>
+</ul>
+</div>
+</div>
+<div class="mt-xl pt-lg border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-md px-margin-mobile md:px-margin-desktop text-xs text-primary-fixed/50">
+<div>
+            © <span class="js-year">2026</span> <span class="font-bold text-primary-fixed/70">PT. Panji Bali Teknik</span>. All rights reserved.
+        </div>
+<div class="flex gap-6 font-label-md text-secondary-fixed font-bold uppercase tracking-widest">
+<span id="footerTagline1">Kualitas Terjamin</span>
+<span id="footerTagline2">Harga Terbaik</span>
+</div>
+</div>
+</footer>
+<a aria-label="Chat via WhatsApp" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-secondary text-white flex items-center justify-center shadow-2xl hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition" href="https://wa.me/6281234567890" rel="noopener" target="_blank">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+</a>
+<script src="assets/js/site.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const grid = document.getElementById('productGrid');
+        const toolbar = document.getElementById('sortToolbar');
+        if (!grid || !toolbar) return;
+
+        const cards = Array.from(grid.children);
+        const originalOrder = cards.slice();
+
+        const sorters = {
+            'default': (list) => originalOrder.slice(),
+            // No real popularity metric exists yet; available units surface first as a reasonable stand-in.
+            'popular': (list) => originalOrder.slice().sort((a, b) => {
+                const aAvailable = a.dataset.status === 'tersedia';
+                const bAvailable = b.dataset.status === 'tersedia';
+                return aAvailable === bAvailable ? 0 : aAvailable ? -1 : 1;
+            }),
+            // No real "date added" metadata exists yet; reversed catalog order stands in for newest-first.
+            'newest': (list) => originalOrder.slice().reverse(),
+            'price-asc': (list) => list.slice().sort((a, b) => Number(a.dataset.price) - Number(b.dataset.price)),
+        };
+
+        toolbar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.sort-btn');
+            if (!btn) return;
+
+            toolbar.querySelectorAll('.sort-btn').forEach((b) => {
+                const active = b === btn;
+                b.setAttribute('aria-pressed', String(active));
+                b.classList.toggle('bg-primary', active);
+                b.classList.toggle('text-on-primary', active);
+                b.classList.toggle('bg-surface-container-highest', !active);
+                b.classList.toggle('text-on-surface-variant', !active);
+            });
+
+            // FLIP: record First position of every card.
+            const firstRects = new Map(cards.map((card) => [card, card.getBoundingClientRect()]));
+
+            const sortFn = sorters[btn.dataset.sort] || sorters.default;
+            sortFn(cards).forEach((card) => grid.appendChild(card));
+
+            // Last: read new position, Invert: jump back visually via transform, Play: animate to identity.
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            cards.forEach((card) => {
+                const first = firstRects.get(card);
+                const last = card.getBoundingClientRect();
+                const deltaX = first.left - last.left;
+                const deltaY = first.top - last.top;
+                if (!deltaX && !deltaY) return;
+                if (prefersReducedMotion) return;
+
+                card.style.transition = 'none';
+                card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+                card.getBoundingClientRect(); // force reflow so the invert applies before the next line
+                card.style.transition = 'transform 300ms var(--ease-in-out)';
+                card.style.transform = '';
+            });
+
+            if (!prefersReducedMotion) {
+                cards.forEach((card) => {
+                    card.addEventListener('transitionend', function handler() {
+                        card.style.transition = '';
+                        card.removeEventListener('transitionend', handler);
+                    }, { once: true });
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

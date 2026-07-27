@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="assets/img/favicon.svg" rel="icon" type="image/svg+xml"/>
+<title>Sewa Genset Silent 100kVA - PT. Panji Bali Teknik</title>
+<meta content="Formulir penyewaan unit alat konstruksi PT. Panji Bali Teknik. Pilih tanggal sewa dan dapatkan estimasi biaya secara instan." name="description"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="assets/js/tailwind-config.js"></script>
+<link href="assets/css/motion.css" rel="stylesheet"/>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/store.js"></script>
+<script src="assets/js/content.js"></script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body { font-family: 'Inter', sans-serif; }
+    .font-headline { font-family: 'Hanken Grotesk', sans-serif; }
+    .font-technical { font-family: 'JetBrains Mono', monospace; }
+    .btn-active-state:active { transform: scale(0.95); transition: transform 0.15s; }
+    .hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .hover-lift:hover { transform: translateY(-2px); }
+    @media (prefers-reduced-motion: reduce) {
+        .btn-active-state:active { transform: none; }
+        .hover-lift:hover { transform: none; }
+    }
+</style>
+</head>
+<body class="bg-background text-on-surface">
+<a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-secondary focus:text-on-primary focus:px-md focus:py-sm focus:rounded font-button" href="#konten-utama">Langsung ke konten</a>
+<!-- TopNavBar -->
+<nav class="site-nav fixed top-0 w-full z-[60] bg-white/95 backdrop-blur-sm border-b border-outline-variant px-margin-mobile md:px-margin-desktop py-4 transition-[padding,box-shadow]">
+<div class="flex justify-between items-center">
+<a class="flex items-center gap-sm" href="index.html">
+<img alt="PT. PANJI BALI TEKNIK Logo" class="h-10 md:h-12 w-auto object-contain" id="navLogo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIDuYdk1pmU8usCFo87gA2ld1wDaqkZ-dhCoO6lj01Nsi6bRlDsPzP-6tnV6xcod-tv3W8pfR9wVkC94Fz3TcMTTPimncFgj-1JPqAmLohJj_11cSaTeh1qkas3U6LcmO15h1cduAOAuEYN8jC0BoAZRTwbuO-dunyDAZ6bsZ2mwOPWjN5I2NuJ9Nvnc7oh54_u4G517GIPtyGN49mBlnODEAZ7UXWAcGW0jMZBbMYNd1wa1wuYn40TJfk1OOFD1Y7vXGe6plVSfHc"/>
+<span class="hidden lg:block font-headline-md text-xl font-bold text-primary tracking-tight" id="navCompanyName">PT. PANJI BALI TEKNIK</span>
+</a>
+<div class="hidden md:flex items-center gap-lg">
+<a class="font-label-md text-on-surface hover:text-secondary transition-colors" href="index.html">Beranda</a>
+<a class="font-label-md text-secondary font-bold" href="katalog.html">Produk</a>
+<a class="font-label-md text-on-surface hover:text-secondary transition-colors" href="layanan.html">Layanan</a>
+<a class="font-label-md text-on-surface hover:text-secondary transition-colors" href="tentang-kami.html">Tentang Kami</a>
+<a class="font-label-md text-on-surface hover:text-secondary transition-colors" href="kontak.html">Hubungi Kami</a>
+</div>
+<div class="flex items-center gap-sm">
+<a class="hidden sm:inline-flex bg-secondary text-on-primary px-lg py-2.5 font-button rounded hover:brightness-110 transition active:scale-95 motion-reduce:active:scale-100 text-sm md:text-base whitespace-nowrap shadow-sm" href="katalog.html">Rent Now</a>
+<button aria-expanded="false" aria-label="Buka menu" class="md:hidden w-10 h-10 flex items-center justify-center text-primary" id="mobile-menu-btn">
+<span class="material-symbols-outlined icon-open">menu</span>
+<span class="material-symbols-outlined icon-close hidden">close</span>
+</button>
+</div>
+</div>
+<div class="md:hidden mobile-menu-collapse" id="mobile-menu">
+<div class="flex flex-col gap-1 mt-4 pb-2 border-t border-outline-variant pt-4">
+<a class="font-label-md text-on-surface py-2" href="index.html">Beranda</a>
+<a class="font-label-md text-secondary font-bold py-2" href="katalog.html">Produk</a>
+<a class="font-label-md text-on-surface py-2" href="layanan.html">Layanan</a>
+<a class="font-label-md text-on-surface py-2" href="tentang-kami.html">Tentang Kami</a>
+<a class="font-label-md text-on-surface py-2" href="kontak.html">Hubungi Kami</a>
+<a class="mt-2 bg-secondary text-on-primary text-center px-lg py-2.5 font-button rounded" href="katalog.html">Rent Now</a>
+</div>
+</div>
+</nav>
+<main class="max-w-screen-2xl mx-auto px-margin-mobile md:px-margin-desktop py-lg lg:py-xl pt-24" id="konten-utama">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-xs mb-md text-on-surface-variant text-sm">
+<span class="material-symbols-outlined text-sm">home</span>
+<a class="hover:text-primary transition-colors" href="index.html">Beranda</a>
+<span>/</span>
+<a class="hover:text-primary transition-colors" href="katalog.html">Produk</a>
+<span>/</span>
+<span class="text-primary font-semibold">Detail Penyewaan</span>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
+<!-- Left Column: Product Details & Form -->
+<div class="lg:col-span-8 space-y-lg">
+<!-- Product Header & Specs -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-sm md:p-lg overflow-hidden">
+<div class="flex flex-col md:flex-row gap-lg">
+<div class="w-full md:w-1/2">
+<div class="aspect-[4/3] rounded-lg bg-surface-container overflow-hidden border border-outline-variant">
+<img alt="Genset Silent 100kVA" class="w-full h-full object-cover hero-image-in" id="productImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7WzodFkOcwfc90GYIC-El4U5WGeXDGGyOsIGmam0nUHTuezKcfieTi0vmxaBzzbbL0xWnOjMlo5g9idXtQITSXWdsxa97u-cAxFX4lO6hZkoV8_6lSND3AxQhUkHfMRB1Bw7JDs9gkscsXE4E-QGzavth5JrdpI6wM08lH-acurjaglZtjsnfF9Q-98XCtxEYGTl1-Ov-JwRdETDpFRDzQL8UcreOSMOcW1Y8LVctC_6hNl6gT9YZil3ZRyL1GJtlgdDZ68xKEx9s"/>
+</div>
+</div>
+<div class="w-full md:w-1/2 space-y-md">
+<div class="hero-enter" style="animation-delay:0ms">
+<span class="bg-secondary-container text-on-secondary-container px-sm py-1 rounded-full font-label-md text-label-md uppercase mb-2 inline-block" id="productBadge">Unit Tersedia</span>
+<h1 class="font-headline-lg text-headline-lg text-primary" id="productName">Genset Silent 100kVA</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-1" id="productModel">MODEL: PBT-GS100-SILENT</p>
+</div>
+<div class="grid grid-cols-2 gap-md pt-md border-t border-outline-variant hero-enter" style="animation-delay:120ms" id="specGrid">
+<div>
+<p class="text-on-surface-variant font-label-md text-label-md uppercase">Power Output</p>
+<p class="font-technical text-body-lg font-semibold text-primary">100 kVA / 80 kW</p>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md text-label-md uppercase">Fuel Type</p>
+<p class="font-technical text-body-lg font-semibold text-primary">Diesel (BioSolar)</p>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md text-label-md uppercase">Noise Level</p>
+<p class="font-technical text-body-lg font-semibold text-primary">65 dB @ 7m</p>
+</div>
+<div>
+<p class="text-on-surface-variant font-label-md text-label-md uppercase">Weight</p>
+<p class="font-technical text-body-lg font-semibold text-primary">1,850 kg</p>
+</div>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md pt-md border-t border-outline-variant hidden" id="specFallback">Spesifikasi teknis lengkap unit ini tersedia melalui konsultasi dengan tim kami.</p>
+</div>
+</div>
+</section>
+<!-- Booking Form -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-sm md:p-lg space-y-lg reveal-on-scroll">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+<h2 class="font-headline-md text-headline-md text-primary">Informasi Penyewaan</h2>
+</div>
+<form class="grid grid-cols-1 md:grid-cols-2 gap-md" id="bookingForm">
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant">Tanggal Mulai Sewa</label>
+<input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg" id="startDate" type="date"/>
+</div>
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant">Tanggal Selesai Sewa</label>
+<input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg" id="endDate" type="date"/>
+</div>
+<div class="md:col-span-2 space-y-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant">Lokasi Proyek (Alamat Lengkap)</label>
+<input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg" id="lokasi" placeholder="Jl. Raya Bypass Ngurah Rai..." type="text"/>
+</div>
+<div class="md:col-span-2 space-y-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant">Kebutuhan Tambahan (Operator, Medan Situs, dll.)</label>
+<textarea class="w-full p-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg resize-none" id="kebutuhan" placeholder="Contoh: Memerlukan operator 24 jam, lokasi berada di area pegunungan..." rows="4"></textarea>
+</div>
+<div class="md:col-span-2 pt-lg">
+<div class="flex items-center gap-xs mb-md">
+<span class="material-symbols-outlined text-primary">person_pin</span>
+<h2 class="font-headline-md text-headline-md text-primary">Detail Kontak</h2>
+</div>
+</div>
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant">Nama Lengkap / Perusahaan <span class="text-error">*</span></label>
+<input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg" id="nama" placeholder="PT. Pembangunan Jaya" required="" type="text"/>
+<p class="hidden text-xs text-error" id="namaError">Nama lengkap wajib diisi.</p>
+</div>
+<div class="space-y-xs">
+<label class="block font-label-md text-label-md text-on-surface-variant">Nomor WhatsApp <span class="text-error">*</span></label>
+<div class="flex">
+<span class="flex items-center px-md bg-surface-container-high border-b-2 border-outline-variant rounded-tl-lg font-label-md">+62</span>
+<input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-tr-lg" id="noWa" placeholder="8123456789" required="" type="tel"/>
+</div>
+<p class="hidden text-xs text-error" id="noWaError">Nomor WhatsApp wajib diisi.</p>
+</div>
+</form>
+</section>
+</div>
+<!-- Right Column: Sidebar Summary -->
+<aside class="lg:col-span-4 sticky top-28">
+<div class="bg-primary text-on-primary rounded-xl overflow-hidden shadow-lg hero-enter" style="animation-delay:200ms">
+<div class="p-lg space-y-md">
+<h3 class="font-headline-md text-headline-md">Ringkasan Sewa</h3>
+<div class="space-y-sm">
+<div class="flex justify-between items-start">
+<p class="font-body-md opacity-80">Unit Terpilih</p>
+<p class="font-technical text-label-md text-right" id="summaryUnitName">Genset Silent 100kVA</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="font-body-md opacity-80">Durasi</p>
+<p class="font-technical text-label-md" id="durationText">-</p>
+</div>
+<div class="flex justify-between items-center" id="dailyRateRow">
+<p class="font-body-md opacity-80">Tarif Harian</p>
+<p class="font-technical text-label-md" id="summaryDailyRate">Rp 1.250.000</p>
+</div>
+</div>
+<div class="pt-md border-t border-on-primary/20 flex justify-between items-end" id="totalPriceBlock">
+<div>
+<p class="font-label-md uppercase opacity-60">Estimasi Total</p>
+<p class="font-headline-lg text-headline-lg text-secondary-fixed tabular-nums" id="totalPrice">Rp 0</p>
+</div>
+</div>
+<div class="hidden pt-md border-t border-on-primary/20" id="hidePriceNotice">
+<p class="font-body-md text-sm opacity-90 leading-relaxed">Harga unit ini tersedia atas permintaan. Kirim detail penyewaan Anda dan tim kami akan memberikan penawaran langsung.</p>
+</div>
+<div class="bg-surface-container/10 p-sm rounded-lg border border-on-primary/10">
+<div class="flex gap-xs items-start">
+<span class="material-symbols-outlined text-secondary-fixed text-sm">info</span>
+<p class="text-xs font-body-md opacity-80 leading-relaxed">
+                                    Harga belum termasuk biaya mobilisasi (ongkos kirim) dan biaya bahan bakar (BBM).
+                                </p>
+</div>
+</div>
+<p class="hidden text-xs text-secondary-fixed bg-on-primary/10 border border-on-primary/20 rounded-lg p-sm" id="formError" role="alert"></p>
+<button class="w-full bg-secondary-fixed text-on-secondary-fixed py-4 px-lg rounded-xl font-button text-button flex items-center justify-center gap-md btn-active-state hover-lift shadow-lg hover:bg-secondary transition uppercase tracking-wide" onclick="confirmBooking()" type="button">
+                            Konfirmasi &amp; Kirim Permintaan
+                            <span class="material-symbols-outlined font-bold">send</span>
+</button>
+<p class="text-center text-[10px] uppercase tracking-widest opacity-40">Industrial Grade Rental Service</p>
+</div>
+</div>
+<!-- Assistance Card -->
+<div class="mt-md bg-surface-container-low p-md rounded-xl border border-outline-variant flex items-center gap-md hero-enter" style="animation-delay:280ms">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">support_agent</span>
+</div>
+<div>
+<p class="font-button text-primary">Butuh Bantuan Cepat?</p>
+<a class="text-xs text-on-surface-variant hover:text-secondary transition-colors" href="tel:+6281234567890">Hubungi tim ahli kami via telepon</a>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-primary text-white pt-xl pb-lg border-t-8 border-secondary">
+<div class="px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-xl">
+<div class="space-y-lg">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<img alt="Logo" class="h-12 w-auto brightness-0 invert" id="footerLogo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIDuYdk1pmU8usCFo87gA2ld1wDaqkZ-dhCoO6lj01Nsi6bRlDsPzP-6tnV6xcod-tv3W8pfR9wVkC94Fz3TcMTTPimncFgj-1JPqAmLohJj_11cSaTeh1qkas3U6LcmO15h1cduAOAuEYN8jC0BoAZRTwbuO-dunyDAZ6bsZ2mwOPWjN5I2NuJ9Nvnc7oh54_u4G517GIPtyGN49mBlnODEAZ7UXWAcGW0jMZBbMYNd1wa1wuYn40TJfk1OOFD1Y7vXGe6plVSfHc"/>
+<div class="font-headline-md text-xl font-extrabold text-secondary-fixed leading-tight tracking-tight uppercase" id="footerCompanyName">PANJI BALI TEKNIK</div>
+</div>
+</div>
+<p class="text-sm text-primary-fixed/80 leading-relaxed max-w-xs" id="footerDescription">
+                    Penyedia solusi alat konstruksi jalan dan infrastruktur terdepan di Indonesia sejak 2015. Mengutamakan kualitas unit, keselamatan kerja, dan kepuasan pelanggan secara menyeluruh.
+                </p>
+</div>
+<div class="lg:pl-8">
+<h4 class="font-headline-md text-lg mb-8 text-white flex items-center gap-2">
+<span class="w-8 h-[2px] bg-secondary-fixed"></span> Navigasi
+                </h4>
+<ul class="space-y-4 text-sm text-primary-fixed/90">
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="index.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Beranda</a></li>
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="katalog.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Produk</a></li>
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="layanan.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Layanan</a></li>
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="tentang-kami.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Tentang Kami</a></li>
+<li><a class="hover:text-secondary-fixed flex items-center gap-3 transition-colors group" href="kontak.html"><span class="material-symbols-outlined text-xs group-hover:translate-x-1 motion-reduce:group-hover:translate-x-0 transition-transform">arrow_forward</span> Hubungi Kami</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-headline-md text-lg mb-8 text-white flex items-center gap-2">
+<span class="w-8 h-[2px] bg-secondary-fixed"></span> Jam Operasional
+                </h4>
+<div class="space-y-4 text-sm text-primary-fixed/90 bg-white/5 p-5 rounded-xl border border-white/10">
+<div class="flex justify-between items-center">
+<span class="font-medium text-primary-fixed/70">Senin - Jumat</span>
+<span class="font-bold text-secondary-fixed" id="footerHoursWeekday">08.00 - 17.00</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="font-medium text-primary-fixed/70">Sabtu</span>
+<span class="font-bold text-secondary-fixed" id="footerHoursSaturday">08.00 - 14.00</span>
+</div>
+<div class="flex justify-between items-center border-t border-white/10 pt-4">
+<span class="font-bold text-error/80">Minggu</span>
+<span class="px-2 py-0.5 bg-error/20 text-error rounded text-[10px] font-bold uppercase tracking-wider" id="footerHoursSunday">Tutup</span>
+</div>
+</div>
+</div>
+<div>
+<h4 class="font-headline-md text-lg mb-8 text-white flex items-center gap-2">
+<span class="w-8 h-[2px] bg-secondary-fixed"></span> Info Kontak
+                </h4>
+<ul class="space-y-6 text-sm text-primary-fixed/90">
+<li class="flex gap-4 items-start">
+<div class="bg-secondary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-secondary-fixed">location_on</span>
+</div>
+<span class="leading-relaxed" id="footerAddress">Jl. KH Aja No. 34A, Meruya Selatan, Kembangan, Jakarta Barat 11650</span>
+</li>
+<li class="flex gap-4 items-center">
+<div class="bg-secondary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-secondary-fixed">call</span>
+</div>
+<a class="font-bold text-lg hover:text-secondary-fixed transition-colors" href="tel:+6281234567890" id="footerPhone">+62 812-3456-7890</a>
+</li>
+<li class="flex gap-4 items-center">
+<div class="bg-secondary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-secondary-fixed">mail</span>
+</div>
+<a class="hover:text-secondary-fixed transition-colors" href="mailto:info@panjibali.co.id" id="footerEmail">info@panjibali.co.id</a>
+</li>
+</ul>
+</div>
+</div>
+<div class="mt-xl pt-lg border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-md px-margin-mobile md:px-margin-desktop text-xs text-primary-fixed/50">
+<div>
+                © <span class="js-year">2026</span> <span class="font-bold text-primary-fixed/70">PT. Panji Bali Teknik</span>. All rights reserved.
+            </div>
+<div class="flex gap-6 font-label-md text-secondary-fixed font-bold uppercase tracking-widest">
+<span id="footerTagline1">KUALITAS TERJAMIN</span>
+<span id="footerTagline2">HARGA TERBAIK</span>
+</div>
+</div>
+</footer>
+<a aria-label="Chat via WhatsApp" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-secondary text-white flex items-center justify-center shadow-2xl hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition" href="https://wa.me/6281234567890" rel="noopener" target="_blank">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
+</a>
+<script src="assets/js/site.js"></script>
+<script>
+    // Product catalog now comes from SiteStore (assets/js/data.js + admin
+    // overrides), so pricing/name/image/specs stay in sync with katalog.html
+    // and the admin dashboard automatically.
+    const siteData = window.SiteStore ? window.SiteStore.get() : { products: [], company: {} };
+    const PRODUCTS = {};
+    (siteData.products || []).forEach((p) => {
+        PRODUCTS[p.sku] = {
+            name: p.name,
+            model: p.model,
+            price: p.price,
+            hidePrice: !!p.hidePrice,
+            available: p.status === 'tersedia',
+            image: p.image,
+            specs: p.specs
+        };
+    });
+
+    const requestedSku = new URLSearchParams(window.location.search).get('sku');
+    const firstSku = (siteData.products && siteData.products[0] && siteData.products[0].sku) || 'SKU-001';
+    const sku = PRODUCTS[requestedSku] ? requestedSku : firstSku;
+    const product = PRODUCTS[sku];
+
+    document.title = `Sewa ${product.name} - PT. Panji Bali Teknik`;
+    document.getElementById('productImage').src = product.image;
+    document.getElementById('productImage').alt = product.name;
+    document.getElementById('productName').textContent = product.name;
+
+    const badgeEl = document.getElementById('productBadge');
+    badgeEl.textContent = product.available ? 'Unit Tersedia' : 'Sedang Disewa';
+    badgeEl.classList.toggle('bg-secondary-container', product.available);
+    badgeEl.classList.toggle('text-on-secondary-container', product.available);
+    badgeEl.classList.toggle('bg-error-container', !product.available);
+    badgeEl.classList.toggle('text-on-error-container', !product.available);
+
+    const modelEl = document.getElementById('productModel');
+    if (product.model) {
+        modelEl.textContent = `MODEL: ${product.model}`;
+    } else {
+        modelEl.remove();
+    }
+
+    if (product.specs) {
+        document.getElementById('specFallback').remove();
+    } else {
+        document.getElementById('specGrid').remove();
+        document.getElementById('specFallback').classList.remove('hidden');
+    }
+
+    document.getElementById('summaryUnitName').textContent = product.name;
+    document.getElementById('summaryDailyRate').textContent = `Rp ${product.price.toLocaleString('id-ID')}`;
+
+    if (product.hidePrice) {
+        document.getElementById('dailyRateRow').classList.add('hidden');
+        document.getElementById('totalPriceBlock').classList.add('hidden');
+        document.getElementById('hidePriceNotice').classList.remove('hidden');
+    }
+
+    const dailyRate = product.price;
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const durationText = document.getElementById('durationText');
+    const totalPrice = document.getElementById('totalPrice');
+    const formError = document.getElementById('formError');
+    const namaInput = document.getElementById('nama');
+    const noWaInput = document.getElementById('noWa');
+    const namaError = document.getElementById('namaError');
+    const noWaError = document.getElementById('noWaError');
+
+    const today = new Date().toISOString().split('T')[0];
+    startDateInput.min = today;
+    endDateInput.min = today;
+    startDateInput.addEventListener('change', () => {
+        endDateInput.min = startDateInput.value || today;
+        updateSummary();
+    });
+
+    function updateSummary() {
+        const start = new Date(startDateInput.value);
+        const end = new Date(endDateInput.value);
+
+        if (startDateInput.value && endDateInput.value && end >= start) {
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+            durationText.textContent = `${diffDays} Hari`;
+            const total = diffDays * dailyRate;
+            totalPrice.textContent = `Rp ${total.toLocaleString('id-ID')}`;
+        } else {
+            durationText.textContent = "-";
+            totalPrice.textContent = "Rp 0";
+        }
+    }
+
+    endDateInput.addEventListener('change', updateSummary);
+
+    function setFieldError(input, errorEl, hasError) {
+        errorEl.classList.toggle('hidden', !hasError);
+        input.classList.toggle('border-error', hasError);
+    }
+
+    function confirmBooking() {
+        const start = startDateInput.value;
+        const end = endDateInput.value;
+        const nama = namaInput.value.trim();
+        const noWa = noWaInput.value.trim();
+
+        setFieldError(namaInput, namaError, !nama);
+        setFieldError(noWaInput, noWaError, !noWa);
+
+        if (!start || !end) {
+            formError.textContent = 'Mohon pilih tanggal mulai dan selesai sewa terlebih dahulu.';
+            formError.classList.remove('hidden');
+            return;
+        }
+        if (!nama || !noWa) {
+            formError.textContent = 'Mohon lengkapi nama dan nomor WhatsApp Anda.';
+            formError.classList.remove('hidden');
+            (nama ? noWaInput : namaInput).focus();
+            return;
+        }
+
+        formError.classList.add('hidden');
+
+        const companyName = (siteData.company && siteData.company.name) || 'PT. Panji Bali Teknik';
+        const message = `Halo ${companyName},\n\nSaya ${nama} ingin menyewa unit:\nUnit: ${product.name}\nDurasi: ${durationText.textContent} (${start} s/d ${end})\nNomor WhatsApp: +62${noWa}\n\nMohon informasi ketersediaan dan penawaran resminya. Terima kasih.`;
+        const encodedMessage = encodeURIComponent(message);
+        const waTarget = ((siteData.company && siteData.company.phone) || '+6281234567890').replace(/[^\d]/g, '');
+        window.open(`https://wa.me/${waTarget}?text=${encodedMessage}`, '_blank');
+    }
+</script>
+</body>
+</html>

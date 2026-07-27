@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <rect width="800" height="600" fill="#e7eeff"/>
+  <rect x="0" y="0" width="800" height="600" fill="none" stroke="#c4c6d0" stroke-width="2"/>
+  <g fill="#7594ca">
+    <path d="M400 220c-38 0-69 31-69 69s31 69 69 69 69-31 69-69-31-69-69-69zm0 112c-24 0-43-19-43-43s19-43 43-43 43 19 43 43-19 43-43 43z"/>
+    <path d="M560 289h-24.4a111 111 0 0 0-11-26.5l17.3-17.3a12 12 0 0 0 0-17l-19.6-19.6a12 12 0 0 0-17 0l-17.3 17.3a111 111 0 0 0-26.5-11V190a12 12 0 0 0-12-12h-27.7a12 12 0 0 0-12 12v24.4a111 111 0 0 0-26.5 11l-17.3-17.3a12 12 0 0 0-17 0l-19.6 19.6a12 12 0 0 0 0 17l17.3 17.3a111 111 0 0 0-11 26.5H240a12 12 0 0 0-12 12v27.7a12 12 0 0 0 12 12h24.4a111 111 0 0 0 11 26.5l-17.3 17.3a12 12 0 0 0 0 17l19.6 19.6a12 12 0 0 0 17 0l17.3-17.3a111 111 0 0 0 26.5 11V434a12 12 0 0 0 12 12h27.7a12 12 0 0 0 12-12v-24.4a111 111 0 0 0 26.5-11l17.3 17.3a12 12 0 0 0 17 0l19.6-19.6a12 12 0 0 0 0-17l-17.3-17.3a111 111 0 0 0 11-26.5H560a12 12 0 0 0 12-12v-27.7a12 12 0 0 0-12-12z" opacity="0.35"/>
+  </g>
+  <text x="400" y="500" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#43474f" text-anchor="middle">PT. PANJI BALI TEKNIK</text>
+  <text x="400" y="530" font-family="Arial, sans-serif" font-size="15" fill="#747780" text-anchor="middle">Gambar belum tersedia</text>
+</svg>
