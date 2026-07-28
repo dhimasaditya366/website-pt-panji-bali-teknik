@@ -22,10 +22,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const escapeHtml = (s) => String(s == null ? '' : s)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+    // Sets the text of a nav/footer link without clobbering an icon child
+    // (footer links wrap an arrow_forward <span> before the label text) or
+    // the logo anchor (wraps an <img> instead of being a plain text link).
+    function setLinkText(a, text) {
+        if (!text || !a) return;
+        if (a.querySelector('img')) return;
+        const icon = a.querySelector('span.material-symbols-outlined');
+        if (icon) {
+            let node = a.lastChild;
+            while (node && node.nodeType !== Node.TEXT_NODE) node = node.previousSibling;
+            if (node) node.textContent = ' ' + text;
+            else a.appendChild(document.createTextNode(' ' + text));
+        } else {
+            a.textContent = text;
+        }
+    }
+
     // Defensive fallback: normalizes a legacy plain-string hours value (the
     // schema before the per-day "closed" toggle existed) into the current
-    // { text, closed } shape, so a stale cached data.js or an unmigrated
-    // override never renders as "undefined" instead of the actual hours.
+    // { text, closed, dayLabel } shape, so a stale cached data.js or an
+    // unmigrated override never renders as "undefined" instead of the
+    // actual hours.
     function normalizeHourEntry(hourData) {
         if (typeof hourData === 'string') {
             return { text: hourData, closed: hourData.trim().toLowerCase() === 'tutup' };
@@ -33,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return hourData;
     }
 
-    // Renders one hours.{weekday|saturday|sunday} entry ({text, closed}) into
-    // the footer's compact list (shared markup on every page).
+    // Renders one hours.{weekday|saturday|sunday} entry ({text, closed,
+    // dayLabel}) into the footer's compact list (shared markup on every page).
     function applyFooterHoursRow(labelId, valueId, hourDataRaw) {
         const labelEl = document.getElementById(labelId);
         const valueEl = document.getElementById(valueId);
@@ -46,24 +64,30 @@ document.addEventListener('DOMContentLoaded', () => {
             ? 'px-2 py-0.5 bg-error/20 text-error rounded text-[10px] font-bold uppercase tracking-wider'
             : 'font-bold text-secondary-fixed';
         if (labelEl) {
+            if (hourData.dayLabel) labelEl.textContent = hourData.dayLabel;
             labelEl.className = closed ? 'font-bold text-error/80' : 'font-medium text-primary-fixed/70';
         }
     }
 
     // Renders the same hours entry into kontak.html's full "Jam Operasional"
     // table row (icon + note only show when that day is marked closed).
-    function applyTableHoursRow(cellId, iconId, textId, noteId, hourDataRaw) {
+    function applyTableHoursRow(dayLabelId, cellId, iconId, textId, noteId, hourDataRaw, closedNote) {
+        const dayLabelEl = document.getElementById(dayLabelId);
         const cell = document.getElementById(cellId);
         const icon = document.getElementById(iconId);
         const text = document.getElementById(textId);
         const note = document.getElementById(noteId);
         const hourData = normalizeHourEntry(hourDataRaw);
         if (!cell || !text || !hourData) return;
+        if (dayLabelEl && hourData.dayLabel) dayLabelEl.textContent = hourData.dayLabel;
         const closed = !!hourData.closed;
         text.textContent = closed ? (hourData.text || 'Tutup') : hourData.text + ' WIB';
         cell.classList.toggle('text-error', closed);
         if (icon) icon.classList.toggle('hidden', !closed);
-        if (note) note.classList.toggle('hidden', !closed);
+        if (note) {
+            note.classList.toggle('hidden', !closed);
+            if (closedNote) note.textContent = closedNote;
+        }
     }
 
     function categoryIconHtml(c, size) {
@@ -103,9 +127,27 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>`;
     }
 
-    // ---- Shared chrome: nav logo/name, footer, WhatsApp FAB (all pages) ----
+    // ---- Shared chrome: nav logo/name, nav/footer links, footer, WA FAB ----
     setAttr('navLogo', 'src', data.company.logo);
     setText('navCompanyName', data.company.name);
+
+    if (data.nav) {
+        const n = data.nav;
+        // Scoped to nav.site-nav (covers desktop + mobile links, since the
+        // mobile menu lives inside that same <nav>) and footer, so hero/
+        // in-page CTA buttons that happen to share a target href (e.g. the
+        // hero's own "Hubungi Kami" button, or "Lihat Semua Produk") are
+        // never touched by this generic pass — those have their own ids.
+        const linkContainers = document.querySelectorAll('nav.site-nav, footer');
+        linkContainers.forEach((container) => {
+            container.querySelectorAll('a[href="index.html"]').forEach((a) => setLinkText(a, n.beranda));
+            container.querySelectorAll('a[href="katalog.html"]:not(.bg-secondary)').forEach((a) => setLinkText(a, n.produk));
+            container.querySelectorAll('a[href="layanan.html"]').forEach((a) => setLinkText(a, n.layanan));
+            container.querySelectorAll('a[href="tentang-kami.html"]').forEach((a) => setLinkText(a, n.tentangKami));
+            container.querySelectorAll('a[href="kontak.html"]').forEach((a) => setLinkText(a, n.kontak));
+        });
+        document.querySelectorAll('nav.site-nav a.bg-secondary').forEach((a) => setLinkText(a, n.ctaButton));
+    }
 
     setAttr('footerLogo', 'src', data.company.logo);
     setText('footerCompanyName', data.company.name);
@@ -114,6 +156,24 @@ document.addEventListener('DOMContentLoaded', () => {
     setText('footerPhone', data.company.phoneDisplay);
     setAttr('footerPhone', 'href', 'tel:' + data.company.phone);
     setText('footerEmail', data.company.email);
+    setText('footerCopyrightName', data.company.name);
+    if (data.footer) {
+        setText('footerCopyrightSuffix', data.footer.copyrightSuffix);
+        // Footer section headings ("Navigasi"/"Jam Operasional"/"Info
+        // Kontak") match by their known source text rather than an id,
+        // since matching the static HTML text (never rewritten) is stable
+        // across saves regardless of what the heading currently displays.
+        document.querySelectorAll('footer h4').forEach((h4) => {
+            let node = h4.lastChild;
+            while (node && node.nodeType !== Node.TEXT_NODE) node = node.previousSibling;
+            if (!node) return;
+            const trimmed = node.textContent.trim();
+            if (trimmed === 'Navigasi' && data.footer.navHeading) node.textContent = ' ' + data.footer.navHeading;
+            else if (trimmed === 'Jam Operasional' && data.footer.hoursHeading) node.textContent = ' ' + data.footer.hoursHeading;
+            else if (trimmed === 'Info Kontak' && data.footer.contactHeading) node.textContent = ' ' + data.footer.contactHeading;
+        });
+    }
+    const closedNote = data.company.hours && data.company.hours.closedNote;
     applyFooterHoursRow('footerHoursWeekdayLabel', 'footerHoursWeekday', data.company.hours.weekday);
     applyFooterHoursRow('footerHoursSaturdayLabel', 'footerHoursSaturday', data.company.hours.saturday);
     applyFooterHoursRow('footerHoursSundayLabel', 'footerHoursSunday', data.company.hours.sunday);
@@ -135,12 +195,24 @@ document.addEventListener('DOMContentLoaded', () => {
         a.href = 'mailto:' + data.company.email;
     });
 
-    // ---- index.html: hero, stats, product preview ----
+    // ---- SEO title/description (per page, via <body data-page="...">) ----
+    if (data.seo) {
+        const pageKey = document.body.dataset.page;
+        const seo = data.seo[pageKey];
+        if (seo) {
+            setText('seoTitle', seo.title);
+            setAttr('seoDescription', 'content', seo.description);
+        }
+    }
+
+    // ---- index.html: hero, stats, why-choose, catalog section, product preview ----
     setText('heroBadgeText', data.hero.badge);
     setText('heroTitlePrefix', data.hero.titlePrefix + ' ');
     setText('heroTitleHighlight', data.hero.titleHighlight);
     setText('heroSubtitle', data.hero.subtitle);
     setAttr('heroImage', 'src', data.hero.image);
+    setText('heroButtonPrimaryText', data.hero.primaryButtonText);
+    setText('heroButtonSecondary', data.hero.secondaryButtonText);
 
     const statsGrid = document.getElementById('statsGrid');
     if (statsGrid && Array.isArray(data.stats)) {
@@ -149,6 +221,25 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="font-display-lg text-4xl md:text-5xl text-secondary-fixed mb-base tabular-nums">${s.value}</div>
 <div class="font-label-md text-xs md:text-sm text-primary-fixed/70 uppercase tracking-widest group-hover:text-primary-fixed transition-colors">${s.label}</div>
 </div>`).join('');
+    }
+
+    if (data.homeWhyChoose) {
+        const w = data.homeWhyChoose;
+        setText('whyChooseHeading', w.heading);
+        setText('whyChooseSubtext', w.subtext);
+        if (Array.isArray(w.cards)) {
+            w.cards.forEach((card, i) => {
+                const n = i + 1;
+                setText('whyChooseCard' + n + 'Icon', card.icon);
+                setText('whyChooseCard' + n + 'Title', card.title);
+                setText('whyChooseCard' + n + 'Desc', card.description);
+            });
+        }
+    }
+    if (data.homeCatalog) {
+        setText('homeCatalogEyebrow', data.homeCatalog.eyebrow);
+        setText('homeCatalogHeading', data.homeCatalog.heading);
+        setText('homeCatalogViewAllText', data.homeCatalog.viewAllText);
     }
 
     function productBadge(status) {
@@ -184,17 +275,39 @@ ${action}
     }
 
     // ---- tentang-kami.html: mini stats row ----
+    // Reuses data.stats[i].label directly (rather than a separate hardcoded
+    // label list) so it can never drift out of sync with the home page's
+    // stats, and stays admin-editable via the same Beranda > Statistik tab.
     const miniStats = document.getElementById('miniStats');
     if (miniStats && Array.isArray(data.stats)) {
-        const labels = ['Tahun Pengalaman', 'Unit Tersedia', 'Proyek Selesai'];
-        miniStats.innerHTML = data.stats.slice(0, 3).map((s, i) => `
+        miniStats.innerHTML = data.stats.slice(0, 3).map((s) => `
 <div class="bg-surface-container-low p-md border border-outline-variant">
 <div class="font-headline-md text-headline-md text-primary tabular-nums">${s.value}</div>
-<div class="font-label-md text-label-md text-on-surface-variant">${labels[i] || s.label}</div>
+<div class="font-label-md text-label-md text-on-surface-variant">${s.label}</div>
 </div>`).join('');
     }
 
-    // ---- katalog.html: category nav, mobile chips, product grid, count ----
+    // ---- katalog.html: sidebar/hero/toolbar labels, category nav, grid ----
+    if (data.katalogPage) {
+        const k = data.katalogPage;
+        setText('katalogSideLabel1', k.sideLabel1);
+        setText('katalogSideLabel2', k.sideLabel2);
+        setText('katalogAllToolsLabel', k.allToolsLabel);
+        setText('katalogAllToolsLabelMobile', k.allToolsLabel);
+        setText('katalogTechnicalServiceLabel1', k.technicalServiceLabel);
+        setText('katalogTechnicalServiceLabel2', k.technicalServiceLabel);
+        setText('katalogHelpButtonText', k.helpButtonText);
+        setText('katalogBreadcrumbHome', k.breadcrumbHome);
+        setText('katalogBreadcrumbCurrent', k.breadcrumbCurrent);
+        setText('katalogEyebrow', k.eyebrow);
+        setText('katalogHeading', k.heading);
+        setText('katalogIntro', k.intro);
+        setText('sortAllBtn', k.sortAllText);
+        setText('sortPopularBtn', k.sortPopularText);
+        setText('sortNewestBtn', k.sortNewestText);
+        setText('sortPriceLowBtn', k.sortPriceLowText);
+    }
+
     const categorySidebar = document.getElementById('categorySidebar');
     if (categorySidebar && Array.isArray(data.categories)) {
         categorySidebar.innerHTML = data.categories.map((c) => `
@@ -241,20 +354,47 @@ ${action}
 </div>`;
         }).join('');
     }
-    setText('productCount', 'Menampilkan ' + (data.products ? data.products.length : 0) + ' Produk');
+    setText('productCount', ((data.katalogPage && data.katalogPage.countTemplate) || 'Menampilkan {n} Produk')
+        .replace('{n}', data.products ? data.products.length : 0));
 
-    // ---- kontak.html: contact cards, hours table, map link ----
+    // ---- kontak.html: hero, contact cards, hours table, banner, map, CTA ----
+    if (data.pages && data.pages.kontak) {
+        const kp = data.pages.kontak;
+        setText('kontakHeroBadge', kp.heroBadge);
+        setText('kontakHeroHeading', kp.heroHeading);
+        setText('kontakHeroParagraph', kp.heroParagraph);
+        setText('kontakAddressHeading', kp.addressHeading);
+        setText('kontakPhoneHeading', kp.phoneHeading);
+        setText('kontakPhoneSubtext', kp.phoneSubtext);
+        setText('kontakEmailHeading', kp.emailHeading);
+        setText('kontakEmailSubtext', kp.emailSubtext);
+        setText('kontakWebsiteHeading', kp.websiteHeading);
+        setText('kontakWebsiteSubtext', kp.websiteSubtext);
+        setText('kontakHoursHeading', kp.hoursHeading);
+        setText('kontakHoursSubtext', kp.hoursSubtext);
+        setText('kontakHoursDayHeader', kp.hoursTableDayHeader);
+        setText('kontakHoursTimeHeader', kp.hoursTableTimeHeader);
+        setText('kontakLocationHeading', kp.locationHeading);
+        setText('kontakMapOverlayTitle', kp.mapOverlayTitle);
+        setText('kontakMapOverlaySubtitle', kp.mapOverlaySubtitle);
+        setText('kontakEmailButton', kp.emailButtonText);
+        const banner = document.getElementById('kontakInfoBanner');
+        if (banner) {
+            const taglines = Array.isArray(data.company.taglines) ? data.company.taglines.join(', ') : '';
+            banner.textContent = [data.company.name, data.company.slogan].filter(Boolean).join(' ') + (taglines ? ' — ' + taglines : '');
+        }
+    }
     setText('contactAddress', data.company.address);
     setText('contactPhoneText', data.company.phoneDisplay);
     setAttr('contactPhone', 'href', 'https://wa.me/' + waNumber);
     setText('contactEmailText', data.company.email);
     setText('contactWebsite', data.company.website);
-    applyTableHoursRow('hoursWeekdayCell', 'hoursWeekdayIcon', 'hoursWeekday', 'hoursWeekdayNote', data.company.hours.weekday);
-    applyTableHoursRow('hoursSaturdayCell', 'hoursSaturdayIcon', 'hoursSaturday', 'hoursSaturdayNote', data.company.hours.saturday);
-    applyTableHoursRow('hoursSundayCell', 'hoursSundayIcon', 'hoursSunday', 'hoursSundayNote', data.company.hours.sunday);
+    applyTableHoursRow('hoursWeekdayLabel', 'hoursWeekdayCell', 'hoursWeekdayIcon', 'hoursWeekday', 'hoursWeekdayNote', data.company.hours.weekday, closedNote);
+    applyTableHoursRow('hoursSaturdayLabel', 'hoursSaturdayCell', 'hoursSaturdayIcon', 'hoursSaturday', 'hoursSaturdayNote', data.company.hours.saturday, closedNote);
+    applyTableHoursRow('hoursSundayLabel', 'hoursSundayCell', 'hoursSundayIcon', 'hoursSunday', 'hoursSundayNote', data.company.hours.sunday, closedNote);
     setAttr('mapLink', 'href', 'https://maps.google.com/?q=' + encodeURIComponent(data.company.mapsQuery));
 
-    // ---- Other pages' photos (tentang-kami, layanan, layanan-teknis, kontak) ----
+    // ---- Other pages' hero photos + hero text (tentang-kami, layanan, layanan-teknis, kontak) ----
     if (data.pages) {
         const p = data.pages;
         if (p.tentangKami) {
@@ -264,15 +404,17 @@ ${action}
         }
         if (p.layanan) {
             setBg('layananHeroImage', p.layanan.heroImage);
+            setText('layananHeroHeading', p.layanan.heroHeading);
+            setText('layananHeroParagraph', p.layanan.heroParagraph);
         }
         if (p.layananTeknis) {
             setBg('layananTeknisHeroImage', p.layananTeknis.heroImage);
             setAttr('layananTeknisPreventiveImage', 'src', p.layananTeknis.preventiveImage);
             setAttr('layananTeknisPartsImage', 'src', p.layananTeknis.partsImage);
             setAttr('layananTeknisCtaImage', 'src', p.layananTeknis.ctaImage);
-        }
-        if (p.kontak) {
-            setBg('kontakMapImage', p.kontak.mapImage);
+            setText('layananTeknisHeroEyebrow', p.layananTeknis.heroEyebrow);
+            setText('layananTeknisHeroHeading', p.layananTeknis.heroHeading);
+            setText('layananTeknisHeroParagraph', p.layananTeknis.heroParagraph);
         }
     }
 
@@ -316,6 +458,8 @@ ${action}
         setText('homeAboutParagraph', a.paragraph);
         setText('homeAboutQuote', a.quote);
         setText('homeAboutLinkText', a.linkText);
+        setAttr('homeAboutImage', 'src', a.image);
+        setAttr('homeAboutImage', 'alt', a.imageAlt);
         if (Array.isArray(a.highlights)) {
             setText('homeAboutHighlight1Icon', a.highlights[0] && a.highlights[0].icon);
             setText('homeAboutHighlight1Text', a.highlights[0] && a.highlights[0].text);
@@ -324,7 +468,11 @@ ${action}
         }
     }
 
-    // ---- layanan.html: 3 service cards ----
+    // ---- layanan.html: section heading + 3 service cards + workflow ----
+    if (data.layananSection) {
+        setText('layananSectionEyebrow', data.layananSection.eyebrow);
+        setText('layananSectionHeading', data.layananSection.heading);
+    }
     if (Array.isArray(data.layananCards)) {
         data.layananCards.forEach((card, i) => {
             const n = i + 1;
@@ -334,6 +482,18 @@ ${action}
             setText('layananCard' + n + 'LinkText', card.linkText);
         });
     }
+    if (data.layananWorkflow) {
+        setText('layananWorkflowHeading', data.layananWorkflow.heading);
+        setText('layananWorkflowSubtext', data.layananWorkflow.subtext);
+        if (Array.isArray(data.layananWorkflow.steps)) {
+            data.layananWorkflow.steps.forEach((step, i) => {
+                const n = i + 1;
+                setText('workflowStep' + n + 'Number', step.number);
+                setText('workflowStep' + n + 'Title', step.title);
+                setText('workflowStep' + n + 'Desc', step.description);
+            });
+        }
+    }
 
     // ---- layanan-teknis.html: bento grid (4) + "why choose us" (4) ----
     if (Array.isArray(data.layananTeknisBento)) {
@@ -342,6 +502,32 @@ ${action}
             setText('bentoCard' + n + 'Title', card.title);
             setText('bentoCard' + n + 'Desc', card.description);
         });
+        const b0 = data.layananTeknisBento[0];
+        if (b0 && Array.isArray(b0.checklist)) {
+            setText('bentoCard1Checklist1', b0.checklist[0]);
+            setText('bentoCard1Checklist2', b0.checklist[1]);
+            setText('bentoCard1Checklist3', b0.checklist[2]);
+        }
+        const b1 = data.layananTeknisBento[1];
+        if (b1) setText('bentoCard2LinkText', b1.linkText);
+        const b2 = data.layananTeknisBento[2];
+        if (b2) {
+            setText('bentoCard3Stat1Label', b2.stat1Label);
+            setText('bentoCard3Stat1Value', b2.stat1Value);
+            setText('bentoCard3Stat2Label', b2.stat2Label);
+            setText('bentoCard3Stat2Value', b2.stat2Value);
+        }
+        const b3 = data.layananTeknisBento[3];
+        if (b3) {
+            setText('bentoCard4Stat1Value', b3.stat1Value);
+            setText('bentoCard4Stat1Label', b3.stat1Label);
+            setText('bentoCard4Stat2Value', b3.stat2Value);
+            setText('bentoCard4Stat2Label', b3.stat2Label);
+        }
+    }
+    if (data.layananTeknisWhySection) {
+        setText('layananTeknisWhyHeading', data.layananTeknisWhySection.heading);
+        setText('layananTeknisWhySubtext', data.layananTeknisWhySection.subtext);
     }
     if (Array.isArray(data.layananTeknisWhy)) {
         data.layananTeknisWhy.forEach((card, i) => {
@@ -352,19 +538,29 @@ ${action}
         });
     }
 
-    // ---- tentang-kami.html: profil perusahaan, visi & misi, nilai-nilai ----
+    // ---- tentang-kami.html: hero, profil perusahaan, visi & misi, nilai-nilai ----
+    if (data.pages && data.pages.tentangKami) {
+        setText('tentangHeroHeading', data.pages.tentangKami.heroHeading);
+        setText('tentangHeroParagraph', data.pages.tentangKami.heroParagraph);
+    }
     if (data.tentangProfil) {
         setText('tentangProfilEyebrow', data.tentangProfil.eyebrow);
         setText('tentangProfilHeading', data.tentangProfil.heading);
         setText('tentangProfilParagraph', data.tentangProfil.paragraph);
     }
     if (data.tentangVisiMisi) {
+        setText('tentangVisiHeading', data.tentangVisiMisi.visiHeading);
+        setText('tentangMisiHeading', data.tentangVisiMisi.misiHeading);
         setText('tentangVisiText', data.tentangVisiMisi.visiText);
         if (Array.isArray(data.tentangVisiMisi.misiItems)) {
             data.tentangVisiMisi.misiItems.forEach((item, i) => {
                 setText('tentangMisiItem' + (i + 1), item);
             });
         }
+    }
+    if (data.tentangValuesSection) {
+        setText('tentangValuesHeading', data.tentangValuesSection.heading);
+        setText('tentangValuesSubtext', data.tentangValuesSection.subtext);
     }
     if (Array.isArray(data.tentangNilai)) {
         data.tentangNilai.forEach((card, i) => {
@@ -373,5 +569,45 @@ ${action}
             setText('nilaiCard' + n + 'Title', card.title);
             setText('nilaiCard' + n + 'Desc', card.description);
         });
+    }
+
+    // ---- detail-penyewaan.html: static form labels/placeholders/errors/banners ----
+    if (data.detailPenyewaan) {
+        const dp = data.detailPenyewaan;
+        setText('detailBreadcrumbCurrent', dp.breadcrumbCurrent);
+        setText('specFallback', dp.specFallbackText);
+        setText('detailFormHeading', dp.formHeading);
+        setText('detailStartDateLabel', dp.startDateLabel);
+        setText('detailEndDateLabel', dp.endDateLabel);
+        setText('detailLokasiLabel', dp.lokasiLabel);
+        setAttr('lokasi', 'placeholder', dp.lokasiPlaceholder);
+        setText('detailKebutuhanLabel', dp.kebutuhanLabel);
+        setAttr('kebutuhan', 'placeholder', dp.kebutuhanPlaceholder);
+        setText('detailContactHeading', dp.contactHeading);
+        setText('detailNamaLabel', dp.namaLabel);
+        setAttr('nama', 'placeholder', dp.namaPlaceholder);
+        setText('namaError', dp.namaError);
+        setText('detailNoWaLabel', dp.noWaLabel);
+        setAttr('noWa', 'placeholder', dp.noWaPlaceholder);
+        setText('noWaError', dp.noWaError);
+        setText('detailSummaryHeading', dp.summaryHeading);
+        setText('detailUnitLabel', dp.unitLabel);
+        setText('detailDurationLabel', dp.durationLabel);
+        setText('detailDailyRateLabel', dp.dailyRateLabel);
+        setText('detailTotalLabel', dp.totalLabel);
+        setText('detailHidePriceNoticeText', dp.hidePriceNoticeText);
+        setText('detailFeeNoticeText', dp.feeNoticeText);
+        setText('detailSubmitButtonText', dp.submitButtonText);
+        setText('detailFooterBadgeText', dp.footerBadgeText);
+        setText('detailAssistanceHeading', dp.assistanceHeading);
+        setText('detailAssistanceLink', dp.assistanceLinkText);
+    }
+
+    // ---- 404.html ----
+    if (data.notFound) {
+        setText('notFoundHeading', data.notFound.heading);
+        setText('notFoundParagraph', data.notFound.paragraph);
+        setText('notFoundHomeButtonText', data.notFound.homeButtonText);
+        setText('notFoundCatalogButtonText', data.notFound.catalogButtonText);
     }
 });

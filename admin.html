@@ -8,10 +8,10 @@
 <meta content="noindex, nofollow" name="robots"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="assets/js/tailwind-config.js?v=5"></script>
-<link href="assets/css/motion.css?v=5" rel="stylesheet"/>
-<script src="assets/js/data.js?v=5"></script>
-<script src="assets/js/store.js?v=5"></script>
+<script src="assets/js/tailwind-config.js?v=6"></script>
+<link href="assets/css/motion.css?v=6" rel="stylesheet"/>
+<script src="assets/js/data.js?v=6"></script>
+<script src="assets/js/store.js?v=6"></script>
 <style>
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
     .tab-btn.active { background-color: #001736; color: #fff; }
@@ -120,7 +120,8 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="beranda" type="button">Beranda</button>
 <button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="kategori" type="button">Kategori</button>
 <button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="produk" type="button">Produk</button>
-<button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="foto" type="button">Foto Halaman Lain</button>
+<button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="foto" type="button">Halaman Lain</button>
+<button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="lainnya" type="button">Sewa, 404 &amp; SEO</button>
 <button class="tab-btn px-md py-2 rounded-full text-sm font-bold bg-surface-container-highest transition" data-tab="bagian" type="button">Bagian &amp; CTA</button>
 </div>
 
@@ -144,6 +145,10 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <input accept="image/*" class="text-xs" data-image-field="company.logo" id="logoUpload" type="file"/>
 </div>
 <input class="field-input mt-xs" data-field="company.logo" placeholder="atau tempel URL gambar di sini" type="text"/>
+</div>
+<div>
+<label class="field-label">Slogan (dipakai di beberapa halaman, mis. banner kontak)</label>
+<input class="field-input" data-field="company.slogan" type="text"/>
 </div>
 <div class="grid grid-cols-2 gap-sm">
 <div>
@@ -192,26 +197,58 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <p class="text-xs text-on-surface-variant mb-sm">Centang "Tutup" untuk hari yang tidak beroperasi — jam yang diisi di kolom teks akan diabaikan dan situs otomatis menampilkan tanda tutup untuk hari itu.</p>
 <div class="grid md:grid-cols-3 gap-sm">
 <div>
-<label class="field-label">Senin - Jumat</label>
+<label class="field-label">Nama Hari (Senin-Jumat)</label>
+<input class="field-input mb-xs" data-field="company.hours.weekday.dayLabel" type="text"/>
+<label class="field-label">Jam</label>
 <input class="field-input mb-xs" data-field="company.hours.weekday.text" placeholder="mis. 08.00 - 17.00" type="text"/>
 <label class="flex items-center gap-xs text-xs text-on-surface-variant">
 <input class="w-4 h-4" data-field="company.hours.weekday.closed" type="checkbox"/> Tutup di hari ini
 </label>
 </div>
 <div>
-<label class="field-label">Sabtu</label>
+<label class="field-label">Nama Hari (Sabtu)</label>
+<input class="field-input mb-xs" data-field="company.hours.saturday.dayLabel" type="text"/>
+<label class="field-label">Jam</label>
 <input class="field-input mb-xs" data-field="company.hours.saturday.text" placeholder="mis. 08.00 - 14.00" type="text"/>
 <label class="flex items-center gap-xs text-xs text-on-surface-variant">
 <input class="w-4 h-4" data-field="company.hours.saturday.closed" type="checkbox"/> Tutup di hari ini
 </label>
 </div>
 <div>
-<label class="field-label">Minggu</label>
+<label class="field-label">Nama Hari (Minggu)</label>
+<input class="field-input mb-xs" data-field="company.hours.sunday.dayLabel" type="text"/>
+<label class="field-label">Jam</label>
 <input class="field-input mb-xs" data-field="company.hours.sunday.text" placeholder="mis. Tutup, atau jam kalau buka" type="text"/>
 <label class="flex items-center gap-xs text-xs text-on-surface-variant">
 <input class="w-4 h-4" data-field="company.hours.sunday.closed" type="checkbox"/> Tutup di hari ini
 </label>
 </div>
+</div>
+<div>
+<label class="field-label">Catatan saat tutup (tabel di halaman Hubungi Kami)</label>
+<input class="field-input" data-field="company.hours.closedNote" type="text"/>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md md:col-span-2">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Navigasi &amp; Footer</h3>
+<p class="text-xs text-on-surface-variant mb-sm">Label menu ini dipakai di menu atas, menu mobile, dan daftar navigasi footer sekaligus — di semua halaman.</p>
+<div class="grid md:grid-cols-3 gap-sm mb-md">
+<div><label class="field-label">Menu: Beranda</label><input class="field-input" data-field="nav.beranda" type="text"/></div>
+<div><label class="field-label">Menu: Produk</label><input class="field-input" data-field="nav.produk" type="text"/></div>
+<div><label class="field-label">Menu: Layanan</label><input class="field-input" data-field="nav.layanan" type="text"/></div>
+<div><label class="field-label">Menu: Tentang Kami</label><input class="field-input" data-field="nav.tentangKami" type="text"/></div>
+<div><label class="field-label">Menu: Hubungi Kami</label><input class="field-input" data-field="nav.kontak" type="text"/></div>
+<div><label class="field-label">Tombol "Rent Now"</label><input class="field-input" data-field="nav.ctaButton" type="text"/></div>
+</div>
+<div class="grid md:grid-cols-3 gap-sm">
+<div><label class="field-label">Judul Kolom Navigasi (Footer)</label><input class="field-input" data-field="footer.navHeading" type="text"/></div>
+<div><label class="field-label">Judul Kolom Jam Operasional (Footer)</label><input class="field-input" data-field="footer.hoursHeading" type="text"/></div>
+<div><label class="field-label">Judul Kolom Info Kontak (Footer)</label><input class="field-input" data-field="footer.contactHeading" type="text"/></div>
+</div>
+<div class="mt-sm">
+<label class="field-label">Teks Copyright (setelah nama perusahaan)</label>
+<input class="field-input" data-field="footer.copyrightSuffix" type="text"/>
 </div>
 </div>
 </div>
@@ -238,6 +275,16 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Subjudul</label>
 <textarea class="field-input" data-field="hero.subtitle" rows="3"></textarea>
 </div>
+<div class="grid grid-cols-2 gap-sm">
+<div>
+<label class="field-label">Tombol Utama</label>
+<input class="field-input" data-field="hero.primaryButtonText" type="text"/>
+</div>
+<div>
+<label class="field-label">Tombol Kedua</label>
+<input class="field-input" data-field="hero.secondaryButtonText" type="text"/>
+</div>
+</div>
 <div>
 <label class="field-label">Gambar Hero</label>
 <div class="flex items-center gap-sm mb-xs">
@@ -251,6 +298,40 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
 <h3 class="font-headline-md text-lg text-primary mb-sm">Statistik (4 kartu tetap)</h3>
 <div class="grid grid-cols-2 gap-sm" id="statsFields"></div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md md:col-span-2">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Section "Kenapa Memilih Kami?" (Beranda)</h3>
+<div class="grid md:grid-cols-2 gap-sm mb-md">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="homeWhyChoose.heading" type="text"/></div>
+<div><label class="field-label">Subjudul</label><input class="field-input" data-field="homeWhyChoose.subtext" type="text"/></div>
+</div>
+<div class="grid md:grid-cols-3 gap-md">
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="homeWhyChoose.cards.0.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="homeWhyChoose.cards.0.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="homeWhyChoose.cards.0.description" rows="3"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="homeWhyChoose.cards.1.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="homeWhyChoose.cards.1.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="homeWhyChoose.cards.1.description" rows="3"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Ikon</label><input class="field-input" data-field="homeWhyChoose.cards.2.icon" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="homeWhyChoose.cards.2.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="homeWhyChoose.cards.2.description" rows="3"></textarea>
+</div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md md:col-span-2">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Section Katalog (Beranda)</h3>
+<div class="grid md:grid-cols-3 gap-sm">
+<div><label class="field-label">Label Kecil</label><input class="field-input" data-field="homeCatalog.eyebrow" type="text"/></div>
+<div><label class="field-label">Judul</label><input class="field-input" data-field="homeCatalog.heading" type="text"/></div>
+<div><label class="field-label">Teks Tautan "Lihat Semua"</label><input class="field-input" data-field="homeCatalog.viewAllText" type="text"/></div>
+</div>
 </div>
 </div>
 </section>
@@ -278,13 +359,17 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <div class="space-y-md" id="productList"></div>
 </section>
 
-<!-- Tab: Foto Halaman Lain -->
+<!-- Tab: Halaman Lain -->
 <section class="hidden" data-tab-panel="foto">
-<p class="text-sm text-on-surface-variant mb-md">Foto-foto ini muncul di halaman selain Katalog Produk. Setiap foto bisa diganti dengan mengunggah gambar baru atau menempel URL gambar.</p>
+<p class="text-sm text-on-surface-variant mb-md">Foto dan teks yang muncul di halaman selain Katalog Produk (yang punya foto). Setiap foto bisa diganti dengan mengunggah gambar baru atau menempel URL gambar.</p>
 <div class="grid md:grid-cols-2 gap-lg">
 
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
 <h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Tentang Kami</h3>
+<div class="grid grid-cols-2 gap-sm">
+<div><label class="field-label">Judul Hero</label><input class="field-input" data-field="pages.tentangKami.heroHeading" type="text"/></div>
+<div><label class="field-label">Paragraf Hero</label><input class="field-input" data-field="pages.tentangKami.heroParagraph" type="text"/></div>
+</div>
 <div>
 <label class="field-label">Foto Latar Hero</label>
 <div class="flex items-center gap-sm mb-xs">
@@ -314,6 +399,14 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
 <h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Layanan</h3>
 <div>
+<label class="field-label">Judul Hero</label>
+<input class="field-input" data-field="pages.layanan.heroHeading" type="text"/>
+</div>
+<div>
+<label class="field-label">Paragraf Hero</label>
+<textarea class="field-input" data-field="pages.layanan.heroParagraph" rows="2"></textarea>
+</div>
+<div>
 <label class="field-label">Foto Latar Hero</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layanan.heroImage" src="assets/img/placeholder.svg"/>
@@ -325,6 +418,14 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
 <h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Layanan Teknis</h3>
+<div class="grid grid-cols-2 gap-sm">
+<div><label class="field-label">Label Kecil Hero</label><input class="field-input" data-field="pages.layananTeknis.heroEyebrow" type="text"/></div>
+<div><label class="field-label">Judul Hero</label><input class="field-input" data-field="pages.layananTeknis.heroHeading" type="text"/></div>
+</div>
+<div>
+<label class="field-label">Paragraf Hero</label>
+<textarea class="field-input" data-field="pages.layananTeknis.heroParagraph" rows="2"></textarea>
+</div>
 <div>
 <label class="field-label">Foto Latar Hero</label>
 <div class="flex items-center gap-sm mb-xs">
@@ -361,6 +462,32 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
 <h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Hubungi Kami</h3>
+<div class="grid grid-cols-2 gap-sm">
+<div><label class="field-label">Badge Hero</label><input class="field-input" data-field="pages.kontak.heroBadge" type="text"/></div>
+<div><label class="field-label">Judul Hero</label><input class="field-input" data-field="pages.kontak.heroHeading" type="text"/></div>
+</div>
+<div><label class="field-label">Paragraf Hero</label><textarea class="field-input" data-field="pages.kontak.heroParagraph" rows="2"></textarea></div>
+<div class="grid grid-cols-2 gap-sm">
+<div><label class="field-label">Judul Kartu Alamat</label><input class="field-input" data-field="pages.kontak.addressHeading" type="text"/></div>
+<div><label class="field-label">Judul Kartu Telepon/WA</label><input class="field-input" data-field="pages.kontak.phoneHeading" type="text"/></div>
+<div><label class="field-label">Subteks Kartu Telepon/WA</label><input class="field-input" data-field="pages.kontak.phoneSubtext" type="text"/></div>
+<div><label class="field-label">Judul Kartu Email</label><input class="field-input" data-field="pages.kontak.emailHeading" type="text"/></div>
+<div><label class="field-label">Subteks Kartu Email</label><input class="field-input" data-field="pages.kontak.emailSubtext" type="text"/></div>
+<div><label class="field-label">Judul Kartu Website</label><input class="field-input" data-field="pages.kontak.websiteHeading" type="text"/></div>
+<div><label class="field-label">Subteks Kartu Website</label><input class="field-input" data-field="pages.kontak.websiteSubtext" type="text"/></div>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div><label class="field-label">Judul Jam Operasional</label><input class="field-input" data-field="pages.kontak.hoursHeading" type="text"/></div>
+<div><label class="field-label">Subteks Jam Operasional</label><input class="field-input" data-field="pages.kontak.hoursSubtext" type="text"/></div>
+<div><label class="field-label">Header Kolom "Hari"</label><input class="field-input" data-field="pages.kontak.hoursTableDayHeader" type="text"/></div>
+<div><label class="field-label">Header Kolom "Waktu"</label><input class="field-input" data-field="pages.kontak.hoursTableTimeHeader" type="text"/></div>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div><label class="field-label">Judul Lokasi</label><input class="field-input" data-field="pages.kontak.locationHeading" type="text"/></div>
+<div><label class="field-label">Teks Tombol "Kirim Email"</label><input class="field-input" data-field="pages.kontak.emailButtonText" type="text"/></div>
+<div><label class="field-label">Judul Overlay Peta</label><input class="field-input" data-field="pages.kontak.mapOverlayTitle" type="text"/></div>
+<div><label class="field-label">Subjudul Overlay Peta</label><input class="field-input" data-field="pages.kontak.mapOverlaySubtitle" type="text"/></div>
+</div>
 <div>
 <label class="field-label">Gambar Peta Lokasi</label>
 <div class="flex items-center gap-sm mb-xs">
@@ -368,6 +495,32 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <input accept="image/*" class="text-xs" data-image-field="pages.kontak.mapImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.kontak.mapImage" type="text"/>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md md:col-span-2">
+<h3 class="font-headline-md text-lg text-primary mb-sm">Halaman Katalog Produk</h3>
+<div class="grid md:grid-cols-3 gap-sm">
+<div><label class="field-label">Label Sidebar Baris 1</label><input class="field-input" data-field="katalogPage.sideLabel1" type="text"/></div>
+<div><label class="field-label">Label Sidebar Baris 2</label><input class="field-input" data-field="katalogPage.sideLabel2" type="text"/></div>
+<div><label class="field-label">Label "Semua Alat"</label><input class="field-input" data-field="katalogPage.allToolsLabel" type="text"/></div>
+<div><label class="field-label">Label "Layanan Teknis" (sidebar)</label><input class="field-input" data-field="katalogPage.technicalServiceLabel" type="text"/></div>
+<div><label class="field-label">Teks Tombol Bantuan</label><input class="field-input" data-field="katalogPage.helpButtonText" type="text"/></div>
+<div><label class="field-label">Breadcrumb: Beranda</label><input class="field-input" data-field="katalogPage.breadcrumbHome" type="text"/></div>
+<div><label class="field-label">Breadcrumb: Halaman Ini</label><input class="field-input" data-field="katalogPage.breadcrumbCurrent" type="text"/></div>
+<div><label class="field-label">Label Kecil (Eyebrow)</label><input class="field-input" data-field="katalogPage.eyebrow" type="text"/></div>
+<div><label class="field-label">Judul Halaman</label><input class="field-input" data-field="katalogPage.heading" type="text"/></div>
+</div>
+<div><label class="field-label">Paragraf Intro</label><textarea class="field-input" data-field="katalogPage.intro" rows="2"></textarea></div>
+<div class="grid md:grid-cols-4 gap-sm">
+<div><label class="field-label">Sortir: Semua</label><input class="field-input" data-field="katalogPage.sortAllText" type="text"/></div>
+<div><label class="field-label">Sortir: Populer</label><input class="field-input" data-field="katalogPage.sortPopularText" type="text"/></div>
+<div><label class="field-label">Sortir: Terbaru</label><input class="field-input" data-field="katalogPage.sortNewestText" type="text"/></div>
+<div><label class="field-label">Sortir: Harga Terendah</label><input class="field-input" data-field="katalogPage.sortPriceLowText" type="text"/></div>
+</div>
+<div>
+<label class="field-label">Template Jumlah Produk (pakai {n} untuk angkanya)</label>
+<input class="field-input" data-field="katalogPage.countTemplate" type="text"/>
 </div>
 </div>
 
@@ -433,6 +586,14 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <div class="md:col-span-2"><label class="field-label">Judul</label><input class="field-input" data-field="homeAbout.heading" type="text"/></div>
 <div class="md:col-span-2"><label class="field-label">Paragraf</label><textarea class="field-input" data-field="homeAbout.paragraph" rows="2"></textarea></div>
 <div class="md:col-span-2"><label class="field-label">Kutipan (kartu mengambang di foto)</label><input class="field-input" data-field="homeAbout.quote" type="text"/></div>
+<div class="md:col-span-2">
+<label class="field-label">Foto</label>
+<div class="flex items-center gap-sm mb-xs">
+<img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_homeAbout.image" src="assets/img/placeholder.svg"/>
+<input accept="image/*" class="text-xs" data-image-field="homeAbout.image" type="file"/>
+</div>
+<input class="field-input" data-field="homeAbout.image" type="text"/>
+</div>
 <div><label class="field-label">Poin 1 — Ikon</label><input class="field-input" data-field="homeAbout.highlights.0.icon" type="text"/></div>
 <div><label class="field-label">Poin 2 — Ikon</label><input class="field-input" data-field="homeAbout.highlights.1.icon" type="text"/></div>
 <div><label class="field-label">Poin 1 — Teks</label><textarea class="field-input" data-field="homeAbout.highlights.0.text" rows="2"></textarea></div>
@@ -441,7 +602,12 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 </div>
 
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
-<h3 class="font-headline-md text-lg text-primary">3 Kartu Layanan (Halaman Layanan)</h3>
+<h3 class="font-headline-md text-lg text-primary">Section Layanan Utama (Halaman Layanan)</h3>
+<div class="grid md:grid-cols-2 gap-sm mb-md">
+<div><label class="field-label">Label Kecil</label><input class="field-input" data-field="layananSection.eyebrow" type="text"/></div>
+<div><label class="field-label">Judul</label><input class="field-input" data-field="layananSection.heading" type="text"/></div>
+</div>
+<h4 class="font-button text-sm text-on-surface-variant mb-xs">3 Kartu Layanan</h4>
 <div class="grid md:grid-cols-3 gap-md">
 <div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
 <label class="field-label">Ikon</label><input class="field-input" data-field="layananCards.0.icon" type="text"/>
@@ -465,30 +631,79 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 </div>
 
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
-<h3 class="font-headline-md text-lg text-primary">4 Kartu Bento (Halaman Layanan Teknis)</h3>
-<p class="text-xs text-on-surface-variant">Hanya judul &amp; deskripsi — ikon, checklist, dan angka statistik pada kartu-kartu ini tetap (struktur tiap kartu berbeda-beda).</p>
-<div class="grid md:grid-cols-2 gap-md">
+<h3 class="font-headline-md text-lg text-primary">Alur Kerja Kami (Halaman Layanan)</h3>
+<div class="grid md:grid-cols-2 gap-sm mb-md">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="layananWorkflow.heading" type="text"/></div>
+<div><label class="field-label">Subjudul</label><input class="field-input" data-field="layananWorkflow.subtext" type="text"/></div>
+</div>
+<div class="grid md:grid-cols-4 gap-md">
 <div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
-<label class="field-label">Judul (Pemeliharaan Preventif)</label><input class="field-input" data-field="layananTeknisBento.0.title" type="text"/>
-<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.0.description" rows="3"></textarea>
+<label class="field-label">Nomor</label><input class="field-input" data-field="layananWorkflow.steps.0.number" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananWorkflow.steps.0.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananWorkflow.steps.0.description" rows="3"></textarea>
 </div>
 <div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
-<label class="field-label">Judul (Suku Cadang Asli)</label><input class="field-input" data-field="layananTeknisBento.1.title" type="text"/>
-<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.1.description" rows="3"></textarea>
+<label class="field-label">Nomor</label><input class="field-input" data-field="layananWorkflow.steps.1.number" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananWorkflow.steps.1.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananWorkflow.steps.1.description" rows="3"></textarea>
 </div>
 <div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
-<label class="field-label">Judul (Perbaikan Unit di Lokasi)</label><input class="field-input" data-field="layananTeknisBento.2.title" type="text"/>
-<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.2.description" rows="3"></textarea>
+<label class="field-label">Nomor</label><input class="field-input" data-field="layananWorkflow.steps.2.number" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananWorkflow.steps.2.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananWorkflow.steps.2.description" rows="3"></textarea>
 </div>
 <div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
-<label class="field-label">Judul (Diagnostik Modern)</label><input class="field-input" data-field="layananTeknisBento.3.title" type="text"/>
-<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.3.description" rows="3"></textarea>
+<label class="field-label">Nomor</label><input class="field-input" data-field="layananWorkflow.steps.3.number" type="text"/>
+<label class="field-label">Judul</label><input class="field-input" data-field="layananWorkflow.steps.3.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananWorkflow.steps.3.description" rows="3"></textarea>
 </div>
 </div>
 </div>
 
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
-<h3 class="font-headline-md text-lg text-primary">4 Kartu "Kenapa Memilih Layanan Kami" (Halaman Layanan Teknis)</h3>
+<h3 class="font-headline-md text-lg text-primary">4 Kartu Bento (Halaman Layanan Teknis)</h3>
+<div class="grid md:grid-cols-2 gap-md">
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Judul (Pemeliharaan Preventif)</label><input class="field-input" data-field="layananTeknisBento.0.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.0.description" rows="3"></textarea>
+<label class="field-label">Checklist 1</label><input class="field-input" data-field="layananTeknisBento.0.checklist.0" type="text"/>
+<label class="field-label">Checklist 2</label><input class="field-input" data-field="layananTeknisBento.0.checklist.1" type="text"/>
+<label class="field-label">Checklist 3</label><input class="field-input" data-field="layananTeknisBento.0.checklist.2" type="text"/>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Judul (Suku Cadang Asli)</label><input class="field-input" data-field="layananTeknisBento.1.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.1.description" rows="3"></textarea>
+<label class="field-label">Teks Tautan</label><input class="field-input" data-field="layananTeknisBento.1.linkText" type="text"/>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Judul (Perbaikan Unit di Lokasi)</label><input class="field-input" data-field="layananTeknisBento.2.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.2.description" rows="3"></textarea>
+<div class="grid grid-cols-2 gap-xs">
+<div><label class="field-label">Label Statistik 1</label><input class="field-input" data-field="layananTeknisBento.2.stat1Label" type="text"/></div>
+<div><label class="field-label">Nilai Statistik 1</label><input class="field-input" data-field="layananTeknisBento.2.stat1Value" type="text"/></div>
+<div><label class="field-label">Label Statistik 2</label><input class="field-input" data-field="layananTeknisBento.2.stat2Label" type="text"/></div>
+<div><label class="field-label">Nilai Statistik 2</label><input class="field-input" data-field="layananTeknisBento.2.stat2Value" type="text"/></div>
+</div>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Judul (Diagnostik Modern)</label><input class="field-input" data-field="layananTeknisBento.3.title" type="text"/>
+<label class="field-label">Deskripsi</label><textarea class="field-input" data-field="layananTeknisBento.3.description" rows="3"></textarea>
+<div class="grid grid-cols-2 gap-xs">
+<div><label class="field-label">Nilai Statistik 1</label><input class="field-input" data-field="layananTeknisBento.3.stat1Value" type="text"/></div>
+<div><label class="field-label">Label Statistik 1</label><input class="field-input" data-field="layananTeknisBento.3.stat1Label" type="text"/></div>
+<div><label class="field-label">Nilai Statistik 2</label><input class="field-input" data-field="layananTeknisBento.3.stat2Value" type="text"/></div>
+<div><label class="field-label">Label Statistik 2</label><input class="field-input" data-field="layananTeknisBento.3.stat2Label" type="text"/></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">"Kenapa Memilih Layanan Kami" (Halaman Layanan Teknis)</h3>
+<div class="grid md:grid-cols-2 gap-sm mb-md">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="layananTeknisWhySection.heading" type="text"/></div>
+<div><label class="field-label">Subjudul</label><input class="field-input" data-field="layananTeknisWhySection.subtext" type="text"/></div>
+</div>
 <div class="grid md:grid-cols-2 gap-md">
 <div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
 <label class="field-label">Ikon</label><input class="field-input" data-field="layananTeknisWhy.0.icon" type="text"/>
@@ -524,6 +739,10 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
 <h3 class="font-headline-md text-lg text-primary">Visi &amp; Misi (Halaman Tentang Kami)</h3>
+<div class="grid grid-cols-2 gap-sm mb-sm">
+<div><label class="field-label">Judul "Visi"</label><input class="field-input" data-field="tentangVisiMisi.visiHeading" type="text"/></div>
+<div><label class="field-label">Judul "Misi"</label><input class="field-input" data-field="tentangVisiMisi.misiHeading" type="text"/></div>
+</div>
 <label class="field-label">Visi</label>
 <textarea class="field-input mb-sm" data-field="tentangVisiMisi.visiText" rows="2"></textarea>
 <label class="field-label">Misi — Poin 1</label><input class="field-input mb-xs" data-field="tentangVisiMisi.misiItems.0" type="text"/>
@@ -533,7 +752,11 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 </div>
 
 <div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
-<h3 class="font-headline-md text-lg text-primary">4 Kartu Nilai Perusahaan (Halaman Tentang Kami)</h3>
+<h3 class="font-headline-md text-lg text-primary">Nilai-Nilai Perusahaan (Halaman Tentang Kami)</h3>
+<div class="grid grid-cols-2 gap-sm mb-md">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="tentangValuesSection.heading" type="text"/></div>
+<div><label class="field-label">Subjudul</label><input class="field-input" data-field="tentangValuesSection.subtext" type="text"/></div>
+</div>
 <div class="grid md:grid-cols-2 gap-md">
 <div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
 <label class="field-label">Ikon (Keselamatan — kartu unggulan)</label><input class="field-input" data-field="tentangNilai.0.icon" type="text"/>
@@ -554,6 +777,94 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Ikon (Integritas)</label><input class="field-input" data-field="tentangNilai.3.icon" type="text"/>
 <label class="field-label">Judul</label><input class="field-input" data-field="tentangNilai.3.title" type="text"/>
 <label class="field-label">Deskripsi</label><textarea class="field-input" data-field="tentangNilai.3.description" rows="2"></textarea>
+</div>
+</div>
+</div>
+
+</section>
+
+<!-- Tab: Sewa, 404 & SEO -->
+<section class="hidden space-y-lg" data-tab-panel="lainnya">
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">Halaman Detail Penyewaan</h3>
+<p class="text-xs text-on-surface-variant">Label form, placeholder, dan pesan error di halaman formulir sewa unit.</p>
+<div class="grid md:grid-cols-3 gap-sm">
+<div><label class="field-label">Breadcrumb: Halaman Ini</label><input class="field-input" data-field="detailPenyewaan.breadcrumbCurrent" type="text"/></div>
+<div><label class="field-label">Judul Form Sewa</label><input class="field-input" data-field="detailPenyewaan.formHeading" type="text"/></div>
+<div><label class="field-label">Judul Detail Kontak</label><input class="field-input" data-field="detailPenyewaan.contactHeading" type="text"/></div>
+<div><label class="field-label">Label Tanggal Mulai</label><input class="field-input" data-field="detailPenyewaan.startDateLabel" type="text"/></div>
+<div><label class="field-label">Label Tanggal Selesai</label><input class="field-input" data-field="detailPenyewaan.endDateLabel" type="text"/></div>
+<div><label class="field-label">Label Lokasi Proyek</label><input class="field-input" data-field="detailPenyewaan.lokasiLabel" type="text"/></div>
+<div><label class="field-label">Placeholder Lokasi Proyek</label><input class="field-input" data-field="detailPenyewaan.lokasiPlaceholder" type="text"/></div>
+<div><label class="field-label">Label Kebutuhan Tambahan</label><input class="field-input" data-field="detailPenyewaan.kebutuhanLabel" type="text"/></div>
+<div><label class="field-label">Placeholder Kebutuhan Tambahan</label><input class="field-input" data-field="detailPenyewaan.kebutuhanPlaceholder" type="text"/></div>
+<div><label class="field-label">Label Nama Lengkap</label><input class="field-input" data-field="detailPenyewaan.namaLabel" type="text"/></div>
+<div><label class="field-label">Placeholder Nama Lengkap</label><input class="field-input" data-field="detailPenyewaan.namaPlaceholder" type="text"/></div>
+<div><label class="field-label">Pesan Error Nama Kosong</label><input class="field-input" data-field="detailPenyewaan.namaError" type="text"/></div>
+<div><label class="field-label">Label Nomor WhatsApp</label><input class="field-input" data-field="detailPenyewaan.noWaLabel" type="text"/></div>
+<div><label class="field-label">Placeholder Nomor WhatsApp</label><input class="field-input" data-field="detailPenyewaan.noWaPlaceholder" type="text"/></div>
+<div><label class="field-label">Pesan Error WhatsApp Kosong</label><input class="field-input" data-field="detailPenyewaan.noWaError" type="text"/></div>
+<div><label class="field-label">Judul Ringkasan Sewa</label><input class="field-input" data-field="detailPenyewaan.summaryHeading" type="text"/></div>
+<div><label class="field-label">Label "Unit Terpilih"</label><input class="field-input" data-field="detailPenyewaan.unitLabel" type="text"/></div>
+<div><label class="field-label">Label "Durasi"</label><input class="field-input" data-field="detailPenyewaan.durationLabel" type="text"/></div>
+<div><label class="field-label">Label "Tarif Harian"</label><input class="field-input" data-field="detailPenyewaan.dailyRateLabel" type="text"/></div>
+<div><label class="field-label">Label "Estimasi Total"</label><input class="field-input" data-field="detailPenyewaan.totalLabel" type="text"/></div>
+<div><label class="field-label">Teks Tombol Kirim</label><input class="field-input" data-field="detailPenyewaan.submitButtonText" type="text"/></div>
+<div><label class="field-label">Badge Bawah (mis. "Industrial Grade...")</label><input class="field-input" data-field="detailPenyewaan.footerBadgeText" type="text"/></div>
+<div><label class="field-label">Judul Kartu Bantuan</label><input class="field-input" data-field="detailPenyewaan.assistanceHeading" type="text"/></div>
+<div><label class="field-label">Teks Tautan Kartu Bantuan</label><input class="field-input" data-field="detailPenyewaan.assistanceLinkText" type="text"/></div>
+</div>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Spesifikasi tidak tersedia — teks pengganti</label><input class="field-input" data-field="detailPenyewaan.specFallbackText" type="text"/></div>
+<div><label class="field-label">Catatan harga disembunyikan</label><input class="field-input" data-field="detailPenyewaan.hidePriceNoticeText" type="text"/></div>
+<div><label class="field-label">Catatan biaya tambahan (ongkir/BBM)</label><input class="field-input" data-field="detailPenyewaan.feeNoticeText" type="text"/></div>
+<div><label class="field-label">Error: tanggal belum diisi</label><input class="field-input" data-field="detailPenyewaan.dateMissingError" type="text"/></div>
+<div><label class="field-label">Error: kontak belum lengkap</label><input class="field-input" data-field="detailPenyewaan.contactMissingError" type="text"/></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">Halaman 404 (Tidak Ditemukan)</h3>
+<div class="grid md:grid-cols-2 gap-sm">
+<div><label class="field-label">Judul</label><input class="field-input" data-field="notFound.heading" type="text"/></div>
+<div><label class="field-label">Teks Tombol Kembali ke Beranda</label><input class="field-input" data-field="notFound.homeButtonText" type="text"/></div>
+<div class="md:col-span-2"><label class="field-label">Paragraf</label><textarea class="field-input" data-field="notFound.paragraph" rows="2"></textarea></div>
+<div><label class="field-label">Teks Tombol Lihat Katalog</label><input class="field-input" data-field="notFound.catalogButtonText" type="text"/></div>
+</div>
+</div>
+
+<div class="bg-white border border-outline-variant rounded-xl p-lg space-y-md">
+<h3 class="font-headline-md text-lg text-primary">SEO (Judul Tab &amp; Deskripsi Pencarian)</h3>
+<p class="text-xs text-on-surface-variant">Judul tab browser dan deskripsi yang muncul di hasil pencarian Google untuk tiap halaman.</p>
+<div class="grid md:grid-cols-2 gap-md">
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Beranda — Judul Tab</label><input class="field-input" data-field="seo.home.title" type="text"/>
+<label class="field-label">Beranda — Deskripsi</label><textarea class="field-input" data-field="seo.home.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Katalog — Judul Tab</label><input class="field-input" data-field="seo.katalog.title" type="text"/>
+<label class="field-label">Katalog — Deskripsi</label><textarea class="field-input" data-field="seo.katalog.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Hubungi Kami — Judul Tab</label><input class="field-input" data-field="seo.kontak.title" type="text"/>
+<label class="field-label">Hubungi Kami — Deskripsi</label><textarea class="field-input" data-field="seo.kontak.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Layanan — Judul Tab</label><input class="field-input" data-field="seo.layanan.title" type="text"/>
+<label class="field-label">Layanan — Deskripsi</label><textarea class="field-input" data-field="seo.layanan.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Layanan Teknis — Judul Tab</label><input class="field-input" data-field="seo.layananTeknis.title" type="text"/>
+<label class="field-label">Layanan Teknis — Deskripsi</label><textarea class="field-input" data-field="seo.layananTeknis.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm">
+<label class="field-label">Tentang Kami — Judul Tab</label><input class="field-input" data-field="seo.tentangKami.title" type="text"/>
+<label class="field-label">Tentang Kami — Deskripsi</label><textarea class="field-input" data-field="seo.tentangKami.description" rows="2"></textarea>
+</div>
+<div class="space-y-xs bg-surface-container-low border border-outline-variant rounded-lg p-sm md:col-span-2">
+<label class="field-label">Detail Penyewaan — Judul Tab</label><input class="field-input" data-field="seo.detailPenyewaan.title" type="text"/>
+<label class="field-label">Detail Penyewaan — Deskripsi</label><textarea class="field-input" data-field="seo.detailPenyewaan.description" rows="2"></textarea>
 </div>
 </div>
 </div>
@@ -702,6 +1013,6 @@ Sembunyikan harga (tampilkan "Hubungi Kami" di kartu produk, tanpa perlu isi nom
 </div>
 </div>
 
-<script src="assets/js/admin.js?v=5"></script>
+<script src="assets/js/admin.js?v=6"></script>
 </body>
 </html>

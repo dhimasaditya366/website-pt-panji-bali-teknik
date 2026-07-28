@@ -4,15 +4,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="assets/img/favicon.svg" rel="icon" type="image/svg+xml"/>
-<title>Hubungi Kami - PT. Panji Bali Teknik</title>
-<meta content="Hubungi PT. Panji Bali Teknik untuk konsultasi gratis, penawaran harga, dan informasi ketersediaan unit alat konstruksi jalan." name="description"/>
+<title id="seoTitle">Hubungi Kami - PT. Panji Bali Teknik</title>
+<meta content="Hubungi PT. Panji Bali Teknik untuk konsultasi gratis, penawaran harga, dan informasi ketersediaan unit alat konstruksi jalan." id="seoDescription" name="description"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="assets/js/tailwind-config.js?v=5"></script>
-<link href="assets/css/motion.css?v=5" rel="stylesheet"/>
-<script src="assets/js/data.js?v=5"></script>
-<script src="assets/js/store.js?v=5"></script>
-<script src="assets/js/content.js?v=5"></script>
+<script src="assets/js/tailwind-config.js?v=6"></script>
+<link href="assets/css/motion.css?v=6" rel="stylesheet"/>
+<script src="assets/js/data.js?v=6"></script>
+<script src="assets/js/store.js?v=6"></script>
+<script src="assets/js/content.js?v=6"></script>
 <style>
     .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -27,7 +27,7 @@
     }
 </style>
 </head>
-<body class="bg-surface font-body-md text-on-surface">
+<body class="bg-surface font-body-md text-on-surface" data-page="kontak">
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-secondary focus:text-on-primary focus:px-md focus:py-sm focus:rounded font-button" href="#konten-utama">Langsung ke konten</a>
 <!-- TopNavBar -->
 <nav class="site-nav fixed top-0 w-full z-[60] bg-white/95 backdrop-blur-sm border-b border-outline-variant px-margin-mobile md:px-margin-desktop py-4 transition-[padding,box-shadow]">
@@ -68,9 +68,9 @@
 <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
 <div class="relative px-margin-mobile md:px-margin-desktop w-full max-w-screen-2xl mx-auto">
 <div class="max-w-2xl">
-<span class="inline-block px-sm py-1 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded mb-md uppercase tracking-wider hero-enter" style="animation-delay:0ms">Kontak Kami</span>
-<h1 class="font-display-lg text-3xl sm:text-4xl md:text-display-lg mb-sm [text-wrap:balance] hero-enter" style="animation-delay:100ms">Solusi Alat Konstruksi Terpercaya</h1>
-<p class="font-body-lg text-body-lg opacity-90 hero-enter" style="animation-delay:220ms">
+<span class="inline-block px-sm py-1 bg-secondary-container text-on-secondary-container font-label-md text-label-md rounded mb-md uppercase tracking-wider hero-enter" id="kontakHeroBadge" style="animation-delay:0ms">Kontak Kami</span>
+<h1 class="font-display-lg text-3xl sm:text-4xl md:text-display-lg mb-sm [text-wrap:balance] hero-enter" id="kontakHeroHeading" style="animation-delay:100ms">Solusi Alat Konstruksi Terpercaya</h1>
+<p class="font-body-lg text-body-lg opacity-90 hero-enter" id="kontakHeroParagraph" style="animation-delay:220ms">
                         Kami siap membantu Anda menemukan solusi alat konstruksi jalan terbaik dengan harga paling kompetitif. Hubungi tim kami sekarang untuk konsultasi gratis, penawaran harga, dan informasi ketersediaan unit.
                     </p>
 </div>
@@ -84,7 +84,7 @@
 <div class="text-primary mb-md">
 <span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">location_on</span>
 </div>
-<h3 class="font-headline-md text-headline-md text-primary mb-xs">Alamat</h3>
+<h3 class="font-headline-md text-headline-md text-primary mb-xs" id="kontakAddressHeading">Alamat</h3>
 <p class="font-body-md text-on-surface-variant flex-grow" id="contactAddress">
                         Jl. KH Aja No. 34A, Meruya Selatan, Kembangan, Jakarta Barat 11650
                     </p>
@@ -95,11 +95,11 @@
 <div class="text-primary mb-md">
 <span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">call</span>
 </div>
-<h3 class="font-headline-md text-headline-md text-primary mb-xs">Telepon / WA</h3>
+<h3 class="font-headline-md text-headline-md text-primary mb-xs" id="kontakPhoneHeading">Telepon / WA</h3>
 <p class="font-label-md text-label-md text-primary font-bold" id="contactPhoneText">
                         +62 812-3456-7890
                     </p>
-<p class="font-body-md text-on-surface-variant mt-xs">Layanan pelanggan tersedia 24/7 untuk keadaan darurat.</p>
+<p class="font-body-md text-on-surface-variant mt-xs" id="kontakPhoneSubtext">Layanan pelanggan tersedia 24/7 untuk keadaan darurat.</p>
 <div class="h-1 bg-secondary mt-md w-12"></div>
 </a>
 <!-- Email -->
@@ -107,11 +107,11 @@
 <div class="text-primary mb-md">
 <span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">mail</span>
 </div>
-<h3 class="font-headline-md text-headline-md text-primary mb-xs">Email</h3>
+<h3 class="font-headline-md text-headline-md text-primary mb-xs" id="kontakEmailHeading">Email</h3>
 <p class="font-label-md text-label-md text-primary font-bold" id="contactEmailText">
                         info@panjibali.co.id
                     </p>
-<p class="font-body-md text-on-surface-variant mt-xs">Email kami untuk permintaan proposal atau kerjasama bisnis.</p>
+<p class="font-body-md text-on-surface-variant mt-xs" id="kontakEmailSubtext">Email kami untuk permintaan proposal atau kerjasama bisnis.</p>
 <div class="h-1 bg-secondary mt-md w-12"></div>
 </a>
 <!-- Website -->
@@ -119,11 +119,11 @@
 <div class="text-primary mb-md">
 <span class="material-symbols-outlined text-[40px]" style="font-variation-settings: 'FILL' 1;">language</span>
 </div>
-<h3 class="font-headline-md text-headline-md text-primary mb-xs">Website</h3>
+<h3 class="font-headline-md text-headline-md text-primary mb-xs" id="kontakWebsiteHeading">Website</h3>
 <p class="font-label-md text-label-md text-primary font-bold" id="contactWebsite">
                         www.panjibali.co.id
                     </p>
-<p class="font-body-md text-on-surface-variant mt-xs">Kunjungi portal kami untuk katalog unit rental terbaru.</p>
+<p class="font-body-md text-on-surface-variant mt-xs" id="kontakWebsiteSubtext">Kunjungi portal kami untuk katalog unit rental terbaru.</p>
 <div class="h-1 bg-secondary mt-md w-12"></div>
 </div>
 </div>
@@ -135,21 +135,21 @@
 <div class="mb-lg">
 <h2 class="font-headline-lg text-headline-lg text-primary mb-sm flex items-center gap-xs">
 <span class="w-3 h-8 bg-secondary inline-block"></span>
-                        Jam Operasional
+                        <span id="kontakHoursHeading">Jam Operasional</span>
                     </h2>
-<p class="font-body-lg text-on-surface-variant">Kunjungi workshop kami sesuai jadwal operasional di bawah ini.</p>
+<p class="font-body-lg text-on-surface-variant" id="kontakHoursSubtext">Kunjungi workshop kami sesuai jadwal operasional di bawah ini.</p>
 </div>
 <div class="overflow-x-auto border border-outline-variant rounded-lg">
 <table class="w-full min-w-[420px] text-left border-collapse">
 <thead>
 <tr class="bg-primary text-on-primary">
-<th class="p-md font-button text-button uppercase tracking-wider">Hari</th>
-<th class="p-md font-button text-button uppercase tracking-wider">Waktu</th>
+<th class="p-md font-button text-button uppercase tracking-wider" id="kontakHoursDayHeader">Hari</th>
+<th class="p-md font-button text-button uppercase tracking-wider" id="kontakHoursTimeHeader">Waktu</th>
 </tr>
 </thead>
 <tbody class="bg-white">
 <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
-<td class="p-md font-bold text-primary">Senin – Jumat</td>
+<td class="p-md font-bold text-primary" id="hoursWeekdayLabel">Senin – Jumat</td>
 <td class="p-md font-label-md text-label-md flex flex-wrap items-center gap-xs" id="hoursWeekdayCell">
 <span class="inline-flex items-center gap-xs whitespace-nowrap">
 <span class="material-symbols-outlined text-[20px] hidden" id="hoursWeekdayIcon">block</span>
@@ -159,7 +159,7 @@
 </td>
 </tr>
 <tr class="border-b border-outline-variant hover:bg-surface-container-low transition-colors">
-<td class="p-md font-bold text-primary">Sabtu</td>
+<td class="p-md font-bold text-primary" id="hoursSaturdayLabel">Sabtu</td>
 <td class="p-md font-label-md text-label-md flex flex-wrap items-center gap-xs" id="hoursSaturdayCell">
 <span class="inline-flex items-center gap-xs whitespace-nowrap">
 <span class="material-symbols-outlined text-[20px] hidden" id="hoursSaturdayIcon">block</span>
@@ -169,7 +169,7 @@
 </td>
 </tr>
 <tr class="bg-surface-container-low">
-<td class="p-md font-bold text-on-surface-variant">Minggu / Hari Libur</td>
+<td class="p-md font-bold text-on-surface-variant" id="hoursSundayLabel">Minggu / Hari Libur</td>
 <td class="p-md font-label-md text-label-md flex flex-wrap items-center gap-xs" id="hoursSundayCell">
 <span class="inline-flex items-center gap-xs whitespace-nowrap">
 <span class="material-symbols-outlined text-[20px] hidden" id="hoursSundayIcon">block</span>
@@ -184,7 +184,7 @@
 <div class="mt-lg p-md bg-secondary-container text-on-secondary-container border border-secondary/20 rounded-lg">
 <p class="font-button text-button flex items-center gap-md">
 <span class="material-symbols-outlined">info</span>
-                        PT. PANJI BALI TEKNIK Penyedia Alat Konstruksi Jalan Terpercaya — Kualitas Terjamin, Harga Terbaik
+                        <span id="kontakInfoBanner">PT. PANJI BALI TEKNIK Penyedia Alat Konstruksi Jalan Terpercaya — Kualitas Terjamin, Harga Terbaik</span>
                     </p>
 </div>
 </div>
@@ -193,7 +193,7 @@
 <div class="mb-lg">
 <h2 class="font-headline-lg text-headline-lg text-primary mb-sm flex items-center gap-xs">
 <span class="w-3 h-8 bg-secondary inline-block"></span>
-                        Lokasi Kami
+                        <span id="kontakLocationHeading">Lokasi Kami</span>
                     </h2>
 </div>
 <div class="flex-grow rounded-xl overflow-hidden border-2 border-outline shadow-inner relative">
@@ -203,8 +203,8 @@
 <span class="material-symbols-outlined">map</span>
 </div>
 <div class="min-w-0">
-<p class="font-bold text-primary text-sm truncate">PT. Panji Bali Teknik Headquarters</p>
-<p class="text-xs text-on-surface-variant truncate">Meruya Selatan, Jakarta Barat</p>
+<p class="font-bold text-primary text-sm truncate" id="kontakMapOverlayTitle">PT. Panji Bali Teknik Headquarters</p>
+<p class="text-xs text-on-surface-variant truncate" id="kontakMapOverlaySubtitle">Meruya Selatan, Jakarta Barat</p>
 </div>
 <a class="ml-md text-primary hover:text-secondary transition-colors shrink-0" href="https://maps.google.com/?q=Meruya+Selatan+Kembangan+Jakarta+Barat" id="mapLink" rel="noopener" target="_blank">
 <span class="material-symbols-outlined">open_in_new</span>
@@ -225,7 +225,7 @@
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
                         <span id="ctaKontakButtonText">WhatsApp Kami</span>
                     </a>
-<a class="border-2 border-primary text-primary font-bold px-xl py-md rounded-lg flex items-center justify-center gap-sm hover:bg-primary hover:text-white transition active:scale-95 motion-reduce:active:scale-100" href="mailto:info@panjibali.co.id">
+<a class="border-2 border-primary text-primary font-bold px-xl py-md rounded-lg flex items-center justify-center gap-sm hover:bg-primary hover:text-white transition active:scale-95 motion-reduce:active:scale-100" href="mailto:info@panjibali.co.id" id="kontakEmailButton">
                         Kirim Email
                     </a>
 </div>
@@ -305,7 +305,7 @@
 </div>
 <div class="mt-xl pt-lg border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-md px-margin-mobile md:px-margin-desktop text-xs text-primary-fixed/50">
 <div>
-                © <span class="js-year">2026</span> <span class="font-bold text-primary-fixed/70">PT. Panji Bali Teknik</span>. All rights reserved.
+                © <span class="js-year">2026</span> <span class="font-bold text-primary-fixed/70" id="footerCopyrightName">PT. Panji Bali Teknik</span>. <span id="footerCopyrightSuffix">All rights reserved.</span>
             </div>
 <div class="flex gap-6 font-label-md text-secondary-fixed font-bold uppercase tracking-widest">
 <span id="footerTagline1">Kualitas Terjamin</span>
@@ -316,6 +316,6 @@
 <a aria-label="Chat via WhatsApp" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-secondary text-white flex items-center justify-center shadow-2xl hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition" href="https://wa.me/6281234567890" rel="noopener" target="_blank">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
 </a>
-<script src="assets/js/site.js?v=5"></script>
+<script src="assets/js/site.js?v=6"></script>
 </body>
 </html>

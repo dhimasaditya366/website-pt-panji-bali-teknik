@@ -4,15 +4,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="assets/img/favicon.svg" rel="icon" type="image/svg+xml"/>
-<title>Sewa Genset Silent 100kVA - PT. Panji Bali Teknik</title>
-<meta content="Formulir penyewaan unit alat konstruksi PT. Panji Bali Teknik. Pilih tanggal sewa dan dapatkan estimasi biaya secara instan." name="description"/>
+<title id="seoTitle">Sewa Genset Silent 100kVA - PT. Panji Bali Teknik</title>
+<meta content="Formulir penyewaan unit alat konstruksi PT. Panji Bali Teknik. Pilih tanggal sewa dan dapatkan estimasi biaya secara instan." id="seoDescription" name="description"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="assets/js/tailwind-config.js?v=5"></script>
-<link href="assets/css/motion.css?v=5" rel="stylesheet"/>
-<script src="assets/js/data.js?v=5"></script>
-<script src="assets/js/store.js?v=5"></script>
-<script src="assets/js/content.js?v=5"></script>
+<script src="assets/js/tailwind-config.js?v=6"></script>
+<link href="assets/css/motion.css?v=6" rel="stylesheet"/>
+<script src="assets/js/data.js?v=6"></script>
+<script src="assets/js/store.js?v=6"></script>
+<script src="assets/js/content.js?v=6"></script>
 <style>
     .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -29,7 +29,7 @@
     }
 </style>
 </head>
-<body class="bg-background text-on-surface">
+<body class="bg-background text-on-surface" data-page="detailPenyewaan">
 <a class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-secondary focus:text-on-primary focus:px-md focus:py-sm focus:rounded font-button" href="#konten-utama">Langsung ke konten</a>
 <!-- TopNavBar -->
 <nav class="site-nav fixed top-0 w-full z-[60] bg-white/95 backdrop-blur-sm border-b border-outline-variant px-margin-mobile md:px-margin-desktop py-4 transition-[padding,box-shadow]">
@@ -72,7 +72,7 @@
 <span>/</span>
 <a class="hover:text-primary transition-colors" href="katalog.html">Produk</a>
 <span>/</span>
-<span class="text-primary font-semibold">Detail Penyewaan</span>
+<span class="text-primary font-semibold" id="detailBreadcrumbCurrent">Detail Penyewaan</span>
 </nav>
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg items-start">
 <!-- Left Column: Product Details & Form -->
@@ -117,38 +117,38 @@
 <section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-sm md:p-lg space-y-lg reveal-on-scroll">
 <div class="flex items-center gap-xs">
 <span class="material-symbols-outlined text-primary">calendar_month</span>
-<h2 class="font-headline-md text-headline-md text-primary">Informasi Penyewaan</h2>
+<h2 class="font-headline-md text-headline-md text-primary" id="detailFormHeading">Informasi Penyewaan</h2>
 </div>
 <form class="grid grid-cols-1 md:grid-cols-2 gap-md" id="bookingForm">
 <div class="space-y-xs">
-<label class="block font-label-md text-label-md text-on-surface-variant">Tanggal Mulai Sewa</label>
+<label class="block font-label-md text-label-md text-on-surface-variant" id="detailStartDateLabel">Tanggal Mulai Sewa</label>
 <input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg" id="startDate" type="date"/>
 </div>
 <div class="space-y-xs">
-<label class="block font-label-md text-label-md text-on-surface-variant">Tanggal Selesai Sewa</label>
+<label class="block font-label-md text-label-md text-on-surface-variant" id="detailEndDateLabel">Tanggal Selesai Sewa</label>
 <input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg" id="endDate" type="date"/>
 </div>
 <div class="md:col-span-2 space-y-xs">
-<label class="block font-label-md text-label-md text-on-surface-variant">Lokasi Proyek (Alamat Lengkap)</label>
+<label class="block font-label-md text-label-md text-on-surface-variant" id="detailLokasiLabel">Lokasi Proyek (Alamat Lengkap)</label>
 <input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg" id="lokasi" placeholder="Jl. Raya Bypass Ngurah Rai..." type="text"/>
 </div>
 <div class="md:col-span-2 space-y-xs">
-<label class="block font-label-md text-label-md text-on-surface-variant">Kebutuhan Tambahan (Operator, Medan Situs, dll.)</label>
+<label class="block font-label-md text-label-md text-on-surface-variant" id="detailKebutuhanLabel">Kebutuhan Tambahan (Operator, Medan Situs, dll.)</label>
 <textarea class="w-full p-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg resize-none" id="kebutuhan" placeholder="Contoh: Memerlukan operator 24 jam, lokasi berada di area pegunungan..." rows="4"></textarea>
 </div>
 <div class="md:col-span-2 pt-lg">
 <div class="flex items-center gap-xs mb-md">
 <span class="material-symbols-outlined text-primary">person_pin</span>
-<h2 class="font-headline-md text-headline-md text-primary">Detail Kontak</h2>
+<h2 class="font-headline-md text-headline-md text-primary" id="detailContactHeading">Detail Kontak</h2>
 </div>
 </div>
 <div class="space-y-xs">
-<label class="block font-label-md text-label-md text-on-surface-variant">Nama Lengkap / Perusahaan <span class="text-error">*</span></label>
+<label class="block font-label-md text-label-md text-on-surface-variant"><span id="detailNamaLabel">Nama Lengkap / Perusahaan</span> <span class="text-error">*</span></label>
 <input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-t-lg" id="nama" placeholder="PT. Pembangunan Jaya" required="" type="text"/>
 <p class="hidden text-xs text-error" id="namaError">Nama lengkap wajib diisi.</p>
 </div>
 <div class="space-y-xs">
-<label class="block font-label-md text-label-md text-on-surface-variant">Nomor WhatsApp <span class="text-error">*</span></label>
+<label class="block font-label-md text-label-md text-on-surface-variant"><span id="detailNoWaLabel">Nomor WhatsApp</span> <span class="text-error">*</span></label>
 <div class="flex">
 <span class="flex items-center px-md bg-surface-container-high border-b-2 border-outline-variant rounded-tl-lg font-label-md">+62</span>
 <input class="w-full h-12 px-md bg-surface-container-low border-b-2 border-outline-variant focus:border-primary focus:ring-0 transition text-body-md rounded-tr-lg" id="noWa" placeholder="8123456789" required="" type="tel"/>
@@ -162,44 +162,44 @@
 <aside class="lg:col-span-4 sticky top-28">
 <div class="bg-primary text-on-primary rounded-xl overflow-hidden shadow-lg hero-enter" style="animation-delay:200ms">
 <div class="p-lg space-y-md">
-<h3 class="font-headline-md text-headline-md">Ringkasan Sewa</h3>
+<h3 class="font-headline-md text-headline-md" id="detailSummaryHeading">Ringkasan Sewa</h3>
 <div class="space-y-sm">
 <div class="flex justify-between items-start">
-<p class="font-body-md opacity-80">Unit Terpilih</p>
+<p class="font-body-md opacity-80" id="detailUnitLabel">Unit Terpilih</p>
 <p class="font-technical text-label-md text-right" id="summaryUnitName">Genset Silent 100kVA</p>
 </div>
 <div class="flex justify-between items-center">
-<p class="font-body-md opacity-80">Durasi</p>
+<p class="font-body-md opacity-80" id="detailDurationLabel">Durasi</p>
 <p class="font-technical text-label-md" id="durationText">-</p>
 </div>
 <div class="flex justify-between items-center" id="dailyRateRow">
-<p class="font-body-md opacity-80">Tarif Harian</p>
+<p class="font-body-md opacity-80" id="detailDailyRateLabel">Tarif Harian</p>
 <p class="font-technical text-label-md" id="summaryDailyRate">Rp 1.250.000</p>
 </div>
 </div>
 <div class="pt-md border-t border-on-primary/20 flex justify-between items-end" id="totalPriceBlock">
 <div>
-<p class="font-label-md uppercase opacity-60">Estimasi Total</p>
+<p class="font-label-md uppercase opacity-60" id="detailTotalLabel">Estimasi Total</p>
 <p class="font-headline-lg text-headline-lg text-secondary-fixed tabular-nums" id="totalPrice">Rp 0</p>
 </div>
 </div>
 <div class="hidden pt-md border-t border-on-primary/20" id="hidePriceNotice">
-<p class="font-body-md text-sm opacity-90 leading-relaxed">Harga unit ini tersedia atas permintaan. Kirim detail penyewaan Anda dan tim kami akan memberikan penawaran langsung.</p>
+<p class="font-body-md text-sm opacity-90 leading-relaxed" id="detailHidePriceNoticeText">Harga unit ini tersedia atas permintaan. Kirim detail penyewaan Anda dan tim kami akan memberikan penawaran langsung.</p>
 </div>
 <div class="bg-surface-container/10 p-sm rounded-lg border border-on-primary/10">
 <div class="flex gap-xs items-start">
 <span class="material-symbols-outlined text-secondary-fixed text-sm">info</span>
-<p class="text-xs font-body-md opacity-80 leading-relaxed">
+<p class="text-xs font-body-md opacity-80 leading-relaxed" id="detailFeeNoticeText">
                                     Harga belum termasuk biaya mobilisasi (ongkos kirim) dan biaya bahan bakar (BBM).
                                 </p>
 </div>
 </div>
 <p class="hidden text-xs text-secondary-fixed bg-on-primary/10 border border-on-primary/20 rounded-lg p-sm" id="formError" role="alert"></p>
 <button class="w-full bg-secondary-fixed text-on-secondary-fixed py-4 px-lg rounded-xl font-button text-button flex items-center justify-center gap-md btn-active-state hover-lift shadow-lg hover:bg-secondary transition uppercase tracking-wide" onclick="confirmBooking()" type="button">
-                            Konfirmasi &amp; Kirim Permintaan
+                            <span id="detailSubmitButtonText">Konfirmasi &amp; Kirim Permintaan</span>
                             <span class="material-symbols-outlined font-bold">send</span>
 </button>
-<p class="text-center text-[10px] uppercase tracking-widest opacity-40">Industrial Grade Rental Service</p>
+<p class="text-center text-[10px] uppercase tracking-widest opacity-40" id="detailFooterBadgeText">Industrial Grade Rental Service</p>
 </div>
 </div>
 <!-- Assistance Card -->
@@ -208,8 +208,8 @@
 <span class="material-symbols-outlined">support_agent</span>
 </div>
 <div>
-<p class="font-button text-primary">Butuh Bantuan Cepat?</p>
-<a class="text-xs text-on-surface-variant hover:text-secondary transition-colors" href="tel:+6281234567890">Hubungi tim ahli kami via telepon</a>
+<p class="font-button text-primary" id="detailAssistanceHeading">Butuh Bantuan Cepat?</p>
+<a class="text-xs text-on-surface-variant hover:text-secondary transition-colors" href="tel:+6281234567890" id="detailAssistanceLink">Hubungi tim ahli kami via telepon</a>
 </div>
 </div>
 </aside>
@@ -288,7 +288,7 @@
 </div>
 <div class="mt-xl pt-lg border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-md px-margin-mobile md:px-margin-desktop text-xs text-primary-fixed/50">
 <div>
-                © <span class="js-year">2026</span> <span class="font-bold text-primary-fixed/70">PT. Panji Bali Teknik</span>. All rights reserved.
+                © <span class="js-year">2026</span> <span class="font-bold text-primary-fixed/70" id="footerCopyrightName">PT. Panji Bali Teknik</span>. <span id="footerCopyrightSuffix">All rights reserved.</span>
             </div>
 <div class="flex gap-6 font-label-md text-secondary-fixed font-bold uppercase tracking-widest">
 <span id="footerTagline1">KUALITAS TERJAMIN</span>
@@ -299,7 +299,7 @@
 <a aria-label="Chat via WhatsApp" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full bg-secondary text-white flex items-center justify-center shadow-2xl hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition" href="https://wa.me/6281234567890" rel="noopener" target="_blank">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat</span>
 </a>
-<script src="assets/js/site.js?v=5"></script>
+<script src="assets/js/site.js?v=6"></script>
 <script>
     // Product catalog now comes from SiteStore (assets/js/data.js + admin
     // overrides), so pricing/name/image/specs stay in sync with katalog.html
@@ -342,10 +342,19 @@
         modelEl.remove();
     }
 
-    if (product.specs) {
+    const specGridEl = document.getElementById('specGrid');
+    const specKeys = product.specs ? Object.keys(product.specs) : [];
+    if (specKeys.length) {
+        const escapeHtml = (str) => String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        specGridEl.innerHTML = specKeys.map((key) => `
+            <div>
+                <p class="text-on-surface-variant font-label-md text-label-md uppercase">${escapeHtml(key)}</p>
+                <p class="font-technical text-body-lg font-semibold text-primary">${escapeHtml(product.specs[key])}</p>
+            </div>
+        `).join('');
         document.getElementById('specFallback').remove();
     } else {
-        document.getElementById('specGrid').remove();
+        specGridEl.remove();
         document.getElementById('specFallback').classList.remove('hidden');
     }
 
@@ -410,13 +419,14 @@
         setFieldError(namaInput, namaError, !nama);
         setFieldError(noWaInput, noWaError, !noWa);
 
+        const dp = siteData.detailPenyewaan || {};
         if (!start || !end) {
-            formError.textContent = 'Mohon pilih tanggal mulai dan selesai sewa terlebih dahulu.';
+            formError.textContent = dp.dateMissingError || 'Mohon pilih tanggal mulai dan selesai sewa terlebih dahulu.';
             formError.classList.remove('hidden');
             return;
         }
         if (!nama || !noWa) {
-            formError.textContent = 'Mohon lengkapi nama dan nomor WhatsApp Anda.';
+            formError.textContent = dp.contactMissingError || 'Mohon lengkapi nama dan nomor WhatsApp Anda.';
             formError.classList.remove('hidden');
             (nama ? noWaInput : namaInput).focus();
             return;
