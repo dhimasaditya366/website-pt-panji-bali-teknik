@@ -4,7 +4,6 @@ window.SITE_DEFAULTS = {
         "legalName": "PT. Panji Bali Teknik",
         "since": 2015,
         "slogan": "Penyedia Alat Konstruksi Jalan Terpercaya",
-        "navTagline": "Rental Alat Konstruksi",
         "address": "Jl. KH Aja No. 34A, Meruya Selatan, Kembangan, Jakarta Barat 11650",
         "mapsQuery": "Meruya Selatan Kembangan Jakarta Barat",
         "phone": "+6281234567890",
@@ -20,8 +19,8 @@ window.SITE_DEFAULTS = {
                 "dayLabel": "Senin - Jumat"
             },
             "saturday": {
-                "text": "08.00 - 14.00",
-                "closed": false,
+                "text": "Tutup",
+                "closed": true,
                 "dayLabel": "Sabtu"
             },
             "sunday": {
