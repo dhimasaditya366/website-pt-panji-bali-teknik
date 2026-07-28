@@ -20,7 +20,7 @@ window.SITE_DEFAULTS = {
             },
             "saturday": {
                 "text": "Tutup",
-                "closed": true,
+                "closed": false,
                 "dayLabel": "Sabtu"
             },
             "sunday": {
