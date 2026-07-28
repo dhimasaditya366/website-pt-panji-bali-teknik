@@ -50,7 +50,7 @@ window.SITE_DEFAULTS = {
         "copyrightSuffix": "All rights reserved."
     },
     "hero": {
-        "badge": "Trusted since 2015",
+        "badge": "Trusted since 2017",
         "titlePrefix": "Solusi Alat Konstruksi",
         "titleHighlight": "Terpercaya",
         "subtitle": "Hampir 10 tahun melayani kebutuhan infrastruktur nasional dengan peralatan berkualitas tinggi dan layanan purna jual yang andal.",
@@ -284,33 +284,19 @@ window.SITE_DEFAULTS = {
     "layananTeknisBento": [
         {
             "title": "Pemeliharaan Preventif",
-            "description": "Mencegah kerusakan sebelum terjadi. Jadwal pemeliharaan rutin kami dirancang untuk mendeteksi potensi masalah lebih awal, mengurangi biaya perbaikan tak terduga, dan memperpanjang umur pakai unit Anda.",
-            "checklist": [
-                "Inspeksi Berkala Komprehensif",
-                "Analisis Cairan & Pelumasan",
-                "Update Software Sistem Elektronik"
-            ]
+            "description": "Mencegah kerusakan sebelum terjadi. Jadwal pemeliharaan rutin kami dirancang untuk mendeteksi potensi masalah lebih awal, mengurangi biaya perbaikan tak terduga, dan memperpanjang umur pakai unit Anda."
         },
         {
             "title": "Suku Cadang Asli",
-            "description": "Kami hanya menyediakan komponen original untuk menjamin integritas mesin dan efisiensi operasional maksimal.",
-            "linkText": "Lihat Katalog"
+            "description": "Kami hanya menyediakan komponen original untuk menjamin integritas mesin dan efisiensi operasional maksimal."
         },
         {
             "title": "Perbaikan Unit di Lokasi",
-            "description": "Tim lapangan kami siap diterjunkan langsung ke lokasi proyek Anda di seluruh Indonesia untuk meminimalkan downtime.",
-            "stat1Label": "Radius Layanan:",
-            "stat1Value": "Nasional",
-            "stat2Label": "Estimasi Tiba:",
-            "stat2Value": "< 4 Jam"
+            "description": "Tim lapangan kami siap diterjunkan langsung ke lokasi proyek Anda di seluruh Indonesia untuk meminimalkan downtime."
         },
         {
             "title": "Diagnostik Modern",
-            "description": "Kami menggunakan peralatan diagnostik digital terkini untuk membaca data telemetri mesin secara real-time, memastikan akurasi perbaikan 100%.",
-            "stat1Value": "98%",
-            "stat1Label": "Akurasi Diagnosis",
-            "stat2Value": "15k",
-            "stat2Label": "Sensor Terdeteksi"
+            "description": "Kami menggunakan peralatan diagnostik digital terkini untuk membaca data telemetri mesin secara real-time, memastikan akurasi perbaikan 100%."
         }
     ],
     "layananTeknisWhySection": {
