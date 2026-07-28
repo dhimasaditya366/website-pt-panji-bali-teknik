@@ -19,7 +19,7 @@ window.SITE_DEFAULTS = {
                 "dayLabel": "Senin - Jumat"
             },
             "saturday": {
-                "text": "Tutup",
+                "text": "08.00 - 17.00",
                 "closed": false,
                 "dayLabel": "Sabtu"
             },
