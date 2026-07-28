@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ---- Shared chrome: nav logo/name, nav/footer links, footer, WA FAB ----
     setAttr('navLogo', 'src', data.company.logo);
     setText('navCompanyName', data.company.name);
+    setText('navCompanyTagline', data.company.navTagline);
 
     if (data.nav) {
         const n = data.nav;
