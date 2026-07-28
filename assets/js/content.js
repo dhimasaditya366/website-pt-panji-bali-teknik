@@ -90,6 +90,35 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Turns whatever URL an admin pasted from Google Maps' "Share" button
+    // into a src for a live, interactive embed — with no API key, since a
+    // real Maps Embed API key needs a billed Google Cloud project, which
+    // isn't reasonable to ask a non-technical admin to set up. Google's
+    // plain "/maps?q=...&output=embed" endpoint (unlike the regular
+    // maps.google.com pages) doesn't send an X-Frame-Options header, so it
+    // can be iframed directly — this is the same trick sites have used for
+    // years to embed a map without a key. We just need a "q" value (ideally
+    // coordinates) pulled out of whatever link shape the admin pasted.
+    function buildMapsEmbedSrc(shareUrl) {
+        if (!shareUrl) return null;
+        let q = null;
+        const coordMatch = shareUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+        if (coordMatch) {
+            q = coordMatch[1] + ',' + coordMatch[2];
+        } else {
+            try {
+                const url = new URL(shareUrl);
+                q = url.searchParams.get('query') || url.searchParams.get('q');
+            } catch (e) { /* not a parseable absolute URL — fall through */ }
+            if (!q) {
+                const placeMatch = shareUrl.match(/\/place\/([^/@]+)/);
+                if (placeMatch) q = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
+            }
+        }
+        if (!q) q = shareUrl; // last resort: let Google try to make sense of the raw link
+        return 'https://www.google.com/maps?q=' + encodeURIComponent(q) + '&output=embed';
+    }
+
     function categoryIconHtml(c, size) {
         // Material Symbols glyphs scale with font-size (text-*), while an
         // uploaded icon image needs an actual box size (w-*/h-*) — same
@@ -393,7 +422,9 @@ ${action}
     applyTableHoursRow('hoursWeekdayLabel', 'hoursWeekdayCell', 'hoursWeekdayIcon', 'hoursWeekday', 'hoursWeekdayNote', data.company.hours.weekday, closedNote);
     applyTableHoursRow('hoursSaturdayLabel', 'hoursSaturdayCell', 'hoursSaturdayIcon', 'hoursSaturday', 'hoursSaturdayNote', data.company.hours.saturday, closedNote);
     applyTableHoursRow('hoursSundayLabel', 'hoursSundayCell', 'hoursSundayIcon', 'hoursSunday', 'hoursSundayNote', data.company.hours.sunday, closedNote);
-    setAttr('mapLink', 'href', 'https://maps.google.com/?q=' + encodeURIComponent(data.company.mapsQuery));
+    setAttr('mapLink', 'href', data.company.mapsShareUrl);
+    const mapEmbedSrc = buildMapsEmbedSrc(data.company.mapsShareUrl);
+    if (mapEmbedSrc) setAttr('kontakMapEmbed', 'src', mapEmbedSrc);
 
     // ---- Other pages' hero photos + hero text (tentang-kami, layanan, layanan-teknis, kontak) ----
     if (data.pages) {

@@ -5,7 +5,7 @@ window.SITE_DEFAULTS = {
         "since": 2015,
         "slogan": "Penyedia Alat Konstruksi Jalan Terpercaya",
         "address": "Jl. KH Aja No. 34A, Meruya Selatan, Kembangan, Jakarta Barat 11650",
-        "mapsQuery": "Meruya Selatan Kembangan Jakarta Barat",
+        "mapsShareUrl": "https://www.google.com/maps/search/?api=1&query=Meruya+Selatan+Kembangan+Jakarta+Barat",
         "phone": "+6281234567890",
         "phoneDisplay": "+62 812-3456-7890",
         "email": "info@panjibali.co.id",
@@ -119,7 +119,6 @@ window.SITE_DEFAULTS = {
             "heroParagraph": "Dukungan teknis menyeluruh untuk memastikan setiap unit alat berat Anda selalu dalam kondisi kerja terbaik."
         },
         "kontak": {
-            "mapImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuCq2YQ4oDvAWB3eo1cv1UICaIaGUzoNNQpcK86UPEbYqyNFmziuLdA5DM4HJvhCV9FgoSTv4hqW0RX64h2X9tmhP4KX3Xokv1KPK92rO0tnpF5jc9juTWrHFklnso1qtOCv8sv6edkqh5suUKgGHs5px2Ph602KRJzgS8BRu9OWKTNayhXwlvXwlvsRwfC9tkFB7RviXN4risaq288TG4OQt6zt0h0N8tMh_UKFDwwkNDeKV-tEJlGZcSKhKnM_hU-5CDMkVEZ5ynY6",
             "heroBadge": "Kontak Kami",
             "heroHeading": "Solusi Alat Konstruksi Terpercaya",
             "heroParagraph": "Hubungi tim kami untuk konsultasi kebutuhan alat, penawaran harga, atau bantuan teknis kapan saja Anda butuhkan.",
@@ -284,19 +283,33 @@ window.SITE_DEFAULTS = {
     "layananTeknisBento": [
         {
             "title": "Pemeliharaan Preventif",
-            "description": "Mencegah kerusakan sebelum terjadi. Jadwal pemeliharaan rutin kami dirancang untuk mendeteksi potensi masalah lebih awal, mengurangi biaya perbaikan tak terduga, dan memperpanjang umur pakai unit Anda."
+            "description": "Mencegah kerusakan sebelum terjadi. Jadwal pemeliharaan rutin kami dirancang untuk mendeteksi potensi masalah lebih awal, mengurangi biaya perbaikan tak terduga, dan memperpanjang umur pakai unit Anda.",
+            "checklist": [
+                "Inspeksi Berkala Komprehensif",
+                "Analisis Cairan & Pelumasan",
+                "Update Software Sistem Elektronik"
+            ]
         },
         {
             "title": "Suku Cadang Asli",
-            "description": "Kami hanya menyediakan komponen original untuk menjamin integritas mesin dan efisiensi operasional maksimal."
+            "description": "Kami hanya menyediakan komponen original untuk menjamin integritas mesin dan efisiensi operasional maksimal.",
+            "linkText": "Lihat Katalog"
         },
         {
             "title": "Perbaikan Unit di Lokasi",
-            "description": "Tim lapangan kami siap diterjunkan langsung ke lokasi proyek Anda di seluruh Indonesia untuk meminimalkan downtime."
+            "description": "Tim lapangan kami siap diterjunkan langsung ke lokasi proyek Anda di seluruh Indonesia untuk meminimalkan downtime.",
+            "stat1Label": "Radius Layanan:",
+            "stat1Value": "Nasional",
+            "stat2Label": "Estimasi Tiba:",
+            "stat2Value": "< 4 Jam"
         },
         {
             "title": "Diagnostik Modern",
-            "description": "Kami menggunakan peralatan diagnostik digital terkini untuk membaca data telemetri mesin secara real-time, memastikan akurasi perbaikan 100%."
+            "description": "Kami menggunakan peralatan diagnostik digital terkini untuk membaca data telemetri mesin secara real-time, memastikan akurasi perbaikan 100%.",
+            "stat1Value": "98%",
+            "stat1Label": "Akurasi Diagnosis",
+            "stat2Value": "15k",
+            "stat2Label": "Sensor Terdeteksi"
         }
     ],
     "layananTeknisWhySection": {
