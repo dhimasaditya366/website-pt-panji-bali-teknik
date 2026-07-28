@@ -6,7 +6,7 @@ window.SITE_DEFAULTS = {
         "slogan": "Penyedia Alat Konstruksi Jalan Terpercaya",
         "navTagline": "Rental Alat Konstruksi",
         "address": "Jl. KH Aja No. 34A, Meruya Selatan, Kembangan, Jakarta Barat 11650",
-        "mapsShareUrl": "https://www.google.com/maps/place/Pt.+Panji+Bali+Teknik/@-6.2034058,106.7420885,19z/data=!4m6!3m5!1s0x2e69f7416c938f2f:0xd87fd43be50746c9!8m2!3d-6.2029466!4d106.7425136!16s%2Fg%2F11p0691nfp",
+        "mapsShareUrl": "https://www.google.com/maps/place/Pt.+Panji+Bali+Teknik/@-6.2034058,106.7420885,19z/data=!4m6!3m5!1s0x2e69f7416c938f2f:0xd87fd43be50746c9!8m2!3d-6.2029466!4d106.7425136!16s%2Fg%2F11p0691nfp?entry=ttu&g_ep=EgoyMDI2MDcyMi4wIKXMDSoASAFQAw%3D%3D",
         "phone": "+6281234567890",
         "phoneDisplay": "+62 812-3456-7890",
         "email": "info@panjibali.co.id",
@@ -34,7 +34,8 @@ window.SITE_DEFAULTS = {
         "taglines": [
             "Kualitas Terjamin",
             "Harga Terbaik"
-        ]
+        ],
+        "mapsQuery": "Meruya Selatan Kembangan Jakarta Barat"
     },
     "nav": {
         "beranda": "Beranda",
@@ -137,7 +138,8 @@ window.SITE_DEFAULTS = {
             "locationHeading": "Lokasi Kami",
             "mapOverlayTitle": "PT. Panji Bali Teknik Headquarters",
             "mapOverlaySubtitle": "Meruya Selatan, Jakarta Barat",
-            "emailButtonText": "Kirim Email"
+            "emailButtonText": "Kirim Email",
+            "mapImage": "https://lh3.googleusercontent.com/aida-public/AB6AXuCq2YQ4oDvAWB3eo1cv1UICaIaGUzoNNQpcK86UPEbYqyNFmziuLdA5DM4HJvhCV9FgoSTv4hqW0RX64h2X9tmhP4KX3Xokv1KPK92rO0tnpF5jc9juTWrHFklnso1qtOCv8sv6edkqh5suUKgGHs5px2Ph602KRJzgS8BRu9OWKTNayhXwlvXwlvsRwfC9tkFB7RviXN4risaq288TG4OQt6zt0h0N8tMh_UKFDwwkNDeKV-tEJlGZcSKhKnM_hU-5CDMkVEZ5ynY6"
         }
     },
     "ctas": {
@@ -284,33 +286,19 @@ window.SITE_DEFAULTS = {
     "layananTeknisBento": [
         {
             "title": "Pemeliharaan Preventif",
-            "description": "Mencegah kerusakan sebelum terjadi. Jadwal pemeliharaan rutin kami dirancang untuk mendeteksi potensi masalah lebih awal, mengurangi biaya perbaikan tak terduga, dan memperpanjang umur pakai unit Anda.",
-            "checklist": [
-                "Inspeksi Berkala Komprehensif",
-                "Analisis Cairan & Pelumasan",
-                "Update Software Sistem Elektronik"
-            ]
+            "description": "Mencegah kerusakan sebelum terjadi. Jadwal pemeliharaan rutin kami dirancang untuk mendeteksi potensi masalah lebih awal, mengurangi biaya perbaikan tak terduga, dan memperpanjang umur pakai unit Anda."
         },
         {
             "title": "Suku Cadang Asli",
-            "description": "Kami hanya menyediakan komponen original untuk menjamin integritas mesin dan efisiensi operasional maksimal.",
-            "linkText": "Lihat Katalog"
+            "description": "Kami hanya menyediakan komponen original untuk menjamin integritas mesin dan efisiensi operasional maksimal."
         },
         {
             "title": "Perbaikan Unit di Lokasi",
-            "description": "Tim lapangan kami siap diterjunkan langsung ke lokasi proyek Anda di seluruh Indonesia untuk meminimalkan downtime.",
-            "stat1Label": "Radius Layanan:",
-            "stat1Value": "Nasional",
-            "stat2Label": "Estimasi Tiba:",
-            "stat2Value": "< 4 Jam"
+            "description": "Tim lapangan kami siap diterjunkan langsung ke lokasi proyek Anda di seluruh Indonesia untuk meminimalkan downtime."
         },
         {
             "title": "Diagnostik Modern",
-            "description": "Kami menggunakan peralatan diagnostik digital terkini untuk membaca data telemetri mesin secara real-time, memastikan akurasi perbaikan 100%.",
-            "stat1Value": "98%",
-            "stat1Label": "Akurasi Diagnosis",
-            "stat2Value": "15k",
-            "stat2Label": "Sensor Terdeteksi"
+            "description": "Kami menggunakan peralatan diagnostik digital terkini untuk membaca data telemetri mesin secara real-time, memastikan akurasi perbaikan 100%."
         }
     ],
     "layananTeknisWhySection": {
