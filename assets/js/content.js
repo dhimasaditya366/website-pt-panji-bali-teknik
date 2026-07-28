@@ -99,23 +99,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // can be iframed directly — this is the same trick sites have used for
     // years to embed a map without a key. We just need a "q" value (ideally
     // coordinates) pulled out of whatever link shape the admin pasted.
-    function buildMapsEmbedSrc(shareUrl) {
-        if (!shareUrl) return null;
+    //
+    // Google's mobile "Share" button gives a shortened maps.app.goo.gl link
+    // by default. A browser can't read where that redirects to (no CORS
+    // header on goo.gl's response), so there's no way to recover
+    // coordinates from it client-side — passing the short link itself as
+    // "q" makes Google fail to geocode anything and fall back to a
+    // zoomed-out world view. Rather than show that broken state, fall back
+    // to searching the company's own street address, which always
+    // geocodes to a reasonable nearby view even when the pasted link can't
+    // be read.
+    function buildMapsEmbedSrc(shareUrl, fallbackAddress) {
         let q = null;
-        const coordMatch = shareUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-        if (coordMatch) {
+        const source = shareUrl || '';
+        // Precise pin coords (from the data blob in a full share link) beat
+        // the @lat,lng in the URL, which is only the map's viewport center.
+        const preciseMatch = source.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+        const coordMatch = source.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+        if (preciseMatch) {
+            q = preciseMatch[1] + ',' + preciseMatch[2];
+        } else if (coordMatch) {
             q = coordMatch[1] + ',' + coordMatch[2];
         } else {
-            try {
-                const url = new URL(shareUrl);
-                q = url.searchParams.get('query') || url.searchParams.get('q');
-            } catch (e) { /* not a parseable absolute URL — fall through */ }
-            if (!q) {
-                const placeMatch = shareUrl.match(/\/place\/([^/@]+)/);
-                if (placeMatch) q = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
+            let hostname = '';
+            try { hostname = new URL(source).hostname; } catch (e) { /* not an absolute URL */ }
+            const isShortLink = hostname === 'maps.app.goo.gl' || hostname === 'goo.gl';
+            if (!isShortLink) {
+                try {
+                    const url = new URL(source);
+                    q = url.searchParams.get('query') || url.searchParams.get('q');
+                } catch (e) { /* fall through */ }
+                if (!q) {
+                    const placeMatch = source.match(/\/place\/([^/@]+)/);
+                    if (placeMatch) q = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
+                }
             }
         }
-        if (!q) q = shareUrl; // last resort: let Google try to make sense of the raw link
+        if (!q) q = fallbackAddress || source;
+        if (!q) return null;
         return 'https://www.google.com/maps?q=' + encodeURIComponent(q) + '&output=embed';
     }
 
@@ -423,7 +444,7 @@ ${action}
     applyTableHoursRow('hoursSaturdayLabel', 'hoursSaturdayCell', 'hoursSaturdayIcon', 'hoursSaturday', 'hoursSaturdayNote', data.company.hours.saturday, closedNote);
     applyTableHoursRow('hoursSundayLabel', 'hoursSundayCell', 'hoursSundayIcon', 'hoursSunday', 'hoursSundayNote', data.company.hours.sunday, closedNote);
     setAttr('mapLink', 'href', data.company.mapsShareUrl);
-    const mapEmbedSrc = buildMapsEmbedSrc(data.company.mapsShareUrl);
+    const mapEmbedSrc = buildMapsEmbedSrc(data.company.mapsShareUrl, data.company.address);
     if (mapEmbedSrc) setAttr('kontakMapEmbed', 'src', mapEmbedSrc);
 
     // ---- Other pages' hero photos + hero text (tentang-kami, layanan, layanan-teknis, kontak) ----
