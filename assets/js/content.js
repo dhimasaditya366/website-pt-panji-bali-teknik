@@ -1,10 +1,16 @@
-// Hydrates every public page from SiteStore (defaults + admin overrides).
+// Hydrates every public page straight from window.SITE_DEFAULTS (data.js) —
+// the published, server-side truth. Deliberately does NOT go through
+// SiteStore's localStorage overrides: those exist only so admin.html can
+// preview an in-progress edit on the same device before it's saved. Public
+// pages reading them too meant the admin's own browser could get stuck
+// showing a stale local snapshot indefinitely, even after the real publish
+// succeeded and every other visitor already saw the update.
 // Safe to include on every page: each render function checks whether its
 // target element(s) exist before touching anything, so a script tag that's
 // identical on all 8 pages can still do page-specific work.
 document.addEventListener('DOMContentLoaded', () => {
-    if (!window.SiteStore) return;
-    const data = window.SiteStore.get();
+    const data = window.SITE_DEFAULTS;
+    if (!data) return;
 
     const formatRupiah = (n) => 'Rp ' + Number(n || 0).toLocaleString('id-ID');
     const setText = (id, value) => {
