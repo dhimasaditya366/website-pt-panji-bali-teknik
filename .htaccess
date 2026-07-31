@@ -1,0 +1,21 @@
+# Allow /admin, /katalog, /kontak, etc. to serve the matching .html file
+# without redirecting or changing the URL bar. Existing links that still
+# include ".html" keep working exactly as before.
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^.]+)$ $1.html [NC,L]
+
+# Serve the site's own 404 page instead of the host's default one
+ErrorDocument 404 /404.html
+
+# data.js is rewritten by admin.html every time content is published, but
+# the <script> tag that loads it never changes its URL (assets/js/data.js?v=10).
+# Hostinger's default 7-day cache on static JS means browsers would keep
+# serving a stale copy for up to a week after a save. Force revalidation on
+# every load instead so published changes show up on a normal refresh.
+<IfModule mod_headers.c>
+<FilesMatch "^data\.js$">
+Header set Cache-Control "no-cache, must-revalidate"
+</FilesMatch>
+</IfModule>

@@ -274,19 +274,163 @@ function updateImagePreviews() {
 // ---- Image uploads: convert to base64 data URI, store directly in state ----
 function bindImageUploads() {
     document.querySelectorAll('[data-image-field]').forEach((input) => {
-        input.addEventListener('change', () => {
+        input.addEventListener('change', async () => {
             const file = input.files[0];
             if (!file) return;
+            const dataUrl = await readImageFile(file, input.dataset.cropRatio);
+            if (!dataUrl) { input.value = ''; return; }
+            const path = input.dataset.imageField;
+            setPath(state, path, dataUrl);
+            const sibling = input.parentElement.parentElement.querySelector(`[data-field="${path}"]`);
+            if (sibling) sibling.value = dataUrl;
+            updateImagePreviews();
+            input.value = '';
+        });
+    });
+}
+
+// ---- Shared upload helper: reads a file, and if a target crop ratio is
+// given, opens the crop modal so the photo can be repositioned/zoomed to
+// match the exact box it will be displayed in on the public site, instead
+// of relying on CSS object-fit to blindly crop off whatever doesn't fit.
+// Returns the final data URI, or null if the user cancels the crop.
+async function readImageFile(file, cropRatio) {
+    if (!cropRatio) {
+        return new Promise((resolve) => {
             const reader = new FileReader();
-            reader.onload = () => {
-                const path = input.dataset.imageField;
-                setPath(state, path, reader.result);
-                const sibling = input.parentElement.parentElement.querySelector(`[data-field="${path}"]`);
-                if (sibling) sibling.value = reader.result;
-                updateImagePreviews();
-            };
+            reader.onload = () => resolve(reader.result);
             reader.readAsDataURL(file);
         });
+    }
+    return openImageCropper(file, cropRatio);
+}
+
+// ---- Crop modal: drag-to-reposition, slider-to-zoom, bake result to canvas ----
+function openImageCropper(file, cropRatio) {
+    return new Promise((resolve) => {
+        const modal = document.getElementById('cropModal');
+        const frame = document.getElementById('cropFrame');
+        const img = document.getElementById('cropImage');
+        const zoomSlider = document.getElementById('cropZoom');
+        const btnApply = document.getElementById('cropApply');
+        const btnCancel = document.getElementById('cropCancel');
+
+        const [rw, rh] = cropRatio.split('/').map(Number);
+        frame.style.aspectRatio = `${rw} / ${rh}`;
+
+        const objectUrl = URL.createObjectURL(file);
+        let coverScale = 1;
+        let zoom = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+        let dragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let dragOriginX = 0;
+        let dragOriginY = 0;
+
+        function clampOffsets() {
+            const dispW = img.naturalWidth * coverScale * zoom;
+            const dispH = img.naturalHeight * coverScale * zoom;
+            const frameW = frame.clientWidth;
+            const frameH = frame.clientHeight;
+            offsetX = Math.min(0, Math.max(frameW - dispW, offsetX));
+            offsetY = Math.min(0, Math.max(frameH - dispH, offsetY));
+        }
+
+        function applyTransform() {
+            const dispW = img.naturalWidth * coverScale * zoom;
+            const dispH = img.naturalHeight * coverScale * zoom;
+            img.style.width = `${dispW}px`;
+            img.style.height = `${dispH}px`;
+            img.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+        }
+
+        function onPointerDown(e) {
+            dragging = true;
+            const point = e.touches ? e.touches[0] : e;
+            dragStartX = point.clientX;
+            dragStartY = point.clientY;
+            dragOriginX = offsetX;
+            dragOriginY = offsetY;
+        }
+        function onPointerMove(e) {
+            if (!dragging) return;
+            const point = e.touches ? e.touches[0] : e;
+            offsetX = dragOriginX + (point.clientX - dragStartX);
+            offsetY = dragOriginY + (point.clientY - dragStartY);
+            clampOffsets();
+            applyTransform();
+            e.preventDefault();
+        }
+        function onPointerUp() { dragging = false; }
+
+        function onZoomInput() {
+            zoom = Number(zoomSlider.value);
+            clampOffsets();
+            applyTransform();
+        }
+
+        function cleanup(result) {
+            frame.removeEventListener('mousedown', onPointerDown);
+            frame.removeEventListener('touchstart', onPointerDown);
+            window.removeEventListener('mousemove', onPointerMove);
+            window.removeEventListener('touchmove', onPointerMove, { passive: false });
+            window.removeEventListener('mouseup', onPointerUp);
+            window.removeEventListener('touchend', onPointerUp);
+            zoomSlider.removeEventListener('input', onZoomInput);
+            btnApply.removeEventListener('click', onApply);
+            btnCancel.removeEventListener('click', onCancel);
+            modal.classList.add('hidden');
+            URL.revokeObjectURL(objectUrl);
+            resolve(result);
+        }
+
+        function onApply() {
+            const frameW = frame.clientWidth;
+            const frameH = frame.clientHeight;
+            const scale = coverScale * zoom;
+            const sx = -offsetX / scale;
+            const sy = -offsetY / scale;
+            const sw = frameW / scale;
+            const sh = frameH / scale;
+
+            const outW = rw >= rh ? 1600 : Math.round(1600 * rw / rh);
+            const outH = rw >= rh ? Math.round(1600 * rh / rw) : 1600;
+            const canvas = document.createElement('canvas');
+            canvas.width = outW;
+            canvas.height = outH;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+            cleanup(canvas.toDataURL('image/jpeg', 0.85));
+        }
+        function onCancel() { cleanup(null); }
+
+        img.onload = () => {
+            // Frame has 0 size while the modal is display:none, so it must be
+            // shown before clientWidth/clientHeight can be measured.
+            modal.classList.remove('hidden');
+
+            const frameW = frame.clientWidth;
+            const frameH = frame.clientHeight;
+            coverScale = Math.max(frameW / img.naturalWidth, frameH / img.naturalHeight);
+            zoom = 1;
+            zoomSlider.value = '1';
+            offsetX = (frameW - img.naturalWidth * coverScale) / 2;
+            offsetY = (frameH - img.naturalHeight * coverScale) / 2;
+            applyTransform();
+
+            frame.addEventListener('mousedown', onPointerDown);
+            frame.addEventListener('touchstart', onPointerDown, { passive: true });
+            window.addEventListener('mousemove', onPointerMove);
+            window.addEventListener('touchmove', onPointerMove, { passive: false });
+            window.addEventListener('mouseup', onPointerUp);
+            window.addEventListener('touchend', onPointerUp);
+            zoomSlider.addEventListener('input', onZoomInput);
+            btnApply.addEventListener('click', onApply);
+            btnCancel.addEventListener('click', onCancel);
+        };
+        img.src = objectUrl;
     });
 }
 
@@ -355,15 +499,14 @@ function renderCategories() {
         });
 
         const iconUpload = node.querySelector('[data-cat-icon-upload]');
-        iconUpload.addEventListener('change', () => {
+        iconUpload.addEventListener('change', async () => {
             const file = iconUpload.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                state.categories[index].icon = reader.result;
-                refreshPreview();
-            };
-            reader.readAsDataURL(file);
+            const dataUrl = await readImageFile(file, iconUpload.dataset.cropRatio);
+            iconUpload.value = '';
+            if (!dataUrl) return;
+            state.categories[index].icon = dataUrl;
+            refreshPreview();
         });
 
         node.querySelector('[data-action="remove-category"]').addEventListener('click', () => {
@@ -447,17 +590,16 @@ function renderProducts() {
 
         const imageUpload = node.querySelector('[data-product-image-upload]');
         if (imageUpload) {
-            imageUpload.addEventListener('change', () => {
+            imageUpload.addEventListener('change', async () => {
                 const file = imageUpload.files[0];
                 if (!file) return;
-                const reader = new FileReader();
-                reader.onload = () => {
-                    state.products[index].image = reader.result;
-                    if (preview) preview.src = reader.result;
-                    const imageTextInput = imageUpload.parentElement.querySelector('[data-product-field="image"]');
-                    if (imageTextInput) imageTextInput.value = reader.result;
-                };
-                reader.readAsDataURL(file);
+                const dataUrl = await readImageFile(file, imageUpload.dataset.cropRatio);
+                imageUpload.value = '';
+                if (!dataUrl) return;
+                state.products[index].image = dataUrl;
+                if (preview) preview.src = dataUrl;
+                const imageTextInput = imageUpload.parentElement.querySelector('[data-product-field="image"]');
+                if (imageTextInput) imageTextInput.value = dataUrl;
             });
         }
 

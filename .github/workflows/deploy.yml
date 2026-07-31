@@ -1,0 +1,39 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./
+          server-dir: ./
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.github/**
+            **/.claude/**
+            **/.agents/**
+            **/.impeccable/**
+            **/__pycache__/**
+            **/cloudflare-worker/**
+            **/plans/**
+            dev-server.py
+            skills-lock.json
+            .mcp.json
+            # data.js is edited live via admin.html -> api/save-data.php.
+            # Never let a code deploy overwrite the live product/content data
+            # with this repo's older seed copy.
+            assets/js/data.js

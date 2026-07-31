@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<link href="assets/img/favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="assets/img/favicon-32.png" rel="icon" type="image/png" sizes="32x32"/>
+<link href="assets/img/favicon-192.png" rel="icon" type="image/png" sizes="192x192"/>
+<link href="assets/img/favicon-180.png" rel="apple-touch-icon" sizes="180x180"/>
 <title>Admin Dashboard - PT. Panji Bali Teknik</title>
 <meta content="noindex, nofollow" name="robots"/>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -294,7 +296,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Gambar Hero</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="Preview hero" class="h-16 w-24 object-cover bg-surface-container-low rounded border border-outline-variant" id="heroImgPreview" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="hero.image" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="21/9" data-image-field="hero.image" type="file"/>
 </div>
 <input class="field-input" data-field="hero.image" placeholder="atau tempel URL gambar di sini" type="text"/>
 </div>
@@ -379,7 +381,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto Latar Hero</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.tentangKami.heroImage" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="pages.tentangKami.heroImage" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="21/9" data-image-field="pages.tentangKami.heroImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.tentangKami.heroImage" type="text"/>
 </div>
@@ -387,7 +389,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto Tim Engineer (Profil Perusahaan)</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.tentangKami.profileImage" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="pages.tentangKami.profileImage" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="4/5" data-image-field="pages.tentangKami.profileImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.tentangKami.profileImage" type="text"/>
 </div>
@@ -395,7 +397,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto Visi &amp; Misi</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.tentangKami.visiMisiImage" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="pages.tentangKami.visiMisiImage" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="4/3" data-image-field="pages.tentangKami.visiMisiImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.tentangKami.visiMisiImage" type="text"/>
 </div>
@@ -415,7 +417,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto Latar Hero</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layanan.heroImage" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="pages.layanan.heroImage" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="21/9" data-image-field="pages.layanan.heroImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.layanan.heroImage" type="text"/>
 </div>
@@ -435,7 +437,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto Latar Hero</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layananTeknis.heroImage" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="pages.layananTeknis.heroImage" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="21/9" data-image-field="pages.layananTeknis.heroImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.layananTeknis.heroImage" type="text"/>
 </div>
@@ -443,7 +445,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto Pemeliharaan Preventif</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layananTeknis.preventiveImage" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="pages.layananTeknis.preventiveImage" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="1/1" data-image-field="pages.layananTeknis.preventiveImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.layananTeknis.preventiveImage" type="text"/>
 </div>
@@ -451,7 +453,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto Suku Cadang Asli</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layananTeknis.partsImage" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="pages.layananTeknis.partsImage" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="5/2" data-image-field="pages.layananTeknis.partsImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.layananTeknis.partsImage" type="text"/>
 </div>
@@ -459,7 +461,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto Teknisi (Bagian CTA)</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_pages.layananTeknis.ctaImage" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="pages.layananTeknis.ctaImage" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="3/4" data-image-field="pages.layananTeknis.ctaImage" type="file"/>
 </div>
 <input class="field-input" data-field="pages.layananTeknis.ctaImage" type="text"/>
 </div>
@@ -588,7 +590,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <label class="field-label">Foto</label>
 <div class="flex items-center gap-sm mb-xs">
 <img alt="" class="h-14 w-20 object-cover bg-surface-container-low rounded border border-outline-variant" id="preview_homeAbout.image" src="assets/img/placeholder.svg"/>
-<input accept="image/*" class="text-xs" data-image-field="homeAbout.image" type="file"/>
+<input accept="image/*" class="text-xs" data-crop-ratio="1/1" data-image-field="homeAbout.image" type="file"/>
 </div>
 <input class="field-input" data-field="homeAbout.image" type="text"/>
 </div>
@@ -907,7 +909,7 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 </div>
 <div class="hidden" data-cat-icon-image-wrap="">
 <label class="field-label">Unggah Gambar Ikon</label>
-<input accept="image/*" class="text-xs block" data-cat-icon-upload="" type="file"/>
+<input accept="image/*" class="text-xs block" data-cat-icon-upload="" data-crop-ratio="1/1" type="file"/>
 </div>
 </div>
 </template>
@@ -965,7 +967,7 @@ Sembunyikan harga (tampilkan "Hubungi Kami" di kartu produk, tanpa perlu isi nom
 </div>
 <div>
 <label class="field-label">Gambar (URL atau unggah)</label>
-<input accept="image/*" class="text-xs mb-1 block" data-product-image-upload="" type="file"/>
+<input accept="image/*" class="text-xs mb-1 block" data-crop-ratio="4/3" data-product-image-upload="" type="file"/>
 <input class="field-input" data-product-field="image" type="text"/>
 </div>
 <div class="md:col-span-2">
@@ -996,6 +998,29 @@ Sembunyikan harga (tampilkan "Hubungi Kami" di kartu produk, tanpa perlu isi nom
 <!-- Toast notifications -->
 <div class="fixed bottom-6 right-6 z-[200] flex flex-col gap-sm items-end pointer-events-none" id="toastContainer"></div>
 
+<!-- Image crop modal (shown after choosing a photo file, before it's stored) -->
+<div class="hidden fixed inset-0 z-[160] bg-black/70 flex items-center justify-center px-margin-mobile" id="cropModal">
+<div class="bg-white rounded-2xl shadow-2xl p-lg max-w-md w-full">
+<div class="flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-2xl text-secondary">crop</span>
+<h3 class="font-headline-md text-lg text-primary">Atur Posisi Foto</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-sm">Geser foto dan atur zoom supaya bagian pentingnya tetap terlihat di area tampil situs.</p>
+<div class="relative w-full bg-surface-container-low rounded-lg overflow-hidden mb-sm select-none touch-none" id="cropFrame">
+<img alt="" class="absolute top-0 left-0 max-w-none origin-top-left cursor-grab active:cursor-grabbing" draggable="false" id="cropImage" src=""/>
+</div>
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-lg text-on-surface-variant">zoom_out</span>
+<input class="flex-1" id="cropZoom" max="4" min="1" step="0.01" type="range" value="1"/>
+<span class="material-symbols-outlined text-lg text-on-surface-variant">zoom_in</span>
+</div>
+<div class="flex gap-sm justify-end">
+<button class="px-md py-2 rounded-lg border border-outline-variant hover:bg-surface-container-low transition text-sm font-medium" id="cropCancel" type="button">Batal</button>
+<button class="px-md py-2 rounded-lg bg-secondary text-on-primary font-bold hover:brightness-110 transition text-sm" id="cropApply" type="button">Gunakan Foto</button>
+</div>
+</div>
+</div>
+
 <!-- Confirm modal (reused for save/reset/logout confirmations) -->
 <div class="hidden fixed inset-0 z-[150] bg-black/50 flex items-center justify-center px-margin-mobile" id="confirmModal">
 <div class="bg-white rounded-2xl shadow-2xl p-lg max-w-sm w-full hero-enter">
@@ -1011,6 +1036,6 @@ Sembunyikan harga (tampilkan "Hubungi Kami" di kartu produk, tanpa perlu isi nom
 </div>
 </div>
 
-<script src="assets/js/admin.js?v=10"></script>
+<script src="assets/js/admin.js?v=11"></script>
 </body>
 </html>
