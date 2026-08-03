@@ -11,6 +11,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Bump cache-busting version on every deploy
+        # The HTML references its own JS/CSS as e.g. assets/js/content.js?v=10.
+        # If that "10" never changes, browsers (and Hostinger's own caching,
+        # which doesn't fully honor our Cache-Control override) keep serving
+        # a stale copy of the CODE indefinitely -- a manual cache clear was
+        # the only fix, which isn't realistic to ask of real site visitors.
+        # Stamp every deploy with this commit's SHA instead, so the URL
+        # itself changes on every deploy and there is nothing left to cache.
+        run: sed -i "s/?v=10/?v=${GITHUB_SHA::8}/g" *.html
+
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
