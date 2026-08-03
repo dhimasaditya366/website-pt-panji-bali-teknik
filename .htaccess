@@ -9,13 +9,15 @@ RewriteRule ^([^.]+)$ $1.html [NC,L]
 # Serve the site's own 404 page instead of the host's default one
 ErrorDocument 404 /404.html
 
-# data.js is rewritten by admin.html every time content is published, but
-# the <script> tag that loads it never changes its URL (assets/js/data.js?v=10).
-# Hostinger's default 7-day cache on static JS means browsers would keep
-# serving a stale copy for up to a week after a save. Force revalidation on
-# every load instead so published changes show up on a normal refresh.
+# Hostinger's default 7-day cache applies to every .js/.css file, not just
+# data.js. That means every code fix (bug fixes, new features) stays
+# invisible to a returning visitor's browser for up to a week, since the
+# <script src="..."> tags don't change their URL between deploys. Force
+# revalidation on every load for all of this site's own JS/CSS so a normal
+# refresh always picks up the latest deployed code, not just the latest
+# published content.
 <IfModule mod_headers.c>
-<FilesMatch "^data\.js$">
+<FilesMatch "\.(js|css)$">
 Header set Cache-Control "no-cache, must-revalidate"
 </FilesMatch>
 </IfModule>
