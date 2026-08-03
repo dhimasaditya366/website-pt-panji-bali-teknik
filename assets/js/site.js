@@ -54,6 +54,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Katalog category filter. The sidebar (desktop) and chips (mobile) each
+    // render their own copy of the same categories, tagged with a shared
+    // data-category-filter value; every product card is tagged with
+    // data-category. Previously these links only smooth-scrolled to the
+    // first product of that category (see the anchor handler below), which
+    // did nothing at all for a category with zero matching products instead
+    // of actually filtering the grid.
+    const categoryFilterLinks = document.querySelectorAll('[data-category-filter]');
+    const equipmentCards = document.querySelectorAll('.equipment-card');
+    if (categoryFilterLinks.length && equipmentCards.length) {
+        const productCountEl = document.getElementById('productCount');
+        const countTemplate = productCountEl && productCountEl.dataset.countTemplate;
+
+        const applyCategoryFilter = (categoryId) => {
+            let visibleCount = 0;
+            equipmentCards.forEach((card) => {
+                const matches = categoryId === 'all' || card.dataset.category === categoryId;
+                card.classList.toggle('hidden', !matches);
+                if (matches) visibleCount += 1;
+            });
+            categoryFilterLinks.forEach((link) => {
+                const isActive = link.dataset.categoryFilter === categoryId;
+                link.classList.toggle('bg-secondary-container', isActive);
+                link.classList.toggle('text-on-secondary-container', isActive);
+                link.classList.toggle('font-bold', isActive);
+                link.classList.toggle('text-on-surface-variant', !isActive);
+            });
+            if (productCountEl && countTemplate) {
+                productCountEl.textContent = countTemplate.replace('{n}', visibleCount);
+            }
+        };
+
+        categoryFilterLinks.forEach((link) => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                applyCategoryFilter(link.dataset.categoryFilter);
+            });
+        });
+    }
+
     // Fallback to local placeholder image when a remote image fails to load
     document.querySelectorAll('img').forEach(img => {
         img.addEventListener('error', function handler() {

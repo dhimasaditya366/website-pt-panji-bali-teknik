@@ -378,7 +378,7 @@ ${action}
     const categorySidebar = document.getElementById('categorySidebar');
     if (categorySidebar && Array.isArray(data.categories)) {
         categorySidebar.innerHTML = data.categories.map((c) => `
-<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high transition" href="katalog.html#${c.id}">
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high transition" data-category-filter="${c.id}" href="katalog.html#${c.id}">
 ${categoryIconHtml(c, 'lg')}
 <span class="font-label-md text-label-md">${c.label}</span>
 </a>`).join('');
@@ -387,7 +387,7 @@ ${categoryIconHtml(c, 'lg')}
     const categoryChipsMobile = document.getElementById('categoryChipsMobile');
     if (categoryChipsMobile && Array.isArray(data.categories)) {
         categoryChipsMobile.innerHTML = data.categories.map((c) => `
-<a class="shrink-0 flex items-center gap-1 px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap" href="katalog.html#${c.id}">
+<a class="shrink-0 flex items-center gap-1 px-md py-xs bg-surface-container-high text-on-surface-variant rounded-full font-label-md text-label-md whitespace-nowrap" data-category-filter="${c.id}" href="katalog.html#${c.id}">
 ${categoryIconHtml(c, 'sm')} ${c.label}
 </a>`).join('');
     }
@@ -404,7 +404,7 @@ ${categoryIconHtml(c, 'sm')} ${c.label}
                 ? `<a class="w-full bg-secondary text-on-primary py-md rounded-lg font-button text-button uppercase tracking-widest hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition flex items-center justify-center" href="detail-penyewaan.html?sku=${encodeURIComponent(productKey(p, i))}">Sewa Sekarang</a>`
                 : `<button class="w-full bg-outline-variant text-on-surface-variant py-md rounded-lg font-button text-button uppercase tracking-widest cursor-not-allowed opacity-60" disabled>Sedang Disewa</button>`;
             return `
-<div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-price="${p.price}" data-status="${p.status}"${anchorId}>
+<div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-category="${p.category || ''}" data-price="${p.price}" data-status="${p.status}"${anchorId}>
 <div class="relative h-64 overflow-hidden bg-surface-container">
 <img alt="${p.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 motion-reduce:group-hover:scale-100" src="${p.image}"/>
 <div class="absolute top-4 left-4 ${badge.cls} px-sm py-xs rounded font-label-md text-label-md uppercase">${badge.label}</div>
@@ -421,8 +421,12 @@ ${action}
 </div>`;
         }).join('');
     }
-    setText('productCount', ((data.katalogPage && data.katalogPage.countTemplate) || 'Menampilkan {n} Produk')
-        .replace('{n}', data.products ? data.products.length : 0));
+    const productCountTemplate = (data.katalogPage && data.katalogPage.countTemplate) || 'Menampilkan {n} Produk';
+    setText('productCount', productCountTemplate.replace('{n}', data.products ? data.products.length : 0));
+    const productCountEl = document.getElementById('productCount');
+    // Stashed so site.js's category filter can update this count without
+    // needing to know the (possibly admin-customized) template text itself.
+    if (productCountEl) productCountEl.dataset.countTemplate = productCountTemplate;
 
     // ---- kontak.html: hero, contact cards, hours table, banner, map, CTA ----
     if (data.pages && data.pages.kontak) {
