@@ -306,13 +306,22 @@
 </a>
 <script src="assets/js/site.js?v=10"></script>
 <script>
-    // Product catalog now comes from SiteStore (assets/js/data.js + admin
-    // overrides), so pricing/name/image/specs stay in sync with katalog.html
-    // and the admin dashboard automatically.
-    const siteData = window.SiteStore ? window.SiteStore.get() : { products: [], company: {} };
+    // Product catalog comes straight from data.js (the published truth) —
+    // not SiteStore.get(), which layers this browser's localStorage on top
+    // and can show a stale snapshot here just like it did on the other
+    // public pages.
+    const siteData = window.SITE_DEFAULTS || { products: [], company: {} };
+    // Keyed by sku when present, but sku is admin-entered free text and can
+    // be left blank or duplicated across products. Falling back to the
+    // product's array index guarantees every product still gets its own
+    // unique, working link even when sku isn't filled in (previously, two
+    // products with the same/blank sku collided on the same key here, so
+    // "Sewa Sekarang" opened the same product no matter which card it was
+    // clicked from).
+    const productKey = (p, i) => (p.sku ? p.sku : 'idx-' + i);
     const PRODUCTS = {};
-    (siteData.products || []).forEach((p) => {
-        PRODUCTS[p.sku] = {
+    (siteData.products || []).forEach((p, i) => {
+        PRODUCTS[productKey(p, i)] = {
             name: p.name,
             model: p.model,
             price: p.price,
@@ -324,7 +333,7 @@
     });
 
     const requestedSku = new URLSearchParams(window.location.search).get('sku');
-    const firstSku = (siteData.products && siteData.products[0] && siteData.products[0].sku) || 'SKU-001';
+    const firstSku = siteData.products && siteData.products[0] ? productKey(siteData.products[0], 0) : 'idx-0';
     const sku = PRODUCTS[requestedSku] ? requestedSku : firstSku;
     const product = PRODUCTS[sku];
 

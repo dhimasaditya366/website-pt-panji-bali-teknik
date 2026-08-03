@@ -305,13 +305,23 @@ document.addEventListener('DOMContentLoaded', () => {
             : { cls: 'bg-error text-on-error', label: 'Disewa Proyek' };
     }
 
+    // sku is admin-entered free text and can be left blank or duplicated
+    // across products; falling back to the array index keeps every "Sewa
+    // Sekarang" link unique even then. Must match the same fallback used in
+    // detail-penyewaan.html's lookup, and i must be the product's index in
+    // the full data.products array (not a filtered/sliced copy) for the two
+    // to agree.
+    function productKey(p, i) {
+        return p.sku ? p.sku : 'idx-' + i;
+    }
+
     const homeProductGrid = document.getElementById('homeProductGrid');
     if (homeProductGrid && Array.isArray(data.products)) {
         const preview = data.products.slice(0, 3);
         homeProductGrid.innerHTML = preview.map((p, i) => {
             const badge = productBadge(p.status);
             const action = p.status === 'tersedia'
-                ? `<a class="bg-primary text-white p-3 rounded-lg hover:bg-secondary transition shadow-md active:scale-95 motion-reduce:active:scale-100" href="detail-penyewaan.html?sku=${p.sku}"><span class="material-symbols-outlined">add_shopping_cart</span></a>`
+                ? `<a class="bg-primary text-white p-3 rounded-lg hover:bg-secondary transition shadow-md active:scale-95 motion-reduce:active:scale-100" href="detail-penyewaan.html?sku=${encodeURIComponent(productKey(p, i))}"><span class="material-symbols-outlined">add_shopping_cart</span></a>`
                 : `<button aria-label="Sedang disewa, tidak tersedia" class="bg-outline-variant text-on-surface-variant p-3 rounded-lg cursor-not-allowed opacity-60" disabled><span class="material-symbols-outlined">calendar_month</span></button>`;
             return `
 <div class="bg-white border border-outline-variant rounded-xl overflow-hidden group hover:shadow-2xl transition duration-500 flex flex-col reveal-on-scroll" style="transition-delay:${i * 80}ms">
@@ -385,13 +395,13 @@ ${categoryIconHtml(c, 'sm')} ${c.label}
     const productGrid = document.getElementById('productGrid');
     if (productGrid && Array.isArray(data.products)) {
         const seenCategory = {};
-        productGrid.innerHTML = data.products.map((p) => {
+        productGrid.innerHTML = data.products.map((p, i) => {
             const badge = productBadge(p.status);
             const isFirstOfCategory = p.category && !seenCategory[p.category];
             if (p.category) seenCategory[p.category] = true;
             const anchorId = isFirstOfCategory ? ` id="${p.category}"` : '';
             const action = p.status === 'tersedia'
-                ? `<a class="w-full bg-secondary text-on-primary py-md rounded-lg font-button text-button uppercase tracking-widest hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition flex items-center justify-center" href="detail-penyewaan.html?sku=${p.sku}">Sewa Sekarang</a>`
+                ? `<a class="w-full bg-secondary text-on-primary py-md rounded-lg font-button text-button uppercase tracking-widest hover:brightness-110 active:scale-95 motion-reduce:active:scale-100 transition flex items-center justify-center" href="detail-penyewaan.html?sku=${encodeURIComponent(productKey(p, i))}">Sewa Sekarang</a>`
                 : `<button class="w-full bg-outline-variant text-on-surface-variant py-md rounded-lg font-button text-button uppercase tracking-widest cursor-not-allowed opacity-60" disabled>Sedang Disewa</button>`;
             return `
 <div class="equipment-card bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden group hover:border-secondary transition duration-300" data-price="${p.price}" data-status="${p.status}"${anchorId}>
