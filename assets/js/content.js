@@ -151,9 +151,15 @@ document.addEventListener('DOMContentLoaded', () => {
         // uploaded icon image needs an actual box size (w-*/h-*) — same
         // "size" keyword maps to the right utility for whichever type it is.
         const symbolSizeClass = size === 'sm' ? 'text-base' : 'text-2xl';
-        const imageSizeClass = size === 'sm' ? 'w-4 h-4' : 'w-6 h-6';
+        const imageBoxClass = size === 'sm' ? 'w-5 h-5' : 'w-7 h-7';
         if (c.iconType === 'image' && c.icon) {
-            return `<img alt="" class="${imageSizeClass} object-contain inline-block" src="${c.icon}"/>`;
+            // A raw product photo dropped straight into a tiny box (no
+            // frame, object-contain) reads as a blurry, inconsistently
+            // sized smudge next to the crisp line-art Material Symbols.
+            // Framing it as a round badge — fixed size, cropped to fill,
+            // bordered — makes it read as "an icon" regardless of what the
+            // source photo's own background looks like.
+            return `<span class="${imageBoxClass} rounded-full overflow-hidden border border-outline-variant/60 shrink-0 inline-block align-middle"><img alt="" class="w-full h-full object-cover" src="${c.icon}"/></span>`;
         }
         return `<span class="material-symbols-outlined ${symbolSizeClass}">${c.icon || 'category'}</span>`;
     }
