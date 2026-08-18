@@ -159,7 +159,12 @@ document.addEventListener('DOMContentLoaded', () => {
             // Framing it as a round badge — fixed size, cropped to fill,
             // bordered — makes it read as "an icon" regardless of what the
             // source photo's own background looks like.
-            return `<span class="${imageBoxClass} rounded-full overflow-hidden border border-outline-variant/60 shrink-0 inline-block align-middle"><img alt="" class="w-full h-full object-cover" src="${c.icon}"/></span>`;
+            // mix-blend-multiply makes a white (or light) background baked
+            // into the uploaded image drop out against the page's own
+            // near-white background, so only the darker icon linework
+            // reads — without it, most uploads showed as a stark white
+            // chip instead of blending in like the Material Symbols do.
+            return `<span class="${imageBoxClass} rounded-full overflow-hidden border border-outline-variant/60 shrink-0 inline-block align-middle bg-surface"><img alt="" class="w-full h-full object-cover mix-blend-multiply" src="${c.icon}"/></span>`;
         }
         return `<span class="material-symbols-outlined ${symbolSizeClass}">${c.icon || 'category'}</span>`;
     }
