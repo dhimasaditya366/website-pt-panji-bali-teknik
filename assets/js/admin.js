@@ -209,6 +209,18 @@ function initDashboard() {
         ? 'Menampilkan perubahan tersimpan di browser ini.'
         : 'Menampilkan konten bawaan (belum ada perubahan tersimpan).');
 
+    // A local draft (from a previous unfinished edit on this browser) can
+    // silently diverge from whatever's actually live now -- e.g. it was
+    // saved before a collaborator published something newer on another
+    // device. That showed up today as the admin seeing only 3 categories
+    // and the wrong products with no explanation why. Flag it plainly
+    // instead of blending the two without comment.
+    const staleDraftBanner = document.getElementById('staleDraftBanner');
+    if (staleDraftBanner) {
+        const isStale = window.SiteStore.hasOverrides() && JSON.stringify(state) !== loadedServerSnapshot;
+        staleDraftBanner.classList.toggle('hidden', !isStale);
+    }
+
     setupTabs();
     populateSimpleFields();
     bindSimpleFieldListeners();
@@ -217,6 +229,7 @@ function initDashboard() {
     renderCategories();
     renderProducts();
     bindActionButtons();
+    bindStaleDraftBanner();
     setupGithubSyncSettings();
     setupSessionTimeout();
 }
@@ -911,6 +924,27 @@ function setupGithubSyncSettings() {
         statusEl.textContent = 'Pengaturan sinkronisasi otomatis dihapus.';
         statusEl.className = 'text-xs text-on-surface-variant';
         refreshAutoInfo();
+    });
+}
+
+function bindStaleDraftBanner() {
+    const banner = document.getElementById('staleDraftBanner');
+    if (!banner) return;
+
+    document.getElementById('btnUseServerData').addEventListener('click', () => {
+        window.SiteStore.reset();
+        state = window.SiteStore.get();
+        banner.classList.add('hidden');
+        populateSimpleFields();
+        renderStats();
+        renderCategories();
+        renderProducts();
+        setStatus('Draf lokal dibuang — menampilkan data terbaru dari server.');
+        showToast('Sekarang menampilkan data terbaru dari server.', 'success');
+    });
+
+    document.getElementById('btnKeepDraft').addEventListener('click', () => {
+        banner.classList.add('hidden');
     });
 }
 

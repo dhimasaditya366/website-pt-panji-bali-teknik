@@ -83,6 +83,22 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <span id="statusText">Memuat data...</span>
 </div>
 
+<!-- Shown when this browser has a local draft that differs from the live
+     published data -- e.g. it was saved before a collaborator published a
+     newer change elsewhere. Without this, the admin silently sees the old
+     draft (fewer categories, mismatched products) with no indication why
+     it doesn't match what visitors actually see on the site. -->
+<div class="hidden bg-error-container text-on-error-container px-margin-mobile md:px-margin-desktop py-sm text-sm flex items-center justify-between gap-sm flex-wrap" id="staleDraftBanner">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-base">warning</span>
+<span>Browser ini menampilkan draf tersimpan lokal yang berbeda dari data yang sedang online — kalau draf ini dibuat sebelum ada perubahan lain yang dipublikasikan (misalnya dari device lain), sebagian data yang kamu lihat di sini mungkin ketinggalan.</span>
+</div>
+<div class="flex gap-xs shrink-0">
+<button class="px-sm py-1.5 rounded-lg bg-error text-on-error font-bold text-xs hover:brightness-110 transition" id="btnUseServerData" type="button">Pakai Data Terbaru dari Server</button>
+<button class="px-sm py-1.5 rounded-lg border border-on-error-container/30 text-xs hover:bg-on-error-container/10 transition" id="btnKeepDraft" type="button">Tetap Pakai Draf Ini</button>
+</div>
+</div>
+
 <div class="px-margin-mobile md:px-margin-desktop py-md max-w-6xl mx-auto">
 
 <div class="bg-white border border-outline-variant rounded-xl p-md mb-lg">
