@@ -175,13 +175,36 @@ function showConfirmModal(opts) {
     }
     function onCancelClick() {
         cleanup();
+        if (opts.onCancel) opts.onCancel();
     }
     confirmBtn.addEventListener('click', onConfirmClick);
     cancelBtn.addEventListener('click', onCancelClick);
 }
 
+// Snapshot of window.SITE_DEFAULTS exactly as it was when this admin session
+// started, used right before Simpan to detect whether someone else (another
+// device/tab) has published a newer version in the meantime -- see the
+// btnSave handler below. Comparing against this instead of the live
+// window.SITE_DEFAULTS is what makes the check meaningful: this tab's own
+// in-progress edits are supposed to differ from it.
+let loadedServerSnapshot = null;
+
+async function fetchFreshServerData() {
+    try {
+        const res = await fetch('assets/js/data.js?t=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) return null;
+        const text = await res.text();
+        const prefix = 'window.SITE_DEFAULTS = ';
+        if (!text.startsWith(prefix)) return null;
+        return JSON.parse(text.slice(prefix.length).trim().replace(/;$/, ''));
+    } catch (e) {
+        return null;
+    }
+}
+
 function initDashboard() {
     state = window.SiteStore.get();
+    loadedServerSnapshot = JSON.stringify(window.SITE_DEFAULTS || {});
     setStatus(window.SiteStore.hasOverrides()
         ? 'Menampilkan perubahan tersimpan di browser ini.'
         : 'Menampilkan konten bawaan (belum ada perubahan tersimpan).');
@@ -517,6 +540,7 @@ function renderCategories() {
             if (!confirm(`Hapus kategori "${state.categories[index].label || state.categories[index].id}"?${warning}`)) return;
             state.categories.splice(index, 1);
             renderCategories();
+            renderProducts();
         });
 
         toggleIconInputs();
@@ -919,6 +943,10 @@ function bindActionButtons() {
             icon: 'category'
         });
         renderCategories();
+        // Each product card's category <select> is built from state.categories
+        // at the time renderProducts() last ran, so it goes stale the moment
+        // a category is added/removed here unless re-rendered too.
+        renderProducts();
     });
 
     document.getElementById('btnSave').addEventListener('click', () => {
@@ -927,6 +955,32 @@ function bindActionButtons() {
             message: 'Simpan semua perubahan yang sudah Anda buat sekarang?',
             confirmLabel: 'Ya, Simpan',
             onConfirm: async () => {
+                // Catches the exact scenario that has bitten this site
+                // before: someone else (another device, another tab left
+                // open) publishes a change after this session loaded, and
+                // this session's Simpan then silently overwrites it with
+                // its own older snapshot. Compare what's live on the server
+                // right now against what was live when THIS session started
+                // -- if they differ, something else changed in between.
+                const freshServerData = await fetchFreshServerData();
+                if (freshServerData && loadedServerSnapshot !== null
+                    && JSON.stringify(freshServerData) !== loadedServerSnapshot) {
+                    const proceed = await new Promise((resolve) => {
+                        showConfirmModal({
+                            title: 'Ada Perubahan Lain di Server',
+                            message: 'Sejak halaman ini dibuka, sudah ada perubahan lain tersimpan di server (mungkin dari device/tab lain). Menyimpan sekarang akan MENIMPA perubahan tersebut dan bisa menghilangkan datanya. Disarankan: batalkan, refresh halaman ini, lalu ulangi editanmu di atas data terbaru. Tetap simpan sekarang?',
+                            confirmLabel: 'Tetap Simpan (Berisiko)',
+                            danger: true,
+                            onConfirm: () => resolve(true),
+                            onCancel: () => resolve(false)
+                        });
+                    });
+                    if (!proceed) {
+                        showToast('Penyimpanan dibatalkan. Silakan refresh halaman ini dulu.', 'error');
+                        return;
+                    }
+                }
+
                 const savedLocally = window.SiteStore.save(state);
                 const btn = document.getElementById('btnSave');
                 btn.disabled = true;
