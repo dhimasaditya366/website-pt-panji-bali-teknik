@@ -151,20 +151,20 @@ document.addEventListener('DOMContentLoaded', () => {
         // uploaded icon image needs an actual box size (w-*/h-*) — same
         // "size" keyword maps to the right utility for whichever type it is.
         const symbolSizeClass = size === 'sm' ? 'text-base' : 'text-2xl';
-        const imageBoxClass = size === 'sm' ? 'w-5 h-5' : 'w-7 h-7';
+        const imageBoxClass = size === 'sm' ? 'w-4 h-4' : 'w-6 h-6';
         if (c.iconType === 'image' && c.icon) {
-            // A raw product photo dropped straight into a tiny box (no
-            // frame, object-contain) reads as a blurry, inconsistently
-            // sized smudge next to the crisp line-art Material Symbols.
-            // Framing it as a round badge — fixed size, cropped to fill,
-            // bordered — makes it read as "an icon" regardless of what the
-            // source photo's own background looks like.
-            // mix-blend-multiply makes a white (or light) background baked
-            // into the uploaded image drop out against the page's own
-            // near-white background, so only the darker icon linework
-            // reads — without it, most uploads showed as a stark white
-            // chip instead of blending in like the Material Symbols do.
-            return `<span class="${imageBoxClass} rounded-full overflow-hidden border border-outline-variant/60 shrink-0 inline-block align-middle bg-surface"><img alt="" class="w-full h-full object-cover mix-blend-multiply" src="${c.icon}"/></span>`;
+            // Rendered as a CSS mask (a solid currentColor shape cut to the
+            // image's silhouette) instead of a normal <img>, so it inherits
+            // whatever text color its link currently has -- the same
+            // active/inactive recolor the Material Symbols icons get for
+            // free, applied here via the exact same class-toggling in
+            // site.js's category filter, with no extra JS needed.
+            // Only works cleanly for a transparent-background PNG/SVG icon
+            // graphic; a solid photo/JPEG has no alpha channel to cut
+            // against, so it renders as a plain colored block instead of
+            // "photo colors" -- expected, not a bug, for that source type.
+            const maskStyle = `background-color:currentColor;-webkit-mask-image:url('${c.icon}');mask-image:url('${c.icon}');-webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;`;
+            return `<span class="${imageBoxClass} inline-block align-middle shrink-0" style="${maskStyle}"></span>`;
         }
         return `<span class="material-symbols-outlined ${symbolSizeClass}">${c.icon || 'category'}</span>`;
     }
