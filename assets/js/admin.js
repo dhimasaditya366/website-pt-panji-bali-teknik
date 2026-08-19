@@ -330,7 +330,7 @@ function bindImageUploads() {
 // match the exact box it will be displayed in on the public site, instead
 // of relying on CSS object-fit to blindly crop off whatever doesn't fit.
 // Returns the final data URI, or null if the user cancels the crop.
-async function readImageFile(file, cropRatio) {
+async function readImageFile(file, cropRatio, outputFormat) {
     if (!cropRatio) {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -338,11 +338,17 @@ async function readImageFile(file, cropRatio) {
             reader.readAsDataURL(file);
         });
     }
-    return openImageCropper(file, cropRatio);
+    return openImageCropper(file, cropRatio, outputFormat);
 }
 
 // ---- Crop modal: drag-to-reposition, slider-to-zoom, bake result to canvas ----
-function openImageCropper(file, cropRatio) {
+// outputFormat defaults to JPEG (much smaller for real photos — hero/product
+// images). Category icons pass 'png' instead so an uploaded transparent
+// icon graphic keeps its transparency; JPEG has no alpha channel at all, so
+// baking a transparent PNG through it silently flattened it to a solid
+// color block.
+function openImageCropper(file, cropRatio, outputFormat) {
+    const mimeType = outputFormat === 'png' ? 'image/png' : 'image/jpeg';
     return new Promise((resolve) => {
         const modal = document.getElementById('cropModal');
         const frame = document.getElementById('cropFrame');
@@ -438,7 +444,7 @@ function openImageCropper(file, cropRatio) {
             canvas.height = outH;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
-            cleanup(canvas.toDataURL('image/jpeg', 0.85));
+            cleanup(mimeType === 'image/png' ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.85));
         }
         function onCancel() { cleanup(null); }
 
@@ -538,7 +544,7 @@ function renderCategories() {
         iconUpload.addEventListener('change', async () => {
             const file = iconUpload.files[0];
             if (!file) return;
-            const dataUrl = await readImageFile(file, iconUpload.dataset.cropRatio);
+            const dataUrl = await readImageFile(file, iconUpload.dataset.cropRatio, 'png');
             iconUpload.value = '';
             if (!dataUrl) return;
             state.categories[index].icon = dataUrl;
