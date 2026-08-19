@@ -19,7 +19,12 @@ jobs:
         # the only fix, which isn't realistic to ask of real site visitors.
         # Stamp every deploy with this commit's SHA instead, so the URL
         # itself changes on every deploy and there is nothing left to cache.
-        run: sed -i "s/?v=10/?v=${GITHUB_SHA::8}/g" *.html
+        #
+        # Matches ?v=<any digits>, not just the literal "10" -- admin.html
+        # had already drifted to a manually-bumped ?v=11 at one point, which
+        # silently exempted admin.js from every cache-bust since (this is
+        # exactly why the PNG-transparency fix never reached real browsers).
+        run: sed -i -E "s/\?v=[0-9]+/?v=${GITHUB_SHA::8}/g" *.html
 
       - name: Upload via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
