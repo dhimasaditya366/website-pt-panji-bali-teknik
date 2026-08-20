@@ -437,8 +437,15 @@ function openImageCropper(file, cropRatio, outputFormat) {
             const sw = frameW / scale;
             const sh = frameH / scale;
 
-            const outW = rw >= rh ? 1600 : Math.round(1600 * rw / rh);
-            const outH = rw >= rh ? Math.round(1600 * rh / rw) : 1600;
+            // Category icons only ever render at a few dozen px on screen,
+            // but PNG (needed to keep transparency) doesn't compress
+            // photo-like content nearly as well as JPEG -- at the same
+            // 1600px used for real photos, a single icon ballooned past 1MB
+            // each. 4 icons alone pushed data.js to 7MB+, likely past
+            // Hostinger's PHP upload limit and silently failing every save.
+            const longEdge = mimeType === 'image/png' ? 256 : 1600;
+            const outW = rw >= rh ? longEdge : Math.round(longEdge * rw / rh);
+            const outH = rw >= rh ? Math.round(longEdge * rh / rw) : longEdge;
             const canvas = document.createElement('canvas');
             canvas.width = outW;
             canvas.height = outH;
