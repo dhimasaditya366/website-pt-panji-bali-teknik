@@ -232,6 +232,45 @@ function initDashboard() {
     bindStaleDraftBanner();
     setupGithubSyncSettings();
     setupSessionTimeout();
+    setupDataSizeWarning();
+}
+
+// ---- Data size early warning ----
+// A save that silently fails because the total payload is too large for
+// Hostinger's PHP upload limit (data.js hit 7MB+ on 2026-08-20, almost
+// entirely from oversized category icon uploads) looks identical to any
+// other "Simpan does nothing" report -- there's no error message, just a
+// save that doesn't take. Surface the size continuously instead of finding
+// out only after several failed attempts.
+const DATA_SIZE_WARN_BYTES = 3 * 1024 * 1024;
+const DATA_SIZE_DANGER_BYTES = 6 * 1024 * 1024;
+
+function updateDataSizeBadge() {
+    const badge = document.getElementById('dataSizeBadge');
+    const textEl = document.getElementById('dataSizeBadgeText');
+    if (!badge || !textEl || !state) return;
+
+    const bytes = new Blob([JSON.stringify(state)]).size;
+    const mb = (bytes / (1024 * 1024)).toFixed(1);
+
+    badge.classList.remove('hidden', 'bg-white/10', 'text-white/70', 'bg-yellow-400/90', 'text-yellow-950', 'bg-error', 'text-on-error');
+    if (bytes >= DATA_SIZE_DANGER_BYTES) {
+        badge.classList.add('bg-error', 'text-on-error');
+        textEl.textContent = mb + ' MB — berisiko gagal disimpan, kecilkan ukuran gambar';
+    } else if (bytes >= DATA_SIZE_WARN_BYTES) {
+        badge.classList.add('bg-yellow-400/90', 'text-yellow-950');
+        textEl.textContent = mb + ' MB — mendekati batas aman';
+    } else {
+        badge.classList.add('bg-white/10', 'text-white/70');
+        textEl.textContent = mb + ' MB';
+    }
+}
+
+function setupDataSizeWarning() {
+    updateDataSizeBadge();
+    // Polls instead of hooking every input/upload handler individually --
+    // simpler, and this only needs to be "roughly current," not real-time.
+    setInterval(updateDataSizeBadge, 3000);
 }
 
 function setStatus(text) {

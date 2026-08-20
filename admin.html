@@ -68,6 +68,14 @@ Catatan keamanan: ini adalah gerbang sederhana di sisi browser, bukan autentikas
 <button class="text-xs md:text-sm px-3 py-2 rounded-lg bg-error/80 hover:bg-error transition flex items-center gap-1" id="btnReset" type="button">
 <span class="material-symbols-outlined text-base">restart_alt</span> Reset
 </button>
+<!-- Early warning for the data.js size that caused every Simpan to fail
+     silently on 2026-08-20 (payload too large for Hostinger's PHP upload
+     limit). Updated continuously so an admin sees this building up long
+     before another save actually fails. -->
+<span class="hidden text-xs md:text-sm px-3 py-2 rounded-lg font-bold items-center gap-1" id="dataSizeBadge" title="Perkiraan ukuran total data situs">
+<span class="material-symbols-outlined text-base">database</span>
+<span id="dataSizeBadgeText"></span>
+</span>
 <button class="text-xs md:text-sm px-4 py-2 rounded-lg bg-secondary text-on-primary font-bold hover:brightness-110 transition flex items-center gap-1 active:scale-95 motion-reduce:active:scale-100" id="btnSave" type="button">
 <span class="material-symbols-outlined text-base">save</span> Simpan Perubahan
 </button>
